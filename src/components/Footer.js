@@ -13,6 +13,7 @@ const Footer = ({ siteTitle }) => (
       </a>
     </div>
       
+       
     <div style={{marginBottom: "2rem"}}>
       <span class="c">
         <a href="https://www.videoscribe.co/en/" class="link">
