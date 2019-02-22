@@ -1,86 +1,78 @@
-import React from 'react'
-import { Link } from 'gatsby'
-import github from '../img/github-icon.svg'
-import logo from '../img/logo.svg'
+import PropTypes from "prop-types"
+import React from "react"
+import shocologo from "../images/shoco_logo.png"
+import SlantedEndge from '../components/slantedEdge'
 
-const Navbar = class extends React.Component {
-  componentDidMount() {
-    // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(
-      document.querySelectorAll('.navbar-burger'),
-      0
-    )
-    // Check if there are any navbar burgers
-    if ($navbarBurgers.length > 0) {
-      // Add a click event on each of them
-      $navbarBurgers.forEach(el => {
-        el.addEventListener('click', () => {
-          // Get the target from the "data-target" attribute
-          const target = el.dataset.target
-          const $target = document.getElementById(target)
+import "./styles/header.scss"
 
-          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-          el.classList.toggle('is-active')
-          $target.classList.toggle('is-active')
-        })
-      })
-    }
-  }
+const Header = ({ siteTitle }) => (
+  <header id="header" class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="logo navbar-btn pull-left" href="/" title="sho.co" rel="home">
+                <img src={shocologo} alt="sho.co logo"/>
+            </a>
 
-  render() {
-    return (
-      <nav
-        className="navbar is-transparent"
-        role="navigation"
-        aria-label="main-navigation"
-      >
-        <div className="container">
-          <div className="navbar-brand">
-            <Link to="/" className="navbar-item" title="Logo">
-              <img src={logo} alt="Kaldi" style={{ width: '88px' }} />
-            </Link>
-            {/* Hamburger menu */}
-            <div className="navbar-burger burger" data-target="navMenu">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-          <div id="navMenu" className="navbar-menu">
-            <div className="navbar-start has-text-centered">
-              <Link className="navbar-item" to="/about">
-                About
-              </Link>
-              <Link className="navbar-item" to="/products">
-                Products
-              </Link>
-              <Link className="navbar-item" to="/blog">
-                Blog
-              </Link>
-              <Link className="navbar-item" to="/contact">
-                Contact
-              </Link>
-              <Link className="navbar-item" to="/contact/examples">
-                Form Examples
-              </Link>
-            </div>
-            <div className="navbar-end has-text-centered">
-              <a
-                className="navbar-item"
-                href="https://github.com/AustinGreen/gatsby-netlify-cms-boilerplate"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="icon">
-                  <img src={github} alt="Github" />
-                </span>
-              </a>
-            </div>
-          </div>
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-      </nav>
-    )
-  }
+
+        <div class="navbar-collapse collapse">
+            <nav role="navigation">
+                <ul id="menu-main-menu" class="menu nav navbar-nav navbar-right pull-right">
+                    <li><a href="/">About</a></li>
+                    <li><a href="/">My videos</a></li>
+                    <li class="last">   
+                        Who's there? |                     
+                       <a href="/">Login</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="mobile-menu">
+            <div class="menu-main mobile-menu-wrap">
+                <ul class="menu nav">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/myvideos">My videos</a></li>
+                    <li>
+                      <a href="/myvideos">Login</a>
+                    </li>
+                </ul> 
+            </div>
+            <div class="menu-global mobile-menu-wrap">
+                <ul class="menu nav">
+                    <li class="first"><a href="http://www.sparkol.com">Sparkol</a></li>
+                    <li class="last"><a href="http://www.sparkol.com/legal/">Privacy and cookies</a></li>
+                </ul>
+            </div>
+            <div class="social mobile-menu-wrap">
+                <ul class="menu nav">
+                    <li><a href="https://twitter.com/SparkolHQ" class="icon-social icon-twitter" target="_blank">Twitter</a></li>
+                    <li><a href="https://www.facebook.com/SparkolHQ" class="icon-social icon-facebook" target="_blank">Facebook</a></li>
+                    <li><a href="https://www.youtube.com/channel/UC-M3N1dBICkLMU8fTlmpgjw" class="icon-social icon-youtube" target="_blank">YouTube</a></li>
+                    <li><a href="https://plus.google.com/u/0/+Sparkol/posts" class="icon-social icon-gplus" target="_blank">Google+</a></li>
+                    <li><a href="https://www.linkedin.com/company/2755634" class="icon-social icon-linkedin" target="_blank">LinkedIn</a></li>
+                    <li><a href="https://instagram.com/sparkolhq/" class="icon-social icon-instagram" target="_blank">Instagram</a></li>
+                </ul>
+            </div>
+            {/* {{> slanted_edge}} */}
+        </div>
+    </div>
+    <SlantedEndge/>
+</header>
+)
+
+Header.propTypes = {
+  siteTitle: PropTypes.string,
 }
 
-export default Navbar
+Header.defaultProps = {
+  siteTitle: ``,
+}
+
+export default Header

@@ -1,105 +1,72 @@
-import React from 'react'
-import { Link } from 'gatsby'
+import PropTypes from "prop-types"
+import React from "react"
+import PFooter from "../components/footerproducts"
+import LFooter from "../components/footerlinks"
+import "./styles/footer.scss"
 
-import logo from '../img/logo.svg'
-import facebook from '../img/social/facebook.svg'
-import instagram from '../img/social/instagram.svg'
-import twitter from '../img/social/twitter.svg'
-import vimeo from '../img/social/vimeo.svg'
+const Footer = ({ siteTitle }) => (
+  <footer id="footer" class="mainfooter">
+    <div class="titlefooter">
+      <a href="https://www.sparkol.com/en/">
+        <img class="footerLogo" alt="Sparkol" style={{marginBottom:"-2rem"}}>
+            </img>
+      </a>
+    </div>
+      
+    <div style={{marginBottom: "2rem"}}>
+      <span class="c">
+        <a href="https://www.videoscribe.co/en/" class="link">
+          <img class="videoscribeLogo" alt="VideoScribe" style={{marginBottom:"0rem"}}>
+          </img>
+          <p style={{marginBottom:"0rem"}}>VideoScribe</p>
+        </a>
+        <p style={{fontSize: "13px"}}>Create your own whiteboard videos, fast</p>
+      </span>
 
-const Footer = class extends React.Component {
-  render() {
-    return (
-      <footer className="footer has-background-black has-text-white-ter">
-        <div className="content has-text-centered">
-          <img
-            src={logo}
-            alt="Kaldi"
-            style={{ width: '14em', height: '10em' }}
-          />
-        </div>
-        <div className="content has-text-centered has-background-black has-text-white-ter">
-          <div className="container has-background-black has-text-white-ter">
-              <div className="columns">
-                <div className="column is-4">
-                <section className="menu">
-                    <ul className="menu-list">
-                      <li><Link to="/" className="navbar-item">Home</Link></li>
-                      <li><Link className="navbar-item" to="/about">About</Link></li>
-                      <li><Link className="navbar-item" to="/products">
-                        Products
-                      </Link>
-                    </li>
-                    <li>
-                    <Link className="navbar-item" to="/contact/examples">
-                      Form Examples
-                    </Link>
-                    </li>
-                    <li><a
-                      className="navbar-item"
-                      href="/admin/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Admin
-                    </a></li>
-                    </ul>
-                  </section>
-                </div>
-                <div className="column is-4">
-                <section>
-                  <ul className="menu-list">
-                  <li>
-                    <Link className="navbar-item" to="/blog">
-                      Latest Stories
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="navbar-item" to="/contact">
-                      Contact
-                    </Link>
-                  </li>
-                  </ul>
-                </section>
-                </div>
-                <div className="column is-4 social">
-                
-                  <a title="facebook" href="https://facebook.com">
-                    <img 
-                      src={facebook}
-                      alt="Facebook"
-                      style={{ width: '1em', height: '1em' }}
-                    />
-                  </a>
-                  <a title="twitter" href="https://twitter.com">
-                  <img
-                    className="fas fa-lg"
-                    src={twitter}
-                    alt="Twitter"
-                    style={{ width: '1em', height: '1em' }}
-                  />
-                </a>
-                <a title="instagram" href="https://instagram.com">
-                  <img
-                  src={instagram}
-                  alt="Instagram"
-                  style={{ width: '1em', height: '1em' }}
-                  />
-                </a>
-                <a title="vimeo" href="https://vimeo.com">
-                  <img
-                  src={vimeo}
-                  alt="Vimeo"
-                  style={{ width: '1em', height: '1em' }}
-                  />
-                </a>
-                </div>
-              </div>
-            </div>
-        </div>
-      </footer>
-    )
-  }
+      <span style={{fontSize: "50px", color: "white"}}>+</span>
+              
+      <span class="c">
+        <a href="http://www.tawe.co/" class="link">
+          <img class="taweLogo" alt="tawe" style={{marginBottom:"0rem"}}>
+          </img>
+          <p style={{marginBottom:"0rem"}}>Tawe</p>
+        </a>
+        <p style={{fontSize: "13px"}}>Transform visual ideas into video instantly</p>
+      </span>
+    </div>
+
+    <a href="https://www.videoscribe.co/en/Buy" style={{fontSize: "15px"}} class="link">
+      Get a Sparkol subscription
+    </a>
+    <p style={{fontSize: "15px"}}>
+      And enjoy 2 video apps for the price of 1
+    </p>
+
+      <PFooter/>
+      <LFooter/>
+          
+    <a href="https://www.videoscribe.co/en/Login" style={{fontSize: "12px"}} class="link">
+      Sparkol Account
+    </a>
+          
+    <p style={{fontSize: "12px", marginBottom:"-.5rem", marginTop:"1rem"}}>
+      © 2018 Sparkol Limited, registered in England and Wales, no 06762963 
+    </p>
+    <p style={{fontSize: "12px", marginBottom:"0rem"}}>
+      1 Temple Way 5th Floor, Bristol, BS2 0BY, UK
+    </p>
+    
+    <a href="https://www.sparkol.com/en/Legal" class="link" style={{fontSize: "12px"}}>Privacy and cookies</a>
+    
+  </footer>
+)
+
+Footer.propTypes = {
+  siteTitle: PropTypes.string,
+}
+
+Footer.defaultProps = {
+  siteTitle: ``,
 }
 
 export default Footer

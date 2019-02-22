@@ -1,0 +1,26 @@
+
+$black :  #000;
+$light-black : #323232;
+$white : #fff;
+$yellow : #f4de4d;
+
+$dark-blue: #1a3b5a;
+
+//colours
+$blue : #2d3743;
+$orange : #ed7e69;
+$green: #93c783;
+$yellow : #e5cb74;
+$pink : #c990bf;
+$light-blue : #7f95c7;
+
+$screen-phone:               480px;
+$screen-tablet:              768px;
+$screen-desktop:             992px;
+$screen-lg-desktop:          1200px;
+
+@mixin transform($property) {
+    -webkit-transform: $property;
+    -ms-transform: $property;
+    transform: $property;
+  }
