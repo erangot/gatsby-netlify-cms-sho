@@ -8,6 +8,8 @@ Sho.co delivers your finished videos much faster than rendering them in the app.
 
 Once your videos are live on sho.co, you can:
 
+<hr>
+
 ### **Download your videos**
 
 Sho.co is the quickest way to get your hands on your videos. No quality spared – download in HD.
