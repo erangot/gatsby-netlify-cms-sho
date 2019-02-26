@@ -55,8 +55,8 @@ const Navbar = class extends React.Component {
                 My Videos
               </Link>
               <div className="navbar-item">
-                Who's there? |  
-                <a href="http://localhost:6970/auth/login?returnUrl=http://localhost:8000"> Login</a>
+                Who's there? | 
+                <a href="https://sho.test.sparkol-dev.co.uk/auth/login?returnUrl=https://cocky-pasteur-b020e9.netlify.com/"> &nbsp;Login</a>
               </div>
             </div>
           </div>

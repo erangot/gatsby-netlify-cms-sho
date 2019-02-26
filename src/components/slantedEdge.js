@@ -1,6 +1,6 @@
 import React from "react"
 
-const SlantedEdge = ({ }) => (
+const SlantedEdge = () => (
     <span className="icwrap">
         <span className="ic1"></span>
         <span className="ic2"></span>
