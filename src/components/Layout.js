@@ -37,7 +37,7 @@ const TemplateWrapper = ({ children }) => (
           <link
             rel="icon"
             type="image/png"
-            href="/img/favicon-32x32.png"
+            href="/img/favicon.ico"
             sizes="32x32"
           />
           <link
