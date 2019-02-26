@@ -2,7 +2,7 @@
 templateKey: index-page
 title: hello
 image: /img/home-jumbotron.jpg
-heading: Great coffee with a conscience
+heading: Test sample
 subheading: Support sustainable farming while enjoying a cup
 mainpitch:
   title: Why Kaldi
