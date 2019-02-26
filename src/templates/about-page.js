@@ -8,9 +8,17 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content
   return (
    
-    <section className="section section--gradient"  style={{color: "white", background: "#2d3743"}}>
+    <section className="section section--gradient" 
+      style={{
+      color: "#fff",
+      background: "url(https://sho.co/assets/images/eng_bg.png) #2d3743 no-repeat bottom right",
+      backgroundSize: "50%",
+      padding: "55px 0",
+      position: "relative",
+    }}>
+    
       <div className="container">
-        <div className="columns" style={{marginLeft:"20rem", marginRight:"20rem"}}>
+        <div className="columns" style={{marginLeft:"15rem", marginRight:"15rem"}}>
           <div className="column is-10 is-offset-1">
             <div className="section">
               <h2 className="title is-size-3 has-text-weight-bold is-bold-light" style={{color: "White", textAlign: "center"}}>
@@ -21,7 +29,9 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
             </div>
           </div>
         </div>
+        
     </section>
+   
   )
 }
 
