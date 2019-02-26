@@ -10,17 +10,17 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
    
     <section className="section section--gradient"  style={{color: "white", background: "#2d3743"}}>
       <div className="container">
-        <div className="columns">
+        <div className="columns" style={{marginLeft:"20rem", marginRight:"20rem"}}>
           <div className="column is-10 is-offset-1">
             <div className="section">
-              <h2 className="title is-size-3 has-text-weight-bold is-bold-light" style={{color: "White"}}>
+              <h2 className="title is-size-3 has-text-weight-bold is-bold-light" style={{color: "White", textAlign: "center"}}>
                 {title}
               </h2>
-              <PageContent  className="content" content={content} />
+              <PageContent style={{color: "White"}} className="content" content={content}/>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </section>
   )
 }
