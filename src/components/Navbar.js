@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import github from '../img/github-icon.svg'
-import logo from '../img/logo.svg'
+import logo from '../img/shoco_logo.png'
+import SlantedEdge from "../components/slantedEdge";
 
 const Navbar = class extends React.Component {
   componentDidMount() {
@@ -37,7 +37,7 @@ const Navbar = class extends React.Component {
         <div className="container">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item" title="Logo">
-              <img src={logo} alt="Kaldi" style={{ width: '88px' }} />
+              <img src={logo} alt="sho.co" style={{ width: '176px' }} />
             </Link>
             {/* Hamburger menu */}
             <div className="navbar-burger burger" data-target="navMenu">
@@ -47,37 +47,21 @@ const Navbar = class extends React.Component {
             </div>
           </div>
           <div id="navMenu" className="navbar-menu">
-            <div className="navbar-start has-text-centered">
+            <div className="navbar-end has-text-centered">
               <Link className="navbar-item" to="/about">
                 About
               </Link>
-              <Link className="navbar-item" to="/products">
-                Products
+              <Link className="navbar-item" to="/">
+                My Videos
               </Link>
-              <Link className="navbar-item" to="/blog">
-                Blog
-              </Link>
-              <Link className="navbar-item" to="/contact">
-                Contact
-              </Link>
-              <Link className="navbar-item" to="/contact/examples">
-                Form Examples
-              </Link>
-            </div>
-            <div className="navbar-end has-text-centered">
-              <a
-                className="navbar-item"
-                href="https://github.com/AustinGreen/gatsby-netlify-cms-boilerplate"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="icon">
-                  <img src={github} alt="Github" />
-                </span>
-              </a>
+              <div className="navbar-item">
+                Who's there? |  
+                <a href="http://localhost:6970/auth/login?returnUrl=http://localhost:8000"> Login</a>
+              </div>
             </div>
           </div>
         </div>
+        <SlantedEdge/>
       </nav>
     )
   }

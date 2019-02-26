@@ -1,0 +1,842 @@
+@import "~bulma";
+
+$black :  #000;
+$light-black : #323232;
+$white : #fff;
+$yellow : #f4de4d;
+
+$dark-blue: #1a3b5a;
+
+//colours
+$blue : #2d3743;
+$orange : #ed7e69;
+$green: #93c783;
+$yellow : #e5cb74;
+$pink : #c990bf;
+$light-blue : #7f95c7;
+
+$screen-phone:               480px;
+$screen-tablet:              768px;
+$screen-desktop:             992px;
+$screen-lg-desktop:          1200px;
+
+@mixin transform($property) {
+    -webkit-transform: $property;
+    -ms-transform: $property;
+    transform: $property;
+}
+
+
+*{
+  font-family: 'Raleway', sans-serif;
+}
+
+html,
+body{
+  font-family: inherit;
+  margin: 0 auto;
+}
+
+.relative{
+  position: relative;
+  overflow: hidden;
+}
+
+a{
+  text-decoration: none;
+  color: $black;
+
+  &:hover{
+      color: $light-black;
+  }
+}
+
+
+.yellow-text{
+  color: $yellow; 
+}
+
+.container{
+  margin: 0 auto;
+  max-width: 960px;
+  // padding: 1.45rem 1.0875rem;
+}
+
+section{
+  @extend .relative;
+}
+
+
+// Responsiveness //
+
+
+// Large Desktop
+@media(min-width: 1368px) and (max-width: 1440px){
+  
+  .container{
+      max-width: 960px;
+  }
+
+}
+
+// Small Desktop
+@media(min-width: 1280px) and (max-width: 1367px){
+  
+  .container{
+      max-width: 960px;
+  }
+  
+}
+
+
+// Tablet
+@media(min-width: 600px) and (max-width: 990px){
+  
+  .container{
+      max-width: 100%;
+      padding: 0;
+      width: 100%;
+  }
+  
+}
+
+// Large Mobile
+@media(min-width: 500px) and (max-width: 599px){
+  
+  .container{
+      max-width: 960px;
+  }
+  
+}
+
+// Small Mobile
+@media(min-width: 320px) and (max-width: 499px){
+  
+  .container{
+      max-width: 960px;
+      padding: 0;
+  }
+  
+}
+
+
+#header {
+  border: 0;
+  color: #6e6e6e;
+  font-weight: 700;
+  position: relative;
+
+  .container{
+    position: relative;
+    z-index: 2;
+  }
+
+
+    .navbar-btn {
+        margin: 6px 0;
+
+        img {
+            width: auto;
+            height: 88px;
+
+            @media(max-width: $screen-tablet){
+              padding: 10px 15px;
+            }
+          }
+    }
+
+    a {
+        color: #6e6e6e;
+
+      &:hover, &:active, &:focus {
+        color: $light-blue;
+      }
+
+    }
+  .mobile-menu {
+    display: none;
+  }
+
+  .navbar-collapse {
+    display: n  one;
+  }
+
+  .navbar-header {
+    margin: 0;
+
+
+  }
+  .mobile-menu {
+    margin-top: 100px;
+
+    a {
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+
+
+  }
+
+  .navbar-toggle {
+    position: relative;
+    float: right;
+    margin-right: 15px;
+    padding: 9px 10px;
+    margin-top: 23.5px;
+    margin-bottom: 23.5px;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin-right: 0;
+    border: 0;
+    right: 2em;
+
+    @media(max-width: $screen-tablet){
+        margin-right: 0;
+        border: 0;
+        background: none;
+        right: 2em;
+        margin-top: 24px;
+    }
+    
+    &:hover, &:focus {
+      background-color: #e6e6e6;
+    }
+
+    .icon-bar {
+      background-color: #b8b8b8;
+      display: block;
+      width: 22px;
+      height: 2px;
+      border-radius: 1px;
+      margin: 0.5em;
+
+      @media(max-width: $screen-tablet){
+        background-color: #000 !important;
+        width: 30px;
+        height: 4px;
+        margin: 4px;
+      }
+
+    }
+  }
+
+  @media (min-width: $screen-desktop) {
+    .navbar-toggle {
+      display: none;
+    }
+    
+    .navbar-collapse {
+      display: block;
+      width: 42%;
+      position: relative;
+      float: right;
+
+      ul {
+        list-style: none;
+        li {
+          display: inline-block;
+          margin-left: 1em;
+        }
+      }
+    }
+
+    .navbar-header {
+      width: 50%;
+      display: inline-block;
+    }
+
+
+  }
+
+  nav {
+    li.last {
+      margin-left: 10px;
+
+      span {
+          display: inline-block;
+      }
+
+      a {
+        display: inline-block;
+        margin: 0;
+        padding-left: 2px;
+      }
+    }
+  }
+
+  .icwrap {
+    z-index: 1;
+    margin-bottom: -30px;
+    display: block;
+    -webkit-backface-visibility: hidden;
+    width: 100%;
+    bottom: 0;
+    position: absolute;
+    @include transform(rotate(-0.9deg));
+  }
+}
+
+body.mobile-menu-show {
+  #header {
+    .navbar-header {
+      position: relative;
+      z-index: 1;
+      background: none;
+    }
+    .icwrap {
+      display: none;
+    }
+  }
+}
+
+@media(max-width: $screen-tablet){
+
+  body.mobile-menu-show {
+    #header {
+
+      .mobile-menu{
+        margin-top: 100px;
+        
+      }
+      .icwrap{
+        display: none;
+      }
+    }     
+  }
+
+    
+
+
+  #header{
+
+    .mobile-menu{
+      margin-top: 100px;
+      display: none;
+      height: 100%;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      overflow-y: auto;
+      padding-bottom: 81px;
+      background: #353535;
+
+      .mobile-menu-wrap{
+        padding: 15px;
+      }
+
+      .menu-internal, 
+      .menu-main, 
+      .menu-secondary, 
+      .menu-social{
+        background-color: #3f3f3f;
+        color: #bbb;
+        
+      }
+
+      ul {
+        margin: 0;
+        list-style: none;
+        padding: 0;
+        li{
+          display:block;
+          list-style: none;
+          
+          a{
+            padding: 3px 15px;
+            margin: 2px 0;
+            line-height: 1.25;
+            color: #fff!important;
+            display: block;
+            font-size: 26px;
+          }
+        }
+      }
+
+  
+      
+    }
+
+  }
+
+}
+
+.collapse{
+  display: none;
+}
+
+
+//@at-root
+
+footer {
+text-align: center;
+clear: both;
+font-weight: 300;
+// position: absolute;
+width: 100%;
+// bottom: 0;
+
+.subscription{
+  padding: 35px 0;
+
+  .logo-sparkol-large {
+      background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_logo_white.png');
+      background-repeat: no-repeat;
+      background-position: 50% 0;
+      background-size: 100%;
+      width: 103px;
+      height: 48px;
+      display: inline-block;
+      padding: 20px 0 0;
+      margin: 0 3px;
+
+      &.logo-link{
+        font-size:0;
+      }
+  }
+
+  ul.products {
+    margin: 35px 0 40px;
+    padding: 0;
+    background: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/form_elements/addition.png') 50% 50% no-repeat;
+    li {
+      max-width: 165px;
+      width: auto;
+      margin: 0 13px;
+      vertical-align: top;
+      display: inline-block;
+      .logo-link {
+        height: auto;
+        text-indent: 0;
+        padding: 68px 0 0;
+        margin: 0 30px;
+        display: block;
+        font-size: 0;
+        background-repeat: no-repeat;
+        &.logo-vs-large {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/vs_logo_large.png');
+          background-position: 50% 0;
+          background-size: 61px 50px;
+       }
+       &.logo-tawe-large {
+        background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/tawe_logo_large.png');
+        background-position: 50% 0;
+        background-size: 43px 50px;
+      }
+     }
+    }
+  }
+}
+
+.sparkol-products{
+  background-color: #3f3f3f;
+  padding: 10px 0;
+  ul.menu{
+    li{
+      .product-logo {
+        padding: 45px 0 0;
+        text-indent: 0;
+        margin: 0;
+        width: auto;
+        background-repeat: no-repeat;
+        display: block;
+
+        &.logo-vsa-small{
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_products/vsa_logo_white.png');
+          background-position: 50% 0;
+          background-size: 28px 32px;
+        }
+        &.logo-blog-small {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_products/engblog_logo_white.png');
+          background-position: 50% 13px;
+          background-size: 44px 15px;
+        }
+        &.logo-ebook-small {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_products/ebook_logo_white.png');
+          background-position: 50% 4px;
+          background-size: 32px 29px;
+      }
+        &.logo-animole-small {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_products/animole_logo_white.png');
+          background-position: 50% 9px;
+          background-size: 44px 22px;
+      }
+        &.logo-tawe-small {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_products/tawe_logo_white.png');
+          background-position: 50% 0;
+          background-size: 30px 34px;
+        }
+        &.logo-svg-small{
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/product_logos/sparkol_products/svg_logo_white.png');
+          background-position: 50% 0;
+          background-size: 27px 30px;
+        }
+      }         
+    }
+  }
+}
+
+.social {
+
+  .menu{
+    padding-left: 0;
+
+    li{
+      display: inline-block;
+
+      .icon-social {
+        background-position: 50% 50%;
+        width: 31px;
+        height: 31px;
+        display: block;
+        font-size: 0;
+        background-size: 31px;
+        background-repeat: no-repeat;
+        padding: 10px 0;
+        margin: 0 0 0 15px;
+
+        &.icon-facebook {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/social_icons/facebook_icon_white.png');
+        }
+        
+        &.icon-gplus {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/social_icons/gplus_icon_white.png');
+        }
+        
+        &.icon-twitter {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/social_icons/twitter_icon_white.png');
+        }
+        
+        &.icon-youtube {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/social_icons/youtube_icon_white.png');
+        }
+        
+        &.icon-instagram {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/social_icons/insta_icon_white.png');
+        }
+        
+        &.icon-linkedin {
+          background-image: url('https://d5la3vuoz3z0g.cloudfront.net/web/dist/1041/img/social_icons/linkedin_icon_white.png');
+        }
+      }
+
+    }
+
+  }
+
+}
+.copyright{
+  color:  #bbb;
+  .container{
+    padding-left: 15px;
+    padding-right: 15px;
+    ul{
+      list-style: none;
+      margin: 20px 0 0;
+      padding: 0;
+      .small{
+        font-size: 14px;
+  
+      }
+    }
+  }
+}
+}
+
+@media (max-width: 480px){
+footer {
+  // temporary 
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  .social {
+    background-color: #3f3f3f;
+    .menu {
+      margin: 15px 0 20px;
+
+      li{
+        .icon-social{
+          width: 20px;
+          background-size: 20px;
+        }
+      }
+    }
+  }
+}
+}
+@media (max-width: 768px){
+footer {
+  // temporary 
+  .sparkol-products {
+    ul.menu{
+      li{
+        width: 33%;
+        max-width: 33%;
+        margin: 12px 0;
+        
+      }
+    }
+  }
+  .social {
+    .menu {
+
+      li{
+        padding: 0 7px;
+        .icon-social{
+
+        }
+      }
+    }
+  }
+}
+}
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+height: 100%;
+width: 100%;
+color: #3c3c3c;
+overflow: scroll;
+&.embeded-video {
+  margin: 0;
+}
+}
+
+//override container size
+@media (min-width: $screen-desktop) {
+.container {
+  width: 975px;
+}
+}
+@media (min-width: $screen-lg-desktop) {
+.container {
+  width: 1160px;
+}
+}
+
+@media (min-width: 1285px) {
+.container {
+  width: 1210px;
+}
+}
+
+.img-responsive {
+margin: 0 auto;
+}
+
+
+h2 {
+margin-top: 15px;
+}
+
+
+a {
+color: #7f95c7;
+text-decoration: none;
+}
+
+.checkbox, .control-label, .help-block, .radio, label {
+font-weight: 600;
+}
+
+.error-text {
+color: $orange;
+margin: 20px 0 0;
+font-size: 18px;
+}
+
+#call-to-action {
+padding-top: 30px;
+}
+
+.main-logo {
+margin: 0 0 35px;
+}
+
+.mobile-menu-show {
+header {
+  z-index: 10;
+}
+}
+
+
+footer{
+  background-color: #353535;
+  .product-desc {
+    color:white;
+  }
+  
+}
+
+footer .copyright{
+  padding: 25px 0;
+}
+
+footer .copyright .small {
+  font-size: 14px;
+}
+
+footer ul.menu li{
+  display: inline-block;
+}
+
+footer .social li .icon-social {
+  background-position: 50% 50%;
+}
+
+footer a{
+  color: white;
+}
+
+.logo-sparkol-large {
+  background-image: url('https://sho.co/img/product_logos/sparkol_logo_white.png');
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: 100%;
+  width: 103px;
+  height: 48px;
+  display: inline-block;
+  padding: 20px 0 0;
+  margin: 0 3px;
+}
+
+footer .social li a{
+  background-size: 24px;
+
+
+  &.icon-facebook {
+    background-image: url('https://sho.co/img/social_icons/facebook_icon_white.png');
+  }
+
+  &.icon-twitter {
+    background-image: url('https://sho.co/img/social_icons/twitter_icon_white.png');
+  }
+
+  &.icon-youtube {
+    background-image: url('https://sho.co/img/social_icons/youtube_icon_white.png');
+  }
+
+  &.icon-gplus {
+    background-image: url('https://sho.co/img/social_icons/gplus_icon_white.png');
+  }
+
+  &.icon-linkedin {
+    background-image: url('https://sho.co/img/social_icons/linkedin_icon_white.png');
+  }
+
+  &.icon-instagram {
+    background-image: url('https://sho.co/img/social_icons/insta_icon_white.png');
+  }
+
+
+}
+
+ul.menu li .icon-social {
+  width: 31px;
+  height: 31px;
+  display: block;
+  font-size: 0;
+  background-size: 31px;
+  background-repeat: no-repeat;
+  padding: 10px 0;
+  margin: 0 0 0 15px;
+}
+
+footer ul.menu li a {
+  display: block;
+  padding: 10px 20px;
+  margin: 0 10px;
+}
+
+@media (max-width: 480px) {
+  footer .social .menu {
+      margin: 15px 0 20px;
+  }
+  footer .social li {
+    padding: 0 4px;
+  }
+
+  footer .sparkol-products, 
+  footer .subscription-wrap {
+    display: none;
+  }
+
+  footer .social li .icon-social {
+    width: 20px;
+    background-size: 20px;
+ }
+
+}
+
+
+.logo-sparkol-large {
+  background-image: url('https://sho.co/img/product_logos/sparkol_logo_white.png');
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+  background-size: 100%;
+  width: 103px;
+  height: 48px;
+  display: inline-block;
+  padding: 20px 0 0;
+  margin: 0 3px;
+}
+
+
+.icwrap {
+	z-index: 1;
+	margin-bottom: -30px;
+	display: block;
+	-webkit-backface-visibility: hidden;
+	width: 100%;
+	bottom: 0;
+  position: absolute;
+  transform: rotate(-.9deg);
+}
+
+.ic1 {
+	background: #fff;
+	height: 25px;
+	display: block;
+}
+
+.ic2 {
+	background: #161b21;
+	height: 9px;
+	display: block;
+	margin-top: -1px;
+	margin-bottom: -1px;
+}
+
+.ic3 {
+	background: $blue;
+	height: 25px;
+	display: block;
+}
+
+//overrides
+.navbar-item img {
+  max-height: none;
+}
+
+.navbar-burger {
+  margin-top: auto;
+  margin-bottom: auto;
+}
