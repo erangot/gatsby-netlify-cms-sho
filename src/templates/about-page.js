@@ -6,17 +6,17 @@ import Content, { HTMLContent } from '../components/Content'
 
 export const AboutPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content
-
   return (
-    <section className="section section--gradient">
+   
+    <section className="section section--gradient"  style={{color: "white", background: "#2d3743"}}>
       <div className="container">
         <div className="columns">
           <div className="column is-10 is-offset-1">
             <div className="section">
-              <h2 className="title is-size-3 has-text-weight-bold is-bold-light">
+              <h2 className="title is-size-3 has-text-weight-bold is-bold-light" style={{color: "White"}}>
                 {title}
               </h2>
-              <PageContent className="content" content={content} />
+              <PageContent  className="content" content={content} />
             </div>
           </div>
         </div>
@@ -35,6 +35,7 @@ const AboutPage = ({ data }) => {
   const { markdownRemark: post } = data
 
   return (
+  <div style={{color: "White"}}>
     <Layout>
       <AboutPageTemplate
         contentComponent={HTMLContent}
@@ -42,6 +43,7 @@ const AboutPage = ({ data }) => {
         content={post.html}
       />
     </Layout>
+    </div>
   )
 }
 
