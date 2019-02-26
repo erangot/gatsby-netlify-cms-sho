@@ -14,13 +14,19 @@ Once your videos are live on sho.co, you can:
 
 Sho.co is the quickest way to get your hands on your videos. No quality spared – download in HD.
 
+<hr>
+
 ### **Share your videos**
 
 Show your video to friends, colleagues or students by sharing the short link.
 
+<hr>
+
 ### **Embed onto your own website**
 
 Place your videos onto your own website or blog using the unique embed code.
+
+<hr>
 
 ### **More on the way**
 
