@@ -2,8 +2,8 @@
 templateKey: index-page
 title: hello
 image: /img/home-jumbotron.jpg
-heading: Test sample
-subheading: Support sustainable farming while enjoying a cup
+heading: 'Test sample '
+subheading: 'test for the '
 mainpitch:
   title: Why Kaldi
   description: >
