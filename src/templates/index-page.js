@@ -8,7 +8,7 @@ export const IndexPageTemplate = () => (
 )
 
 const IndexPage = () => {
-  fetch("/.netlify/functions/hello")
+  fetch("/.netlify/functions/userdetails")
   .then(response => response.json())
   .then(console.log)
 
