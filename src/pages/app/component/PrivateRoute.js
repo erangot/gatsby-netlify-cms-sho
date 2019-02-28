@@ -1,5 +1,5 @@
 import React from "react"
-import { isLoggedIn } from "../services/auth"
+import { isLoggedIn } from "../../../services/auth"
 import { navigate } from "gatsby"
 
 class PrivateRoute extends React.Component {

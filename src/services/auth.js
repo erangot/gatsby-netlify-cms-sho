@@ -1,5 +1,6 @@
 // [WIP]  - Change to auth service connecting to server
 // import netlifyIdentity from "netlify-identity-widget"
+import 'isomorphic-fetch';
 
 export const isBrowser = () => typeof window !== "undefined"
 export const initAuth = () => {

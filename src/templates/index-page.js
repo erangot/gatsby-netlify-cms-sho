@@ -1,5 +1,6 @@
 import React from 'react'
 import Layout from '../components/Layout'
+import 'isomorphic-fetch';
 
 export const IndexPageTemplate = () => (
     <div>
