@@ -56,7 +56,7 @@ const Navbar = class extends React.Component {
               </Link>
               <div className="navbar-item">
                 Who's there? | 
-                <a href="https://sho.test.sparkol-dev.co.uk/auth/login?returnUrl=https://cocky-pasteur-b020e9.netlify.com/"> &nbsp;Login</a>
+                <a href={`${process.env.API_URL}/auth/login?returnUrl=${process.env.BASE_URL}/`}> &nbsp;Login</a>
               </div>
             </div>
           </div>
