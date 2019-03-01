@@ -125,6 +125,7 @@ class IndexPageTemplate extends React.Component {
                 </input>
             </form>      
           </div>
+
           <span class="icwrap3">
             <span class="ic1"></span>
             <span class="ic2"></span>
@@ -155,7 +156,7 @@ class IndexPageTemplate extends React.Component {
                   Creators
                 </span>
               </li>
-              <li>{table.likes}
+              <li class="last">{table.likes}
                 <span class="stat-font">
                   Likes
                 </span>
@@ -171,7 +172,7 @@ class IndexPageTemplate extends React.Component {
           <ul class="video-links">
             {
               videos.map((video, i) => 
-                <li class="column videos-row">
+                <li class="col-sm-4 video-row">
                   <a href={video} class="video-thumb">
                   <img src={video.videoThumbnailURL}/>
                     <span class="video-length">{video.duration}</span>
