@@ -9,7 +9,11 @@ export const IndexPageTemplate = () => (
 )
 
 const IndexPage = () => {
-  fetch("/.netlify/functions/userdetails")
+  fetch("/.netlify/functions/api/?path=/api/globalstats")
+  .then(response => response.json())
+  .then(console.log)
+
+  fetch("/.netlify/functions/api/?path=/api/bestinsho")
   .then(response => response.json())
   .then(console.log)
 
