@@ -79,6 +79,24 @@ class IndexPageTemplate extends React.Component {
     }
   }
 
+  componentWillMount(){
+    fetch("/.netlify/functions/api/?path=/api/globalstats")
+    .then(response => response.json())
+    .then(data => {
+      console.log('asdasd')
+      console.log(data)
+      this.setState({table: data});
+    })
+
+    fetch("/.netlify/functions/api/?path=/api/bestinsho")
+    .then(response => response.json())
+    .then(data => {
+      console.log('Dsomeasd')
+      console.log(data)
+      this.setState({videos: data});
+    })
+    }
+
   render() {
     let videos = this.state.videos;
     let table = this.state.table;
@@ -117,18 +135,35 @@ class IndexPageTemplate extends React.Component {
         <div class="videos">
           <div class="text-center">
             <ul class="stats-table">
-            {
-              table.map((video, i) => 
-              <li>{video.volume} 
+              <li>{table.videos}
                 <span class="stat-font">
-                  {video.category}
+                  Videos
                 </span>
               </li>
-              )
-            }
+              <li>{table.views}
+                <span class="stat-font">
+                  Views
+                </span>
+              </li>
+              <li>{table.comments}
+                <span class="stat-font">
+                  Comments
+                </span>
+              </li>
+              <li>{table.creators}
+                <span class="stat-font">
+                  Creators
+                </span>
+              </li>
+              <li>{table.likes}
+                <span class="stat-font">
+                  Likes
+                </span>
+              </li>
             </ul>
           </div>
-
+          
+          
           <div class="container text-center">
             <h1 class="jumbo text-padding">Best in sho</h1>        
           </div>
@@ -137,11 +172,11 @@ class IndexPageTemplate extends React.Component {
             {
               videos.map((video, i) => 
                 <li class="column videos-row">
-                  <a href={video.link} class="video-thumb">
-                  <img src={video.img}/>
-                    <span class="video-length">03:41</span>
+                  <a href={video} class="video-thumb">
+                  <img src={video.videoThumbnailURL}/>
+                    <span class="video-length">{video.duration}</span>
                       <div class="video-info">              
-                        <span class="video-owner">Created with <a href="/app/videoscribe">VideoScribe</a> by <a href="/user/3143123">{video.author}</a>
+                        <span class="video-owner">Created with <a href="/app/videoscribe">{video.applicationDisplayName}</a> by <a href="/user/3143123">{video.ownerName}</a>
                         </span>
                       </div>
                   </a>
@@ -156,7 +191,6 @@ class IndexPageTemplate extends React.Component {
             <span class="ic3"></span>
           </span>
         </div>
-    
       </div>
     )
   }
@@ -164,13 +198,6 @@ class IndexPageTemplate extends React.Component {
 }
 
 const IndexPage = () => {
-  fetch("/.netlify/functions/api/?path=/api/globalstats")
-  .then(response => response.json())
-  .then(console.log)
-
-  fetch("/.netlify/functions/api/?path=/api/bestinsho")
-  .then(response => response.json())
-  .then(console.log)
 
   return (
     <Layout>
