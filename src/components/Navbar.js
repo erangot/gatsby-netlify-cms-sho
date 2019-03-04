@@ -2,6 +2,7 @@ import PropTypes from "prop-types"
 import React from "react"
 import shocologo from "../images/shoco_logo.png"
 import SlantedEndge from '../components/slantedEdge'
+import { Link } from 'gatsby'
 
 import "./styles/header.scss"
 
@@ -24,17 +25,16 @@ const Header = ({ siteTitle }) => (
         <div class="navbar-collapse collapse">
             <nav role="navigation">
                 <ul id="menu-main-menu" class="menu nav navbar-nav navbar-right pull-right">
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/">My videos</a></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/">My videos</Link></li>
                     <li class="last">   
                         Who's there? |                     
-                       <a href="/">Login</a>
+                       <Link to="/">Login</Link>
                     </li>
                 </ul>
             </nav>
         </div>
-            {/* {{> slanted_edge}} */}
-        </div>
+    </div>
     <SlantedEndge/>
 </header>
 )
