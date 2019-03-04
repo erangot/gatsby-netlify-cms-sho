@@ -7,27 +7,27 @@ import { Link } from 'gatsby'
 import "./styles/header.scss"
 
 const Header = ({ siteTitle }) => (
-  <header id="header" class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="logo navbar-btn pull-left" href="/" title="sho.co" rel="home">
+  <header id="header" className="navbar navbar-default">
+    <div className="container">
+        <div className="navbar-header">
+            <a className="logo navbar-btn pull-left" href="/" title="sho.co" rel="home">
                 <img src={shocologo} alt="sho.co logo"/>
             </a>
 
-            <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+            <button type="button" className="navbar-toggle">
+                <span className="sr-only">Toggle navigation</span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
+                <span className="icon-bar"></span>
             </button>
         </div>
 
-        <div class="navbar-collapse collapse">
+        <div className="navbar-collapse collapse">
             <nav role="navigation">
-                <ul id="menu-main-menu" class="menu nav navbar-nav navbar-right pull-right">
+                <ul id="menu-main-menu" className="menu nav navbar-nav navbar-right pull-right">
                     <li><Link to="/about">About</Link></li>
                     <li><Link to="/">My videos</Link></li>
-                    <li class="last">   
+                    <li className="last">   
                         Who's there? |                     
                        <Link to="/">Login</Link>
                     </li>
