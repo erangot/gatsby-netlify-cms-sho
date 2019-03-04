@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,600,700,900');
+@import './color.scss';
+
+
+*{
+    font-family: 'Raleway', sans-serif;
+}
+
+html,
+body{
+    font-family: inherit;
+}
+
+.relative{
+    position: relative;
+    overflow: hidden;
+}
+
+a{
+    text-decoration: none;
+    color: $black;
+
+    &:hover{
+        color: $light-black;
+    }
+}
+
+
+.yellow-text{
+    color: $yellow; 
+}
+
+.container{
+    margin: 0 auto;
+    max-width: 960px;
+    padding: 1.45rem 1.0875rem;
+}
+
+section{
+    @extend .relative;
+}
+
+
+// Responsiveness //
+
+
+// Large Desktop
+@media(min-width: 1368px) and (max-width: 1440px){
+    
+    .container{
+        max-width: 960px;
+    }
+
+}
+
+// Small Desktop
+@media(min-width: 1280px) and (max-width: 1367px){
+    
+    .container{
+        max-width: 960px;
+    }
+    
+}
+
+
+// Tablet
+@media(min-width: 600px) and (max-width: 990px){
+    
+    .container{
+        max-width: 960px;
+    }
+    
+}
+
+// Large Mobile
+@media(min-width: 500px) and (max-width: 599px){
+    
+    .container{
+        max-width: 960px;
+    }
+    
+}
+
+// Small Mobile
+@media(min-width: 320px) and (max-width: 499px){
+    
+    .container{
+        max-width: 960px;
+    }
+    
+}
+
+

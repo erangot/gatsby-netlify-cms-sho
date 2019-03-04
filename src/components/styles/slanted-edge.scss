@@ -1,0 +1,31 @@
+@import './src/global-style/color.scss';
+
+.icwrap {
+	z-index: 1;
+	margin-bottom: -30px;
+	display: block;
+	-webkit-backface-visibility: hidden;
+	width: 100%;
+	bottom: 0;
+	position: absolute;
+}
+
+.ic1 {
+	background: #fff;
+	height: 25px;
+	display: block;
+}
+
+.ic2 {
+	background: #161b21;
+	height: 9px;
+	display: block;
+	margin-top: -1px;
+	margin-bottom: -1px;
+}
+
+.ic3 {
+	background: $blue;
+	height: 25px;
+	display: block;
+}

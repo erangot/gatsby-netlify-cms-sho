@@ -1,0 +1,74 @@
+@import './src/global-style/color.scss';
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+height: 100%;
+width: 100%;
+color: #3c3c3c;
+&.embeded-video {
+  margin: 0;
+}
+}
+
+
+//override container size
+@media (min-width: $screen-desktop) {
+.container {
+  width: 975px;
+}
+}
+@media (min-width: $screen-lg-desktop) {
+.container {
+  width: 1160px;
+}
+}
+
+@media (min-width: 1285px) {
+.container {
+  width: 1210px;
+}
+}
+
+.img-responsive {
+margin: 0 auto;
+}
+
+
+h2 {
+margin-top: 15px;
+}
+
+
+a {
+color: #7f95c7;
+text-decoration: none;
+}
+
+.checkbox, .control-label, .help-block, .radio, label {
+font-weight: 600;
+}
+
+.error-text {
+color: $orange;
+margin: 20px 0 0;
+font-size: 18px;
+}
+
+#call-to-action {
+padding-top: 30px;
+}
+
+.main-logo {
+margin: 0 0 35px;
+}
+
+.mobile-menu-show {
+header {
+  z-index: 10;
+}
+
+}

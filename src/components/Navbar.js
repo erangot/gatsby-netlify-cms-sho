@@ -1,70 +1,50 @@
-import React from 'react'
-import { Link } from 'gatsby'
-import logo from '../img/shoco_logo.png'
-import SlantedEdge from "../components/slantedEdge";
+import PropTypes from "prop-types"
+import React from "react"
+import shocologo from "../images/shoco_logo.png"
+import SlantedEndge from '../components/slantedEdge'
 
-const Navbar = class extends React.Component {
-  componentDidMount() {
-    // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(
-      document.querySelectorAll('.navbar-burger'),
-      0
-    )
-    // Check if there are any navbar burgers
-    if ($navbarBurgers.length > 0) {
-      // Add a click event on each of them
-      $navbarBurgers.forEach(el => {
-        el.addEventListener('click', () => {
-          // Get the target from the "data-target" attribute
-          const target = el.dataset.target
-          const $target = document.getElementById(target)
+import "./styles/header.scss"
 
-          // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-          el.classList.toggle('is-active')
-          $target.classList.toggle('is-active')
-        })
-      })
-    }
-  }
+const Header = ({ siteTitle }) => (
+  <header id="header" class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="logo navbar-btn pull-left" href="/" title="sho.co" rel="home">
+                <img src={shocologo} alt="sho.co logo"/>
+            </a>
 
-  render() {
-    return (
-      <nav
-        className="navbar is-transparent"
-        role="navigation"
-        aria-label="main-navigation"
-      >
-        <div className="container">
-          <div className="navbar-brand">
-            <Link to="/" className="navbar-item" title="Logo">
-              <img src={logo} alt="sho.co" style={{ width: '176px' }} />
-            </Link>
-            {/* Hamburger menu */}
-            <div className="navbar-burger burger" data-target="navMenu">
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-          <div id="navMenu" className="navbar-menu">
-            <div className="navbar-end has-text-centered">
-              <Link className="navbar-item" to="/about">
-                About
-              </Link>
-              <Link className="navbar-item" to="/">
-                My Videos
-              </Link>
-              <div className="navbar-item">
-                Who's there? | 
-                <a href={`${process.env.API_URL}/auth/login?returnUrl=${process.env.BASE_URL}/`}> &nbsp;Login</a>
-              </div>
-            </div>
-          </div>
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-        <SlantedEdge/>
-      </nav>
-    )
-  }
+
+        <div class="navbar-collapse collapse">
+            <nav role="navigation">
+                <ul id="menu-main-menu" class="menu nav navbar-nav navbar-right pull-right">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/">My videos</a></li>
+                    <li class="last">   
+                        Who's there? |                     
+                       <a href="/">Login</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+            {/* {{> slanted_edge}} */}
+        </div>
+    <SlantedEndge/>
+</header>
+)
+
+Header.propTypes = {
+  siteTitle: PropTypes.string,
 }
 
-export default Navbar
+Header.defaultProps = {
+  siteTitle: ``,
+}
+
+export default Header

@@ -1,0 +1,141 @@
+footer {
+  background: #333240;
+  text-align: center;
+}
+
+.footerLogo {
+  content: url("../../images/footericons/footerlogo.png");
+}
+
+.videoscribeLogo {
+  content: url("../../images/footericons/videoscribe.png");
+}
+
+.taweLogo {
+  content: url("../../images/footericons/tawe.png");
+}
+
+.vsanywhereLogo {
+  content: url("../../images/footericons/vsanywhere.png");
+  margin: 1.2rem;
+}
+
+.blogLogo {
+  content: url("../../images/footericons/sparkolblog.png");
+  margin: 1.2rem;
+}
+
+.booksLogo {
+  content: url("../../images/footericons/sparkolbooks.png");
+  margin: 1.2rem;
+}
+
+.animoleLogo {
+  content: url("../../images/footericons/animole.png");
+  margin: 1.2rem;
+}
+
+.tawemobileLogo {
+  content: url("../../images/footericons/tawemobile.png");
+  margin: 1.2rem;
+}
+
+.svgLogo {
+  content: url("../../images/footericons/svgstudio.png");
+  margin: 1.2rem;
+}
+
+.twitterLogo {
+  content: url("../../images/footericons/twitter.png");
+  margin: 1.2rem;
+}
+
+.facebookLogo {
+  content: url("../../images/footericons/facebook.png");
+  margin: 1.2rem;
+}
+
+.linkedinLogo {
+  content: url("../../images/footericons/linkedin.png");
+  margin: 1.2rem;
+}
+
+.googleplusLogo {
+  content: url("../../images/footericons/googleplus.png");
+  margin: 1.2rem;
+}
+
+.youtubeLogo {
+  content: url("../../images/footericons/youtube.png");
+  margin: 1.2rem;
+}
+
+.instagramLogo {
+  content: url("../../images/footericons/instagram.png");
+  margin: 1.2rem;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+}
+
+.mainfooter {
+  text-align: center;
+  color: #8e8e8e;
+  background: #333333;
+}
+
+.columntitle {
+  font-size: 15px;
+  font-family: Arial;
+}
+
+a {
+  &.link{
+  color: white;
+  text-decoration: none;
+  &:hover {
+    color: rgb(26, 248, 248);
+  }
+  }
+}
+
+span {
+  &.a {
+    display: inline-block;
+    width: 100;
+    height: 200;
+    padding: 5px;
+  }
+  &.b {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    padding: 5px;
+  }
+  &.c {
+    display: inline-block;
+    margin-bottom: 2rem;
+    width: 150px;
+    height: 100px;
+    padding: 5px;
+  }
+}
+
+.productFooter {
+  background: #3C3C3C;
+  color: #8e8e8e;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.titlefooter {
+  text-align: center;
+  width: 100%;
+  padding: 3rem;
+}

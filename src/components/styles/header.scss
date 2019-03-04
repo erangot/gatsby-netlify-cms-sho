@@ -1,0 +1,143 @@
+@import './src/global-style/color.scss';
+
+#header {
+    border: 0;
+    color: #6e6e6e;
+    font-weight: 700;
+  
+      .navbar-btn {
+          margin: 6px 0;
+  
+          img {
+                  width: auto;
+              height: 88px;
+            }
+      }
+  
+      a {
+          color: #6e6e6e;
+  
+        &:hover, &:active, &:focus {
+          color: $light-blue;
+        }
+      }
+    .mobile-menu {
+      display: none;
+    }
+
+    .navbar-collapse {
+      display: none;
+    }
+  
+    .navbar-header {
+      margin: 0;
+    }
+    .mobile-menu {
+      margin-top: 100px;
+  
+      a {
+        color: #fff;
+        font-weight: 600;
+      }
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      border: 0;
+    }
+
+    .navbar-toggle {
+      position: relative;
+      float: right;
+      margin-right: 15px;
+      padding: 9px 10px;
+      margin-top: 23.5px;
+      margin-bottom: 23.5px;
+      background-image: none;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      margin-right: 0;
+      border: 0;
+      right: 2em;
+      
+      &:hover, &:focus {
+        background-color: #e6e6e6;
+      }
+  
+      .icon-bar {
+        background-color: #b8b8b8;
+        display: block;
+        width: 22px;
+        height: 2px;
+        border-radius: 1px;
+        margin: 0.5em;
+      }
+    }
+
+    @media (min-width: $screen-desktop) {
+      .navbar-toggle {
+        display: none;
+      }
+      
+      .navbar-collapse {
+        display: block;
+        width: 42%;
+        position: relative;
+        float: right;
+
+        ul {
+          list-style: none;
+          li {
+            display: inline-block;
+            margin-left: 1em;
+          }
+        }
+      }
+
+      .navbar-header {
+        width: 50%;
+        display: inline-block;
+      }
+
+
+    }
+  
+    nav {
+      li.last {
+        margin-left: 10px;
+  
+        span {
+            display: inline-block;
+        }
+  
+        a {
+          display: inline-block;
+          margin: 0;
+          padding-left: 2px;
+        }
+      }
+    }
+
+    .icwrap {
+      @include transform(rotate(-0.9deg));
+    }
+  }
+  
+  body.mobile-menu-show {
+    #header {
+      .navbar-header {
+        position: relative;
+        z-index: 1;
+        background: none;
+      }
+      .icwrap {
+        display: none;
+      }
+    }
+  }
