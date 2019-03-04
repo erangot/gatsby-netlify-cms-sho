@@ -1,8 +1,5 @@
 import React from "react"
 import { Router } from "@reach/router" // comes with gatsby v2
-import Layout from "../../components/Layout"
-import NavBar from "../../components/Navbar"
-import AboutPageTemplate from "../../templates/about-page" 
 import IndexPageTemplate from "../../templates/index-page"
 import PrivateRoute from "./component/PrivateRoute"
 
@@ -20,10 +17,6 @@ const App = () => {
 
 function AboutPage() {
     return <div><h3>AboutPage</h3></div>
-}
-
-function IndexPage() {
-    return <div><h3>IndexPage</h3></div>
 }
 
 function PublicRoute(props) {

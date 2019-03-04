@@ -24,7 +24,7 @@ const Footer = class extends React.Component {
                   <span className="product-desc">Transform visual ideas into video instantly</span>
                 </li>
               </ul>
-              <a href="https://my.sparkol.com/buy">Get a Sparkol subscription</a>
+              <a href="https://my.sparkol.com/buy">Get a Sparkol subscription</a><br></br> 
               <p className="product-desc">And enjoy 2 video apps for the price of 1</p>
             </div>
           </div>
