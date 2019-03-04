@@ -10,9 +10,11 @@ const Header = ({ siteTitle }) => (
   <header id="header" className="navbar navbar-default">
     <div className="container">
         <div className="navbar-header">
-            <a className="logo navbar-btn pull-left" href="/" title="sho.co" rel="home">
-                <img src={shocologo} alt="sho.co logo"/>
-            </a>
+            <Link to="/">
+                <div className="logo navbar-btn pull-left" title="sho.co" rel="home">
+                    <img src={shocologo} alt="sho.co logo"/>
+                </div>
+            </Link>
 
             <button type="button" className="navbar-toggle">
                 <span className="sr-only">Toggle navigation</span>

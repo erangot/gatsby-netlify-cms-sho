@@ -81,14 +81,26 @@
     }
 
     @media (min-width: $screen-desktop) {
+
+      #header {
+        .container {
+          display: flex;
+          position: relative;
+          z-index: 2;
+        }
+      }
       .navbar-toggle {
         display: none;
       }
       
       .navbar-collapse {
-        display: block;
-        width: 42%;
-        position: relative;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: auto;
+        display: table;
+        width: 45%;
+        height: 95px;
+        text-align: right;
         float: right;
 
         ul {
@@ -103,12 +115,18 @@
       .navbar-header {
         width: 50%;
         display: inline-block;
+        flex-grow: 0;
+        flex-shrink: 0;
+        flex-basis: auto;
       }
 
 
     }
   
     nav {
+      vertical-align: middle;
+      display: table-cell;
+
       li.last {
         margin-left: 10px;
   

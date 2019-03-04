@@ -8,7 +8,7 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
   const PageContent = contentComponent || Content
   return (
    
-    <section className="section section--gradient" 
+    <section className="section section--gradient about-page" 
       style={{
       color: "#fff",
       background: "url(https://sho.co/assets/images/eng_bg.png) #2d3743 no-repeat bottom right",
@@ -18,13 +18,13 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
     }}>
     
       <div className="container">
-        <div className="columns" style={{marginLeft:"15rem", marginRight:"15rem"}}>
-          <div className="column is-10 is-offset-1">
+        <div className="columns">
+          <div className="column">
             <div className="section">
               <h2 className="title is-size-3 has-text-weight-bold is-bold-light" style={{color: "White", textAlign: "center"}}>
                 {title}
               </h2>
-              <PageContent style={{color: "White"}} className="content" content={content}/>
+              <PageContent className="content" content={content}/>
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@ const AboutPage = ({ data }) => {
   const { markdownRemark: post } = data
 
   return (
-  <div style={{color: "White"}}>
+  <div>
     <Layout>
       <AboutPageTemplate
         contentComponent={HTMLContent}
