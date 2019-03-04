@@ -63,9 +63,9 @@ class IndexPageTemplate extends React.Component {
           </span>
         </div>
     
-        <div className="videos">
-          <div className="text-center">
-            <ul className="stats-table">
+        <div class="videos">
+          <div class="text-center">
+            <ul class="container stats-table">
               <li>{table.videos}
                 <span className="stat-font">
                   Videos
@@ -102,7 +102,7 @@ class IndexPageTemplate extends React.Component {
           <ul className="video-links">
             {
               videos.map((video, i) => 
-                <li className="col-sm-4 video-row">
+                <li>
                   <div className="video-thumb">
                     <Link to={'/'+video.shortId}>
                       <img src={video.videoThumbnailURL} alt={video.title}/>
@@ -127,7 +127,6 @@ class IndexPageTemplate extends React.Component {
       </div>
     )
   }
-
 }
 
 const IndexPage = () => {
