@@ -32,4 +32,4 @@ Place your videos onto your own website or blog using the unique embed code.
 
 Sho.co is a new service from Sparkol. We have big plans for the platform.
 
-Tell us what else you’d like to see on sho.co on Facebook or Twitter.
+Tell us what else you’d like to see on sho.co on Facebook or Twitter and Youtube.
