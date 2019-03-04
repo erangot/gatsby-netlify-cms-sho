@@ -3,14 +3,15 @@ const https = require('https');
 
 const dev_host = 'localhost';
 const prod_host = 'sho.test.sparkol-dev.co.uk';
+const mock_host = '5c7cce79dd19010014c8e925.mockapi.io';
 
 let options = {
-    host : dev_host,
-    port : 6970,
+    host : mock_host,
+    // port : 6970,
     path:  "/api/globalstats",
-    headers: {
-        "Authorization": "Basic Y29saW46cGFzc3dvcmQ="
-        },
+    // headers: {
+    //     "Authorization": "Basic Y29saW46cGFzc3dvcmQ="
+    //     },
 };
 
 
@@ -26,44 +27,23 @@ export function handler(event, context, callback) {
     res.on('data', (chunk) => body1 += chunk);
     res.on('end', () => {
       console.log('Successfully processed HTTPS response');
-      // If we know it's JSON, parse it
-      if (res.headers['content-type'] === 'application/json') {
+     
+      if (res.headers['content-type'] === 'application/json') 
           body1 = JSON.parse(body1);
-      }
+
       callback(null, {
         statusCode: 200,
-        body: body1,
+        body: JSON.stringify(body1),
       })
     })
-    // context.succeed();
   }).on('error', function(e) {
     console.log("Got error: " + e.message);
+
     callback(null, {
-      statusCode: 200,
-      body: JSON.stringify({
-        msg: 'Hello, World! err http ' + Math.round(Math.random() * 10),
-      }),
+      statusCode: 500,
+      body: JSON.stringify(e),
     })
-    // context.done(null, 'FAILURE');
   });
   
-  // const req = https.request(options, (res) => {
-  //   let body = '';
-  //   console.log('Status:', res.statusCode);
-  //   console.log('Headers:', JSON.stringify(res.headers));
-  //   res.setEncoding('utf8');
-  //   res.on('data', (chunk) => body += chunk);
-  //   res.on('end', () => {
-  //       console.log('Successfully processed HTTPS response');
-  //       // If we know it's JSON, parse it
-  //       if (res.headers['content-type'] === 'application/json') {
-  //           body = JSON.parse(body);
-  //       }
-  //       callback(null, body);
-  //   });
-  // });
-  // req.on('error', callback);
-  // req.write(JSON.stringify(event.data));
-  // req.end();
-
 }
+
