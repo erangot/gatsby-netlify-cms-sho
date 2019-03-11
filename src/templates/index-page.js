@@ -109,7 +109,7 @@ class IndexPageTemplate extends React.Component {
                     </Link>
                       <span className="video-length">{video.duration}</span>
                         <div className="video-info">              
-                          <span className="video-owner">Created with <a href="/app/videoscribe">{video.applicationDisplayName}</a> by <a href="/user/3143123">{video.ownerName}</a>
+                          <span className="video-owner">Created with <a href="/app/videoscribe">{video.applicationDisplayName}</a> by <a href={"/user/"+video.ownerId}>{video.ownerName}</a>
                           </span>
                         </div>
                   </div>
