@@ -1,17 +1,25 @@
+let activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
+
+console.log(`Using environment config: '${activeEnv}'`)
+
+require("dotenv").config({
+  path: `.env.${activeEnv}`,
+});
+
 const http = require('http');
 const https = require('https');
 
 const dev_host = 'localhost';
-const prod_host = 'sho.test.sparkol-dev.co.uk';
+const prod_host = 'sho2.test.sparkol-dev.co.uk';
 const mock_host = '5c7cce79dd19010014c8e925.mockapi.io';
 
 let options = {
-    host : mock_host,
+    host : prod_host,
     // port : 6970,
     path:  "/api/globalstats",
-    // headers: {
-    //     "Authorization": "Basic Y29saW46cGFzc3dvcmQ="
-    //     },
+    headers: {
+        "Authorization": "Basic Y29saW46cGFzc3dvcmQ="
+        },
 };
 
 
@@ -21,7 +29,7 @@ export function handler(event, context, callback) {
       options.path = event.queryStringParameters.path;
   }
 
-  http.get(options, function(res) {
+  https.get(options, function(res) {
     let body1 = '';
     console.log("Got response: " + res.statusCode);
     res.on('data', (chunk) => body1 += chunk);
