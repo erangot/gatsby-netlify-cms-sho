@@ -11,7 +11,6 @@ const https = require('https');
 
 const dev_host = 'localhost';
 const prod_host = 'sho2.test.sparkol-dev.co.uk';
-const mock_host = '5c7cce79dd19010014c8e925.mockapi.io';
 
 let options = {
     host : prod_host,
@@ -41,7 +40,7 @@ export function handler(event, context, callback) {
 
       callback(null, {
         statusCode: 200,
-        body: JSON.stringify(body1),
+        body: body1,
       })
     })
   }).on('error', function(e) {

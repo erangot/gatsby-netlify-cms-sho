@@ -53,10 +53,6 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
       return Promise.reject(result.errors)
     }
 
-    const {data: allVideos} = async() => { get(); };
-
-    console.log(allVideos);
-
     const posts = result.data.allMarkdownRemark.edges
 
     posts.forEach(edge => {

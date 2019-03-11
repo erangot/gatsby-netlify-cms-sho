@@ -25,12 +25,12 @@ class IndexPageTemplate extends React.Component {
     .then(data => {
       this.setState({videos: data});
     })
-    }
+  }
 
   render() {
     let videos = this.state.videos;
     let table = this.state.table;
-
+    
     return (
       <div>
         <div className="intro">
@@ -63,9 +63,9 @@ class IndexPageTemplate extends React.Component {
           </span>
         </div>
     
-        <div class="videos">
-          <div class="text-center">
-            <ul class="container stats-table">
+        <div className="videos">
+          <div className="text-center">
+            <ul className="container stats-table">
               <li>{table.videos}
                 <span className="stat-font">
                   Videos
@@ -102,7 +102,7 @@ class IndexPageTemplate extends React.Component {
           <ul className="video-links">
             {
               videos.map((video, i) => 
-                <li>
+                <li key={video.shortId}>
                   <div className="video-thumb">
                     <Link to={'/'+video.shortId}>
                       <img src={video.videoThumbnailURL} alt={video.title}/>
