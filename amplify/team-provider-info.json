@@ -1,0 +1,19 @@
+{
+    "gatsby": {
+        "awscloudformation": {
+            "AuthRoleName": "gatsbynetlifycmssho-20190322130707-authRole",
+            "UnauthRoleArn": "arn:aws:iam::860713519107:role/gatsbynetlifycmssho-20190322130707-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::860713519107:role/gatsbynetlifycmssho-20190322130707-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "gatsbynetlifycmssho-20190322130707-deployment",
+            "UnauthRoleName": "gatsbynetlifycmssho-20190322130707-unauthRole",
+            "StackName": "gatsbynetlifycmssho-20190322130707",
+            "StackId": "arn:aws:cloudformation:us-east-2:860713519107:stack/gatsbynetlifycmssho-20190322130707/580f4d40-4c60-11e9-a3f6-0a2e34a37100"
+        },
+        "categories": {
+            "auth": {
+                "cognitoc3fb6661": {}
+            }
+        }
+    }
+}
