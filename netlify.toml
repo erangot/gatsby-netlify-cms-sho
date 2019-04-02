@@ -1,6 +1,5 @@
 [build]
   publish = "public"
-  Functions = "lambda"
   command = "npm run build"
 [build.environment]
   YARN_VERSION = "1.9.4"

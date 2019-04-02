@@ -8,16 +8,7 @@ require("dotenv").config({
 var proxy = require("http-proxy-middleware")
 
 module.exports = {
-  developMiddleware: app => {
-    app.use(
-      "/.netlify/functions/",
-      proxy({
-        target: "http://localhost:9000",
-        pathRewrite: {
-          "/.netlify/functions/": "",
-        },
-      })
-    )
+  developMiddleware: app => {    
   },
   siteMetadata: {
     title: 'sho.co for Sparkol',
@@ -25,6 +16,34 @@ module.exports = {
     author: `@ussi`,
   },
   plugins: [
+    {
+      resolve: `gatsby-source-mysql`,
+      options: {
+        connectionDetails: {
+          host: 'db4free.net',
+          user: 'shocogatsbymnl',
+          password: 'rykku8-raqGib-wugtah',
+          database: 'shocogatsbymnl'
+        },
+        query: 'SELECT * FROM shocogatsbymnl.shortUrls a, shocogatsbymnl.media b WHERE a.id = b.shortUrlId;',
+        idFieldName: 'id',
+        typePrefix: 'ShortUrls'
+      }
+    },
+    {
+      resolve: `gatsby-source-mysql`,
+      options: {
+        connectionDetails: {
+          host: 'db4free.net',
+          user: 'shocogatsbymnl',
+          password: 'rykku8-raqGib-wugtah',
+          database: 'shocogatsbymnl'
+        },
+        query: 'SELECT * FROM shocogatsbymnl.media;',
+        idFieldName: 'id',
+        typePrefix: 'Media'
+      }
+    },
     'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-plugin-create-client-paths`,

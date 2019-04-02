@@ -1,7 +1,7 @@
 import React from 'react'
 import Layout from '../components/Layout'
 import 'isomorphic-fetch';
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 
 class IndexPageTemplate extends React.Component {
 
@@ -9,22 +9,38 @@ class IndexPageTemplate extends React.Component {
     super();
     this.state = {
       videos: [],
-      table: []
+      table: [],
+      value: ''
     }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.keyPress = this.keyPress.bind(this);
   }
 
   componentWillMount(){
-    fetch("/.netlify/functions/api/?path=/api/globalstats")
-    .then(response => response.json())
-    .then(data => {
-      this.setState({table: data});
-    })
+    // Refactor for aws lambda
+    // fetch("/.netlify/functions/api/?path=/api/globalstats")
+    // .then(response => response.json())
+    // .then(data => {
+    //   this.setState({table: data});
+    // })
 
-    fetch("/.netlify/functions/api/?path=/api/bestinsho")
-    .then(response => response.json())
-    .then(data => {
-      this.setState({videos: data});
-    })
+    // fetch("/.netlify/functions/api/?path=/api/bestinsho")
+    // .then(response => response.json())
+    // .then(data => {
+    //   this.setState({videos: data});
+    // })
+  }
+
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+ }
+
+  keyPress(e){
+      if(e.keyCode == 13){
+        navigate(`/${e.target.value}`);
+        
+      }
   }
 
   render() {
@@ -51,7 +67,7 @@ class IndexPageTemplate extends React.Component {
             <h1 className="jumbo text-padding">Find a video</h1>
             <form className="search-box">
                 <label className="search-label">sho.co/</label>
-                <input className="search-input" type="text" placeholder="shortcode">
+                <input className="search-input" type="text" placeholder="shortcode" value={this.state.value} onKeyDown={this.keyPress} onChange={this.handleChange}>
                 </input>
             </form>      
           </div>

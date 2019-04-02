@@ -3,29 +3,120 @@ const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
 const { fmImagesToRelative } = require('gatsby-remark-relative-images')
 const axios = require('axios');
-const dev_host = 'http://localhost:6970';
-const prod_host = 'https://sho2.test.sparkol-dev.co.uk';
-
-const get = () => axios.get(prod_host+'/api/allPublic', {
-  headers: {
-    Authorization: "Basic Y29saW46cGFzc3dvcmQ="
-  }
-});
 
 
 exports.createPages = async ({ actions: { createPage }, graphql }) => {
-  
-  const { data: allVideos } = await get();
 
-  allVideos.videos.forEach(video => {
-    createPage({
-      path: `/${video.shortId}`,
-      component: path.resolve(
-              `src/templates/video-page.js`
-            ),
-      context: { video }
-    });
-  });
+  graphql(`
+  {
+    allShortUrlsResults {
+      edges {
+        node {
+          shortUrlsId
+          username
+          engaged
+          timeInSeconds
+          videoTitle
+          videoDescription
+          applicationId
+          shortId
+          blocked
+          visibility
+          deleted
+          views
+          engaged
+          createdOn
+          createdBy
+          shortUrlId
+          path
+          bucketPath
+          formatId
+        }
+      }
+    }
+  }
+  `).then(result => {
+    if (result.errors) {
+      result.errors.forEach(e => console.error(e.toString()))
+      return Promise.reject(result.errors)
+    }
+
+    const shortUrls = result.data.allShortUrlsResults.edges;
+
+    
+    // loop to every object with duplicated short id different media type
+    for (let index = 0; index < shortUrls.length; ) {
+    
+      var video = shortUrls[index].node;
+      var temp_shortUrlId = video.shortUrlId;
+      var increment = 0;
+
+      do {
+        increment++;
+        
+        if((increment+index) >= shortUrls.length)
+          break;
+
+        var format_id = shortUrls[index+increment].node.formatId;
+        switch (true) {
+          case 19:
+          case 23:
+            video.thumbnail = `${shortUrls[index+increment].node.path}/5_640x360.png`;
+            break
+          case (format_id > 0 && format_id < 19):
+            video.videopath = shortUrls[index+increment].node.path;
+            break;
+          case (format_id > 19 && format_id < 23):
+            video.videopath = shortUrls[index+increment].node.path;
+            break;
+          //19 & 23
+          default:
+            video.thumbnail = `${shortUrls[index+increment].node.path}/5_640x360.png`;
+            break;
+        }
+
+        var application_id = shortUrls[index+increment].node.applicationId;
+
+        switch (application_id) {
+          case 1:
+            video.applicationName = 'videoscribe';
+            video.applicationDisplayName = 'VideoScribe';
+            break;
+          case 2:
+            video.applicationName = 'tawe';
+            video.applicationDisplayName = 'Tawe';
+          break;
+          case 3:
+            video.applicationName = 'storypix';
+            video.applicationDisplayName = 'StoryPix';
+          break;
+          case 4:
+            video.applicationName = 'videoscribe-cloud';
+            video.applicationDisplayName = 'FunScribe';
+          break;
+        
+          default:
+            break;
+        }
+
+        
+      } while (temp_shortUrlId == shortUrls[index+increment].node.shortUrlId);
+
+      index = increment+index;
+      
+      createPage({
+        path: video.shortId,
+        // tags: edge.node.frontmatter.tags,
+        component: path.resolve(
+          `src/templates/video-page.js`
+        ),
+        // additional data can be passed via context
+        context: {
+          video,
+        },
+      })
+    }
+  })
 
   // Iterate through each video, putting all found Sparkol application created video  into `app`
 

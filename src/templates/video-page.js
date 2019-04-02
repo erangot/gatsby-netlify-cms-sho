@@ -6,7 +6,11 @@ export default ({ pageContext: { video } }) => (
     <Layout>
         <div className="videoPage">
             <div className="intro">
-                <img src={video.videoThumbnailURL} alt={video.shortId} />
+                <img src={video.thumbnail || ''} alt={video.shortId || ''} />
+                <video width="320" height="240" controls>
+                    <source src={video.videopath || ''} type="video/mp4"/>
+                Your browser does not support the video tag.
+                </video>
                 <span className="icwrap2">
                     <span className="ic3"></span>
                     <span className="ic2"></span>
@@ -16,8 +20,8 @@ export default ({ pageContext: { video } }) => (
             <div className="search">
                 <div className="container text-left">
                     <p class="upload-info">Created with 
-                    <Link to={"/app/"+video.applicationName}> {video.applicationDisplayName} </Link>
-                    by <Link to={"/user/"+video.ownerId}> {video.ownerName} </Link>
+                    <Link to={"/app/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
+                    by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
                     <span class="upload-date">2 months ago</span></p>                     
                 </div>
                 <span className="icwrap3">
