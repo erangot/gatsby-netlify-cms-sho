@@ -43,6 +43,11 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
 
     const shortUrls = result.data.allShortUrlsResults.edges;
 
+    var application_array = [{name: 'videoscribe', displayName: 'VideoScribe', videos: []},
+                            {name: 'tawe', displayName: 'Tawe', videos: []},
+                            {name: 'storypix', displayName: 'StoryPix', videos: []},
+                            {name: 'videoscribe-cloud', displayName: 'FunScribe', videos: []},];
+
     
     // loop to every object with duplicated short id different media type
     for (let index = 0; index < shortUrls.length; ) {
@@ -53,7 +58,6 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
 
       do {
         increment++;
-        
         if((increment+index) >= shortUrls.length)
           break;
 
@@ -74,33 +78,37 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
             video.thumbnail = `${shortUrls[index+increment].node.path}/5_640x360.png`;
             break;
         }
-
-        var application_id = shortUrls[index+increment].node.applicationId;
-
-        switch (application_id) {
-          case 1:
-            video.applicationName = 'videoscribe';
-            video.applicationDisplayName = 'VideoScribe';
-            break;
-          case 2:
-            video.applicationName = 'tawe';
-            video.applicationDisplayName = 'Tawe';
-          break;
-          case 3:
-            video.applicationName = 'storypix';
-            video.applicationDisplayName = 'StoryPix';
-          break;
-          case 4:
-            video.applicationName = 'videoscribe-cloud';
-            video.applicationDisplayName = 'FunScribe';
-          break;
-        
-          default:
-            break;
-        }
-
-        
+ 
       } while (temp_shortUrlId == shortUrls[index+increment].node.shortUrlId);
+
+
+      // use first row on the media /shortUrl query
+      var application_id = shortUrls[index].node.applicationId;
+
+      switch (application_id) {
+        case 1:
+          video.applicationName = 'videoscribe';
+          video.applicationDisplayName = 'VideoScribe';
+          break;
+        case 2:
+          video.applicationName = 'tawe';
+          video.applicationDisplayName = 'Tawe';
+        break;
+        case 3:
+          video.applicationName = 'storypix';
+          video.applicationDisplayName = 'StoryPix';
+        break;
+        case 4:
+          video.applicationName = 'videoscribe-cloud';
+          video.applicationDisplayName = 'FunScribe';
+        break;
+      
+        default:
+          break;
+      }
+      
+      // push specific video per application category
+      application_array[(application_id-1)].videos.push(video);
 
       index = increment+index;
       
@@ -115,10 +123,23 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
           video,
         },
       })
-    }
-  })
+    } //end of for loop for every object on graphql
 
-  // Iterate through each video, putting all found Sparkol application created video  into `app`
+    // Iterate through each video, - above ^
+    // putting all found Sparkol application created video  into `application_array`
+
+    application_array.forEach(application => {
+        const applicationPath = `/application/${application.name}/`
+  
+        createPage({
+          path: applicationPath,
+          component: path.resolve(`src/templates/application-page.js`),
+          context: {
+            application,
+          },
+        })
+      })
+  })
 
   // Iterate through each video, putting all found user video into `user`
 

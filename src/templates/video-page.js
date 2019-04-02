@@ -6,11 +6,13 @@ export default ({ pageContext: { video } }) => (
     <Layout>
         <div className="videoPage">
             <div className="intro">
-                <img src={video.thumbnail || ''} alt={video.shortId || ''} />
-                <video width="320" height="240" controls>
-                    <source src={video.videopath || ''} type="video/mp4"/>
-                Your browser does not support the video tag.
-                </video>
+                {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
+                <div className="container text-center">
+                    <video width="640" height="480" controls>
+                        <source src={video.videopath || ''} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                    </video>
+                </div>
                 <span className="icwrap2">
                     <span className="ic3"></span>
                     <span className="ic2"></span>
@@ -19,10 +21,12 @@ export default ({ pageContext: { video } }) => (
             </div>
             <div className="search">
                 <div className="container text-left">
-                    <p class="upload-info">Created with 
-                    <Link to={"/app/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
+
+                    <p className="upload-info">Created with 
+                    <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
                     by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
-                    <span class="upload-date">2 months ago</span></p>                     
+                    <span className="upload-date">2 months ago</span></p>                     
+
                 </div>
                 <span className="icwrap3">
                     <span className="ic1"></span>
@@ -30,8 +34,8 @@ export default ({ pageContext: { video } }) => (
                     <span className="ic3"></span>
                 </span>
             </div>
-            <div class="videos">
-                <div class="text-center">
+            <div className="videos">
+                <div className="text-center">
                 <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
                 <h2>0 comments</h2>
                 </div>

@@ -1,4 +1,3 @@
-import PropTypes from "prop-types"
 import React, { Component } from "react"
 import shocologo from "../images/shoco_logo.png"
 import SlantedEndge from '../components/slantedEdge'
@@ -44,7 +43,7 @@ import "./styles/header.scss"
       }
 
     render() {
-        if(this.state.authState == 'signedIn') 
+        if(this.state.authState === 'signedIn') 
             return (
             <header id="header" className="navbar navbar-default">
                     <div className="container">
