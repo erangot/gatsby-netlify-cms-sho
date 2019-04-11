@@ -18,7 +18,7 @@ exports.handler = async (event, context) => {
   console.log('Received event:', JSON.stringify(event, null, 2));
   var result;
   if(event.queryStringParameters != null )
-    result = await pathChecking(event.queryStringParameters.api,event.body); 
+    result = await pathChecking(event); 
   else 
     result = "success";
 
@@ -38,9 +38,9 @@ exports.handler = async (event, context) => {
 };
 
 
-async function pathChecking(path, bodyString) {
+async function pathChecking(event) {
   return new Promise(resolve => {
-    switch (path) {  
+    switch (event.queryStringParameters.api) {  
       case 'getGlobalStats':
           
         connection.query("call shocogatsbymnl.get_global_statistics()", function(err, rows, fields) {
@@ -67,21 +67,24 @@ async function pathChecking(path, bodyString) {
         break;
        
       case 'create':
-        var body = JSON.parse(bodyString);
+        var body = JSON.parse(event.body);
         
         connection.query(`call shocogatsbymnl.create_short_url('${body.renderRequestId}', '${body.createdBy}', '${body.username}', '${body.applicationName}', '${body.visibility}')`, function (err, rows, fields) {          
           var output = {
             shorturl: rows[0][0],
             media: ""
           }
+
+          connection.query(`call shocogatsbymnl.add_media_for_shortId('${rows[0][0].shortId}', '${body.path}', 'thumbnails', '${body.bucketPath}')`, function(err, rows, fields) {
+
+          });
           
-          console.log(`call shocogatsbymnl.add_media_for_shortId('${rows[0][0].shortId}', '${body.path}', '${body.format}', '${body.bucketPath}')`);
+          
           connection.query(`call shocogatsbymnl.add_media_for_shortId('${rows[0][0].shortId}', '${body.path}', '${body.format}', '${body.bucketPath}')`, function(err, rows, fields) {
             
-            console.log(rows);
             output.media = rows;
             
-            var args = " -d '{ }' https://api.netlify.com/build_hooks/5caee94d280d0f5886f22e9a";
+            var args = " -d '{ }' https://api.netlify.com/build_hooks/5cb060185c8ee50189b4609f";
 
             exec('curl ' + args, function (error, stdout, stderr) {
               console.log('stdout: ' + stdout);
@@ -97,6 +100,31 @@ async function pathChecking(path, bodyString) {
         });
  
         break;
+
+      case 'getMyVideos':
+
+      var createdBy = event.queryStringParameters.createdBy;
+        
+        console.log(`SELECT * FROM shocogatsbymnl.shortUrls where createdBy = '${createdBy}'`);
+        connection.query(`SELECT * FROM shocogatsbymnl.shortUrls where createdBy = '${createdBy}'`, function (err, rows, fields) {          
+          console.log(rows);
+          
+          var output = [];
+          for (var i=0; i<rows.length; i++) {
+            
+            var firstElement = rows[i].shortId;
+            console.log(firstElement);
+            output.push(firstElement);
+          }
+          console.log(`call shocogatsbymnl.get_video_details_for_shortId_list('${output}')`);
+          connection.query(`call shocogatsbymnl.get_video_details_for_shortId_list('${output}')`, function(err, rows, fields) {
+
+            resolve(rows);
+          });  
+        });
+ 
+        break;
+
     }
   });
 }

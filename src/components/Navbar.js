@@ -66,7 +66,7 @@ import "./styles/header.scss"
                             <nav role="navigation">
                                 <ul id="menu-main-menu" className="menu nav navbar-nav navbar-right pull-right">
                                     <li><Link to="/about">About</Link></li>
-                                    <li><Link to="/">My videos</Link></li>
+                                    <li><Link to="/app/myvideos">My videos</Link></li>
                                     <li className="last">   
                                         Yo, {this.state.user} |                     
                                         <span onClick={this.signOut}>Logout</span>
@@ -101,7 +101,7 @@ import "./styles/header.scss"
                             <nav role="navigation">
                                 <ul id="menu-main-menu" className="menu nav navbar-nav navbar-right pull-right">
                                     <li><Link to="/about">About</Link></li>
-                                    <li><Link to="/">My videos</Link></li>
+                                    <li><Link to="/app/myvideos">My videos</Link></li>
                                     <li className="last">   
                                         Who's there? |                     
                                         <Link to="/app">Login</Link>
