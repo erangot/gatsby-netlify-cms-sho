@@ -168,7 +168,7 @@ class MyVideosPage extends React.Component {
                   <li key={video.shortId}>
                     <div className="video-thumb">
                       <Link to={'/'+video.shortId}>
-                        <img src={video.videoThumbnailURL || 'https://via.placeholder.com/250x250.png?text=Placeholder+Sho.Co+Under+Development'} alt={video.title}/>
+                        <img src={video.videoThumbnailURL || 'https://via.placeholder.com/250x100.png?text=Placeholder+Sho.Co+Under+Development'} alt={video.title}/>
                       </Link>
                         <span className="video-length">{video.duration}</span>
                           <div className="video-info">              
