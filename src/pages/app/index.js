@@ -105,21 +105,22 @@ class MyVideosPage extends React.Component {
       body: JSON.stringify(payload)
     });
     const content = await rawResponse.json();
-  
+    
+    this.setState({ videos: this.state.videos.concat({
+      shortId: content.shorturl.shortId,
+      path: content.media[0][0].path,
+      bucketPath: content.media[0][0].bucketPath,
+      format: content.media[0][0].format,
+      formatDescription: "",
+      owner: this.state.user.attributes.sub,
+      application: "videoscribe",
+      applicationDisplayName: "VideoScribe",
+      title: null,
+      timeInSeconds: null,
+      username: this.state.user.username,
+      visibility: "public"
+    }) })
     console.log(content);
-   (async () => {
-    const rawResponse = await fetch('https://ukzm28gfld.execute-api.us-east-2.amazonaws.com/default/test-api?api=create', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-    const content = await rawResponse.json();
-  
-    console.log(content);
-  })();
  }
 
   keyPress(e){
