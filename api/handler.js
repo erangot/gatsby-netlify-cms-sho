@@ -99,11 +99,11 @@ async function pathChecking(event) {
           // resolve(output);      
         });
  
-        break;
+      break;
 
       case 'getMyVideos':
 
-      var createdBy = event.queryStringParameters.createdBy;
+        var createdBy = event.queryStringParameters.createdBy;
         
         console.log(`SELECT * FROM shocogatsbymnl.shortUrls where createdBy = '${createdBy}'`);
         connection.query(`SELECT * FROM shocogatsbymnl.shortUrls where createdBy = '${createdBy}'`, function (err, rows, fields) {          
@@ -123,7 +123,27 @@ async function pathChecking(event) {
           });  
         });
  
-        break;
+      break;
+
+      case 'checkSetEmailCompletion':
+
+        var shortId = event.queryStringParameters.shortId;
+        console.log(`SELECT completionEmailSent FROM shocogatsbymnl.shortUrls where shortId ='${shortId}'`);
+        connection.query(`SELECT completionEmailSent FROM shocogatsbymnl.shortUrls where shortId ='${shortId}'`, function (err, rows, fields) {          
+          console.log(rows[0].completionEmailSent);
+          if(rows[0].completionEmailSent) {
+
+            console.log(`SELECT * FROM shocogatsbymnl.shortUrls su inner JOIN shocogatsbymnl.media m ON m.shortUrlId = su.id WHERE su.shortId ='${shortId}'`)
+            connection.query(`SELECT * FROM shocogatsbymnl.shortUrls su inner JOIN shocogatsbymnl.media m ON m.shortUrlId = su.id WHERE su.shortId ='${shortId}'`, function (err, rows, fields) {          
+              console.log(rows);
+              resolve(rows);
+            });
+          } else {
+            resolve( false );
+          }
+          
+        });
+      break;
 
     }
   });

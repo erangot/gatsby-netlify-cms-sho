@@ -7,7 +7,7 @@ import Amplify, { I18n, Auth } from 'aws-amplify';
 // Get the aws resources configuration parameters
 import aws_exports from '../../aws-exports'; // if you are using Amplify CLI
 import { navigate, Link } from 'gatsby';
-import Layout from '../../components/Layout'
+import Layout from '../../components/Layout';
 
 Amplify.configure(aws_exports);
 
@@ -33,6 +33,7 @@ const App = () => {
         <PublicRoute path="/app">
           <PrivateRoute path="/" component={IndexPageTemplate} />
         </PublicRoute>
+        <DynamicRoute path="/app/:shortId"/>
       </Router>
   )
 }
@@ -174,7 +175,7 @@ class MyVideosPage extends React.Component {
                           <div className="video-info">              
                             <span className="video-owner">Created with 
                             <Link to={"/application/"+video.application || ''}> {video.applicationDisplayName || ''} </Link>
-                            Short URL: <Link to={'/'+video.shortId}>{video.shortId}</Link>
+                            Short URL: <Link to={'/app/'+video.shortId}>{video.shortId}</Link>
                             </span>
                           </div>
                     </div>
@@ -194,6 +195,247 @@ class MyVideosPage extends React.Component {
 
 function PublicRoute(props) {
   return <div>{props.children}</div>
+}
+
+class DynamicRoute extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      video: {},
+      isRendered: false,
+      message: ''
+    }
+    this.videoIsRendered = this.videoIsRendered.bind(this);
+    this.formatCategorize = this.formatCategorize.bind(this);
+  }
+
+  componentWillMount() {
+
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
+    .then(response => response.json())
+    .then(data => {
+      if(data) {
+        var videoPageData = {
+          videopath: '',
+          applicationName:'',
+          applicationDisplayName:'',
+          createdBy:data[0].createdBy,
+          username:data[0].username,
+          createdOn:data[0].createdOn,
+          thumbnail:''
+        
+        }
+    
+        switch (data[0].application_id) {
+          case 1:
+            videoPageData.applicationName = 'videoscribe';
+            videoPageData.applicationDisplayName = 'VideoScribe';
+            break;
+          case 2:
+            videoPageData.applicationName = 'tawe';
+            videoPageData.applicationDisplayName = 'Tawe';
+          break;
+          case 3:
+            videoPageData.applicationName = 'storypix';
+            videoPageData.applicationDisplayName = 'StoryPix';
+          break;
+          case 4:
+            videoPageData.applicationName = 'videoscribe-cloud';
+            videoPageData.applicationDisplayName = 'FunScribe';
+          break;
+        
+          default:
+            break;
+        }
+        
+        data.forEach(video => {
+          if( video.formatId === 6) 
+            videoPageData.videopath = video.path;
+          else 
+            videoPageData.thumbnail = video.path;
+        });
+    
+        console.log(videoPageData);
+    
+        this.setState({
+          isRendered: true,
+          video: videoPageData});
+      } else {
+        this.setState({
+          isRendered: false,
+          message: 'Your video is being rendered. Please return on completion, an email will notify you. '});
+      }
+
+    })
+
+    // Redirect to site when it is ready
+    // if( siteIsBuilt() ){
+    //   navigate(`/${this.props.shortId}`)
+    // } else if ( videoIsRendered() ) {
+    // // Show video page when rendered but not yet built
+    //   this.setState({});
+    // // Check on set_completion email variable 
+    // } else {
+    // // Show video when it is being rendered
+    //   this.setState({});
+    // }
+  
+
+  }
+
+  siteIsBuilt() {
+    return false;
+  }
+
+  videoIsRendered() {
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
+    .then(response => response.json())
+    .then(data => {
+      if(data) {
+        // formatCategorize(data);
+      }
+
+    })
+  }
+
+  formatCategorize( data ) {
+    var videoPageData = {
+      videopath: '',
+      applicationName:'',
+      applicationDisplayName:'',
+      createdBy:data[0].createdBy,
+      username:data[0].username,
+      createdOn:data[0].createdOn,
+      thumbnail:''
+    
+    }
+
+    switch (data[0].application_id) {
+      case 1:
+        videoPageData.applicationName = 'videoscribe';
+        videoPageData.applicationDisplayName = 'VideoScribe';
+        break;
+      case 2:
+        videoPageData.applicationName = 'tawe';
+        videoPageData.applicationDisplayName = 'Tawe';
+      break;
+      case 3:
+        videoPageData.applicationName = 'storypix';
+        videoPageData.applicationDisplayName = 'StoryPix';
+      break;
+      case 4:
+        videoPageData.applicationName = 'videoscribe-cloud';
+        videoPageData.applicationDisplayName = 'FunScribe';
+      break;
+    
+      default:
+        break;
+    }
+    
+    data.forEach(video => {
+      if( video.formatId === 6) 
+        videoPageData.videopath = video.path;
+      else 
+        videoPageData.thumbnail = video.path;
+    });
+
+    console.log(videoPageData);
+
+    this.setState({
+      isRendered: true,
+      video: videoPageData});
+  }
+
+
+
+  render() {
+
+    var video = this.state.video;
+
+    if(this.state.isRendered)
+      return (
+        <Layout>
+          <div className="videoPage">
+              <div className="intro">
+                  {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
+                  <div className="container text-center">
+                      <video width="640" height="480" controls>
+                          <source src={video.videopath || ''} type="video/mp4"/>
+                      Your browser does not support the video tag.
+                      </video>
+                  </div>
+                  <span className="icwrap2">
+                      <span className="ic3"></span>
+                      <span className="ic2"></span>
+                      <span className="ic1"></span>
+                  </span>
+              </div>
+              <div className="search">
+                  <div className="container text-left">
+
+                      <p className="upload-info">Created with 
+                      <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
+                      by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
+                      <span className="upload-date">2 months ago</span></p>                     
+
+                  </div>
+                  <span className="icwrap3">
+                      <span className="ic1"></span>
+                      <span className="ic2"></span>
+                      <span className="ic3"></span>
+                  </span>
+              </div>
+              <div className="videos">
+                  <div className="text-center">
+                  <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
+                  <h2>0 comments</h2>
+                  </div>
+              </div>
+          </div>
+        </Layout>
+      );
+    else 
+    return (
+      <Layout>
+        <div className="videoPage">
+            {/* <div className="intro">
+                <img src={video.thumbnail || ''} alt={video.shortId || ''} /> 
+                <div className="container text-center">
+                    <video width="640" height="480" controls>
+                        <source src={video.videopath || ''} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                    </video>
+                </div>
+                <span className="icwrap2">
+                    <span className="ic3"></span>
+                    <span className="ic2"></span>
+                    <span className="ic1"></span>
+                </span>
+            </div> */}
+            <div className="search">
+                <div className="container text-center">
+
+                    <p className="upload-info text-center">
+                      {this.state.message}
+                    </p>                     
+
+                </div>
+                <span className="icwrap3">
+                    <span className="ic1"></span>
+                    <span className="ic2"></span>
+                    <span className="ic3"></span>
+                </span>
+            </div>
+            {/* <div className="videos">
+                <div className="text-center">
+                <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
+                <h2>0 comments</h2>
+                </div>
+            </div> */}
+        </div>
+      </Layout>
+    );
+  }
 }
 
 const MyTheme = {
