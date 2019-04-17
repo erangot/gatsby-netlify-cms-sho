@@ -8,6 +8,7 @@ import Amplify, { I18n, Auth } from 'aws-amplify';
 import aws_exports from '../../aws-exports'; // if you are using Amplify CLI
 import { navigate, Link } from 'gatsby';
 import Layout from '../../components/Layout';
+import TimeAgo from 'react-timeago'
 
 Amplify.configure(aws_exports);
 
@@ -68,6 +69,7 @@ class MyVideosPage extends React.Component {
         fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getMyVideos&createdBy=${user.attributes.sub}`)
         .then(response => response.json())
         .then(data => {
+          console.log(data[0]);
           this.setState({videos: data[0]});
         })
     })
@@ -89,11 +91,11 @@ class MyVideosPage extends React.Component {
       "renderRequestId": "123",
       "createdBy": `${this.state.user.attributes.sub}`,
       "username": `${this.state.user.username}`,
-      "applicationName": "videoscribe",
-      "visibility": `${this.state.form._visibility.value}`,
-      "path":  `${this.state.form._path.value}`,
+      "applicationName": `${this.state.form._application.value}`,
+      "visibility": `public`,
+      "video":  `${this.state.form._video.value}`,
       "format": "mp4",
-      "bucketPath": `${this.state.form._bucketpath.value}`
+      "thumbnail": `${this.state.form._thumbnail.value}`
     };
 
    const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -109,18 +111,25 @@ class MyVideosPage extends React.Component {
     
     this.setState({ videos: this.state.videos.concat({
       shortId: content.shorturl.shortId,
-      path: content.media[0][0].path,
+      path: this.state.form._thumbnail.value,
       bucketPath: content.media[0][0].bucketPath,
       format: content.media[0][0].format,
       formatDescription: "",
       owner: this.state.user.attributes.sub,
-      application: "videoscribe",
-      applicationDisplayName: "VideoScribe",
+      application: this.state.form._application.value,
+      applicationDisplayName: this.state.form._application.value,
       title: null,
       timeInSeconds: null,
       username: this.state.user.username,
       visibility: "public"
     }) })
+
+    this.setState({
+      form: {
+
+      }
+    });
+    
     console.log(content);
  }
 
@@ -155,10 +164,10 @@ class MyVideosPage extends React.Component {
               <div className="container text-center">
                 <h1 className="jumbo text-padding">My Videos</h1>
                 {/* <form className="search-box"> */}
-                    <label className="search-label">Add a video</label>                    
-                    <input className="search-input" type="text" placeholder="visibility"   ref={input => this.state.form._visibility = input}/>
-                    <input className="search-input" type="text" placeholder="path" ref={input => this.state.form._path = input}/>
-                    <input className="search-input" type="text" placeholder="bucketpath" ref={input => this.state.form._bucketpath = input}/>
+                    <label className="">Add a video</label><br/>                   
+                    <input className="search-input" type="text" placeholder="application"   ref={input => this.state.form._application = input}/><br/>
+                    <input className="search-input" type="text" placeholder="video" ref={input => this.state.form._video = input}/><br/>
+                    <input className="search-input" type="text" placeholder="thumbnail" ref={input => this.state.form._thumbnail = input}/><br/>
                     <button className="addButton-video" onClick={this.handleAdd}>Submit</button>
                 {/* </form>            */}
               </div>
@@ -169,7 +178,13 @@ class MyVideosPage extends React.Component {
                   <li key={video.shortId}>
                     <div className="video-thumb">
                       <Link to={'/'+video.shortId}>
-                        <img src={video.videoThumbnailURL || 'https://via.placeholder.com/250x100.png?text=Placeholder+Sho.Co+Under+Development'} alt={video.title}/>
+                        <img src={
+                          (video.path === 'samplepath' || video.path === 'sample' ) ? (
+                            'https://via.placeholder.com/250x100.png?text=Placeholder+Sho.Co+Under+Development'
+                          ) : (
+                            video.path
+                          )
+                           } alt={video.title}/>
                       </Link>
                         <span className="video-length">{video.duration}</span>
                           <div className="video-info">              
@@ -205,16 +220,17 @@ class DynamicRoute extends React.Component {
       isRendered: false,
       message: ''
     }
-    this.videoIsRendered = this.videoIsRendered.bind(this);
-    this.formatCategorize = this.formatCategorize.bind(this);
   }
 
   componentWillMount() {
 
+    // Show video page when rendered but not yet built
+    // Show video when it is being rendered
     fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
     .then(response => response.json())
     .then(data => {
       if(data) {
+        console.log(data);
         var videoPageData = {
           videopath: '',
           applicationName:'',
@@ -223,10 +239,9 @@ class DynamicRoute extends React.Component {
           username:data[0].username,
           createdOn:data[0].createdOn,
           thumbnail:''
-        
         }
     
-        switch (data[0].application_id) {
+        switch (data[0].applicationId) {
           case 1:
             videoPageData.applicationName = 'videoscribe';
             videoPageData.applicationDisplayName = 'VideoScribe';
@@ -268,85 +283,9 @@ class DynamicRoute extends React.Component {
 
     })
 
-    // Redirect to site when it is ready
-    // if( siteIsBuilt() ){
-    //   navigate(`/${this.props.shortId}`)
-    // } else if ( videoIsRendered() ) {
-    // // Show video page when rendered but not yet built
-    //   this.setState({});
-    // // Check on set_completion email variable 
-    // } else {
-    // // Show video when it is being rendered
-    //   this.setState({});
-    // }
-  
-
+    // Redirect to site static page is ready
+      // fetch
   }
-
-  siteIsBuilt() {
-    return false;
-  }
-
-  videoIsRendered() {
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
-    .then(response => response.json())
-    .then(data => {
-      if(data) {
-        // formatCategorize(data);
-      }
-
-    })
-  }
-
-  formatCategorize( data ) {
-    var videoPageData = {
-      videopath: '',
-      applicationName:'',
-      applicationDisplayName:'',
-      createdBy:data[0].createdBy,
-      username:data[0].username,
-      createdOn:data[0].createdOn,
-      thumbnail:''
-    
-    }
-
-    switch (data[0].application_id) {
-      case 1:
-        videoPageData.applicationName = 'videoscribe';
-        videoPageData.applicationDisplayName = 'VideoScribe';
-        break;
-      case 2:
-        videoPageData.applicationName = 'tawe';
-        videoPageData.applicationDisplayName = 'Tawe';
-      break;
-      case 3:
-        videoPageData.applicationName = 'storypix';
-        videoPageData.applicationDisplayName = 'StoryPix';
-      break;
-      case 4:
-        videoPageData.applicationName = 'videoscribe-cloud';
-        videoPageData.applicationDisplayName = 'FunScribe';
-      break;
-    
-      default:
-        break;
-    }
-    
-    data.forEach(video => {
-      if( video.formatId === 6) 
-        videoPageData.videopath = video.path;
-      else 
-        videoPageData.thumbnail = video.path;
-    });
-
-    console.log(videoPageData);
-
-    this.setState({
-      isRendered: true,
-      video: videoPageData});
-  }
-
-
 
   render() {
 
@@ -376,8 +315,8 @@ class DynamicRoute extends React.Component {
                       <p className="upload-info">Created with 
                       <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
                       by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
-                      <span className="upload-date">2 months ago</span></p>                     
-
+                      <span className="upload-date"><TimeAgo date={video.createdOn} /></span>
+                      </p>
                   </div>
                   <span className="icwrap3">
                       <span className="ic1"></span>
@@ -398,27 +337,11 @@ class DynamicRoute extends React.Component {
     return (
       <Layout>
         <div className="videoPage">
-            {/* <div className="intro">
-                <img src={video.thumbnail || ''} alt={video.shortId || ''} /> 
-                <div className="container text-center">
-                    <video width="640" height="480" controls>
-                        <source src={video.videopath || ''} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                    </video>
-                </div>
-                <span className="icwrap2">
-                    <span className="ic3"></span>
-                    <span className="ic2"></span>
-                    <span className="ic1"></span>
-                </span>
-            </div> */}
             <div className="search">
                 <div className="container text-center">
-
                     <p className="upload-info text-center">
                       {this.state.message}
                     </p>                     
-
                 </div>
                 <span className="icwrap3">
                     <span className="ic1"></span>
@@ -426,12 +349,6 @@ class DynamicRoute extends React.Component {
                     <span className="ic3"></span>
                 </span>
             </div>
-            {/* <div className="videos">
-                <div className="text-center">
-                <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
-                <h2>0 comments</h2>
-                </div>
-            </div> */}
         </div>
       </Layout>
     );

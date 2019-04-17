@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import Layout from '../components/Layout'
+import TimeAgo from 'react-timeago'
 
 export default ({ pageContext: { video } }) => (
     <Layout>
@@ -25,7 +26,8 @@ export default ({ pageContext: { video } }) => (
                     <p className="upload-info">Created with 
                     <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
                     by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
-                    <span className="upload-date">2 months ago</span></p>                     
+                    <span className="upload-date"><TimeAgo date={video.createdOn} /></span>
+                    </p>                     
 
                 </div>
                 <span className="icwrap3">
