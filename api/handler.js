@@ -179,6 +179,19 @@ async function pathChecking(event) {
         });
       break;
 
+      case 'setEmailCompletion':
+
+        var shortId = event.queryStringParameters.shortId;
+        console.log(`call shocogatsbymnl.set_completion_email_sent('${shortId}', 1)`);
+        connection.query(`call shocogatsbymnl.set_completion_email_sent('${shortId}', 1)`, function (err, rows, fields) {          
+          if(err) {
+            resolve(err);
+          }
+            resolve( true );
+          
+        });
+      break;
+
     }
   });
 }
