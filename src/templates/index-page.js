@@ -38,9 +38,8 @@ class IndexPageTemplate extends React.Component {
   keyPress(e){
 
       if(e.keyCode === 13){
-
-        navigate(`/${e.target.value}`);
-        
+        e.preventDefault();
+        navigate(`/${e.target.value.toUpperCase()}`);
       }
   }
 
