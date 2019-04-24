@@ -1,6 +1,6 @@
 ---
 templateKey: about-page
-title: 'Test: The lo-down '
+title: 'Test: The lo-lo-down '
 ---
 **Sho.co is a sharing website for videos made with Sparkol apps.**
 
@@ -30,6 +30,6 @@ Place your videos onto your own website or blog using the unique embed code.
 
 ### **More on the way**
 
-Sho.co is a new service from Sparkol. We have big plans for the platform.
+Sho.co is a new service from Sparkol. We have amazing, big plans for the platform.
 
 Tell us what else you’d like to see on sho.co on Facebook or Twitter and Youtube.
