@@ -4,6 +4,8 @@ import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
 import { Auth } from 'aws-amplify';
 
+const windowGlobal = typeof window !== 'undefined' && window
+
 class DynamicRoute extends React.Component {
   constructor(props) {
     super(props);
@@ -16,12 +18,14 @@ class DynamicRoute extends React.Component {
       user: {},
       comment:'',
       commentReply:'',
-      orderBy: 'asc'
+      orderBy: 'asc',
+
     }
 
     this.handleEditButton = this.handleEditButton.bind(this);
     this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
+    this.handleOrder = this.handleOrder.bind(this);
   }
 
   componentWillMount() {
@@ -207,6 +211,10 @@ class DynamicRoute extends React.Component {
   }
 
 
+  handleOrder(event) {
+    event.preventDefault();
+  }
+
   // handle changing of visibility
 
 
@@ -300,13 +308,19 @@ class DynamicRoute extends React.Component {
                       <p>Share</p>
                       <ul className="social-links">
                           <li className="first">
-                              <a href={"https://www.facebook.com/sharer.php?u="+window.location.href} rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
+                              <a 
+                              // href={`https://www.facebook.com/sharer.php?u=+${windowGlobal.location.href}`} 
+                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
                           </li>
                           <li>
-                              <a href={"http://twitter.com/intent/tweet?url="+window.location.href+"&amp;via=SparkolHQ"} rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
+                              <a 
+                              // href={`http://twitter.com/intent/tweet?url=${windowGlobal.location.href}&amp;via=SparkolHQ`} 
+                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
                           </li>
                           <li>
-                              <a href={"mailto:?to=&Subject=Share%20a%20sho,&body="+window.location.href} data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
+                              <a 
+                              // href={`mailto:?to=&Subject=Share%20a%20sho,&body=${windowGlobal.location.href}`} 
+                              data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
                           </li>
                       </ul>
                       <ul className="action-links">
@@ -317,11 +331,11 @@ class DynamicRoute extends React.Component {
 
                   <div className="input-surround" id="url">
                       <label for="url-input">Link</label>
-                      <input id="url-input" type="text" value={window.location.href} onFocus={this.handleFocus} onClick={this.handleFocus}  readOnly/>
+                      <input id="url-input" type="text" value={`http://shoco-sparkol.unosoft.ph/app/${this.props.shortId}`} onFocus={this.handleFocus} onClick={this.handleFocus}  readOnly/>
                   </div>
                   <div className="input-surround" id="embed-code">
                       <label for="embed-code-input">Embed code</label>
-                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src=&quotembed;"+window.location.href+"; frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
+                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.props.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
                   </div>
 
                   <div className="input-surround" id="download">
@@ -375,7 +389,7 @@ class DynamicRoute extends React.Component {
                       <p> <span>Share</span><span>Tweet</span><span>Email</span> <span>Like</span> <span>Report</span> </p>
                       <div>
                         <p>Link </p>
-                        <input value={window.location.href} readOnly />
+                        <input value={windowGlobal.location.href} readOnly />
                         <p>Embed code </p>
                         <input value='TBD' readOnly/>
                       </div>
@@ -399,23 +413,46 @@ class DynamicRoute extends React.Component {
                       <span className="ic3"></span>
                   </span>
               </div> */}
-              <div className="videos">
+              <div className="videos" id="comments">
+                <div className="container2">
                   {this.state.user ? (
-                      <div className="comment-section">
+                      <div className="comment-section comments">
                         <h2>9 comments</h2>
-                        {
-                          this.state.comments.map((comment, i) => 
-                            <li key={comment.id}>
-                              <div className="comment-item">
-                                <p className="comment-info">
-                                  {comment.comment || ''} 
-                                  by <Link to={"/user/"+comment.uid || ''}> {comment.username || ''} </Link>
-                                </p>
-                                <span className="comment-date"><TimeAgo date={comment.date} /></span>
-                              </div>
-                            </li>
-                          )
-                        }
+                        <ul class="list-inline comment-sort" ng-show="commentsModel.currentTotal > 0">
+                          <li>
+                            <a onClick={this.handleOrder} >Oldest</a>
+                          </li>
+                          <li class="last">
+                            <a onClick={this.handleOrder}>Newest</a>
+                          </li>
+                        </ul>
+                        <div class="comment-wrap">
+                          <textarea className="comment-input"></textarea>
+                          {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
+                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
+                          {/* <span class="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
+                        </div>
+                        <button id="comment-btn">Post</button>
+                        
+                        <ul className="comment-list">
+                          {
+                            this.state.comments.map((comment, i) => 
+                              <li key={comment.id}>
+                                <div className="comment-item">
+                                  <p className="userName"> {comment.userName || ''} </p>
+                                  <p className="comment-text">
+                                    {comment.comment || ''} 
+                                    
+                                  </p>
+                                  <p className="comment-info">
+                                    <span className="comment-date"><TimeAgo date={comment.date} /></span> | 
+                                    <span className="reply">Reply</span>
+                                  </p>
+                                </div>
+                              </li>
+                            )
+                          }
+                        </ul>
                       </div>
                     ):(
                       <div className="text-center">
@@ -423,6 +460,7 @@ class DynamicRoute extends React.Component {
                         <h2>0 comments</h2>
                       </div>
                     )}
+                </div>
                   
               </div>
           </div>
