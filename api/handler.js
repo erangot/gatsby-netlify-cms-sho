@@ -192,6 +192,74 @@ async function pathChecking(event) {
         });
       break;
 
+      case 'changeVisibility':
+
+        var body = JSON.parse(event.body);
+
+        console.log(`call shocogatsbymnl.change_visibility_for_shortId('${body.shortId}', '${body.visibility}', '${body.ownerId}')`);
+        connection.query(`call shocogatsbymnl.change_visibility_for_shortId('${body.shortId}', '${body.visibility}', '${body.ownerId}')`, function (err, rows, fields) {          
+          if(err) {
+            resolve(err);
+          }
+            resolve( rows );
+          
+        });
+      break;
+
+      case 'addComment':
+
+        var body = JSON.parse(event.body);
+
+        console.log(`call shocogatsbymnl.add_comment('${body.shortId}', 'sampleuuid', '${body.parent}', '${body.username}', '${body.comment}', '${body.uid}')`);
+        connection.query(`call shocogatsbymnl.add_comment('${body.shortId}', 'sampleuuid', null, '${body.username}', '${body.comment}', '${body.uid}')`, function (err, rows, fields) {          
+          if(err) {
+            resolve(err);
+          }
+            resolve( rows );
+          
+        });
+      break;
+
+      case 'blockShortUrl':
+
+        var shortUrlId = event.queryStringParameters.shortUrlId;
+
+        console.log(`call shocogatsbymnl.block_short_url(${shortUrlId})`);
+        connection.query(`call shocogatsbymnl.block_short_url(${shortUrlId})`, function (err, rows, fields) {          
+          if(err) {
+            resolve(err);
+          }
+            resolve( rows );
+          
+        });
+      break;
+
+      case 'deleteShortUrl':
+
+      var shortUrl = event.queryStringParameters.shortUrl;
+
+      console.log(`call shocogatsbymnl.delete_short_url('${shortUrl}')`);
+      connection.query(`call shocogatsbymnl.delete_short_url('${shortUrl}')`, function (err, rows, fields) {          
+        if(err) {
+          resolve(err);
+        }
+          resolve( rows );
+        
+      });
+    break;
+
+    case 'getComments':
+
+      var body = event.queryStringParameters;
+
+      console.log(`call shocogatsbymnl.get_comments('${body.shortUrl}', '${body.orderBy}', 0, -1)`);
+      connection.query(`call shocogatsbymnl.get_comments('${body.shortUrl}', '${body.orderBy}', 0, -1)`, function (err, rows, fields) {          
+        if(err) {
+          resolve(err);
+        }
+          resolve( rows );
+      });
+    break;
     }
   });
 }
