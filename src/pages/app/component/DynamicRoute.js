@@ -481,14 +481,14 @@ class DynamicRoute extends React.Component {
                                       <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
                                       {
                                         this.state.openReply && this.state.currentReply === comment.commentId ? (
-                                          <div>
+                                          <div className="comment-post">
                                            <div className="comment-wrap">
-                                              <textarea className="comment-input-reply"></textarea>
+                                              <textarea className="comment-input"></textarea>
                                               {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
                                               <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
                                               {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
                                             </div>
-                                            <button id="comment-btn-reply">Post</button>
+                                            <button id="comment-btn">Post</button>
                                         </div>
                                         ):(
                                           <div></div>
@@ -513,7 +513,22 @@ class DynamicRoute extends React.Component {
                                     <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                     {/* Only when logged In */}
                                     | 
-                                    <span className="reply"> Reply</span>
+                                    <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
+                                      {
+                                        this.state.openReply && this.state.currentReply === comment.commentId ? (
+                                          <div className="comment-post">
+                                           <div className="comment-wrap">
+                                              <textarea className="comment-input"></textarea>
+                                              {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
+                                              <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
+                                              {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
+                                            </div>
+                                            <button id="comment-btn">Post</button>
+                                        </div>
+                                        ):(
+                                          <div></div>
+                                        )
+                                      }
                                   </p>
                                 </div>
                               </li>

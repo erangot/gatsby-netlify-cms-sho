@@ -2038,6 +2038,10 @@ position: relative;
     li {
       padding: 0 3px;
       display:inline-block;
+       
+      a {
+        color: #c1c1c1;
+      }
     }
   }
 
@@ -2187,7 +2191,25 @@ position: relative;
 
         .reply {
           cursor: pointer;
+          color: #c1c1c1;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
+
+       .comment-post {
+          clear: both;
+          margin: 0px 0 0 40px;
+          .comment-wrap {
+            .comment-input {
+              width: 675px;
+            }
+          }
+
+        }
+        
+        
       }
 
     }
