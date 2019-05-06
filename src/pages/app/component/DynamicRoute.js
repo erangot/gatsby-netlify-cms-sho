@@ -18,8 +18,9 @@ class DynamicRoute extends React.Component {
       user: {},
       comment:'',
       commentReply:'',
-      orderBy: 'asc',
-
+      orderBy: 'newest',
+      isCommentValid: false,
+      isCommentInputTouched: false
     }
 
     this.handleEditButton = this.handleEditButton.bind(this);
@@ -95,10 +96,11 @@ class DynamicRoute extends React.Component {
         });
 
         // Get comments
-        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.props.shortId}&orderBy=${this.state.orderBy}`)
+        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.props.shortId}&orderBy=asc`)
         .then(response => response.json())
         .then(data => {
           console.log(data);
+          console.log(this.state.comment.length);
           this.setState({comments: data[0]})
 
           //Arrange comments
@@ -211,8 +213,10 @@ class DynamicRoute extends React.Component {
   }
 
 
-  handleOrder(event) {
+  handleOrder(param, event) {
     event.preventDefault();
+    this.setState({orderBy: param});
+    console.log(param);
   }
 
   // handle changing of visibility
@@ -234,8 +238,9 @@ class DynamicRoute extends React.Component {
  handleFocus = (event) => event.target.select();
 
   render() {
-    var commentLength = 9;//this.state.comments.length();
-    var video = this.state.video;
+    const objectComments = this.state.comments.filter(comment => comment.id)
+    const commentLength = objectComments.length;
+    const video = this.state.video;
 
       return (
         <Layout>
@@ -271,7 +276,7 @@ class DynamicRoute extends React.Component {
                     <div id="video-detail-editable">
                     <form>
                         <div className="form-group">
-                            <label for="title" className="sr-only">Video title</label>
+                            <label htmlFor="title" className="sr-only">Video title</label>
                             <input type="text" className="form-control" id="video-title" placeholder="" value="" maxlength="100"/>
                             <button type="submit" className="btn btn-default btn-save" id="save-btn"  onClick={this.handleEditButton}>Save</button>
                         </div>
@@ -284,7 +289,7 @@ class DynamicRoute extends React.Component {
                         <span className="upload-date"><TimeAgo date={video.createdOn} /></span></p>
                         
                             <div className="form-group">
-                                <label for="videoDesc" className="sr-only">Video description</label>
+                                <label htmlFor="videoDesc" className="sr-only">Video description</label>
                                 <textarea rows="5" className="form-control" id="video-desc" maxlength="1000"></textarea>
                             </div>
                     </form>
@@ -330,27 +335,27 @@ class DynamicRoute extends React.Component {
                   </div>
 
                   <div className="input-surround" id="url">
-                      <label for="url-input">Link</label>
+                      <label htmlFor="url-input">Link</label>
                       <input id="url-input" type="text" value={`http://shoco-sparkol.unosoft.ph/app/${this.props.shortId}`} onFocus={this.handleFocus} onClick={this.handleFocus}  readOnly/>
                   </div>
                   <div className="input-surround" id="embed-code">
-                      <label for="embed-code-input">Embed code</label>
+                      <label htmlFor="embed-code-input">Embed code</label>
                       <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.props.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
                   </div>
 
                   <div className="input-surround" id="download">
-                      <label for="download-drop-down">Download</label>
+                      <label htmlFor="download-drop-down">Download</label>
                       <select id="download-drop-down">
-                          <option value="" disabled="" selected="">Select a format</option>
+                          <option defaultValue="" disabled="">Select a format</option>
                               <option value="1080MP4_H264">1080 MP4</option>
                               <option value="720MP4_H264">720 MP4</option>
                               <option value="360MP4_H264">360 MP4</option>
                       </select>
                   </div>
                   <div className="input-surround" id="visibility">
-                      <label for="download-drop-down">Visibility</label>
+                      <label htmlFor="download-drop-down">Visibility</label>
                       <select id="visibility-drop-down">
-                          <option value="public" selected="">Public</option>
+                          <option value="public" defaultValue="">Public</option>
                           <option value="unlisted">Unlisted</option>
                           <option value="private">Private</option>
                       </select>
@@ -417,40 +422,68 @@ class DynamicRoute extends React.Component {
                 <div className="container2">
                   {this.state.user ? (
                       <div className="comment-section comments">
-                        <h2>9 comments</h2>
-                        <ul class="list-inline comment-sort" ng-show="commentsModel.currentTotal > 0">
+                      <div className="comment-post">
+                        <h2>{commentLength} comments of {commentLength}</h2>
+                        <ul className="list-inline comment-sort" >
                           <li>
-                            <a onClick={this.handleOrder} >Oldest</a>
+                            <a onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
+                             |
                           </li>
-                          <li class="last">
-                            <a onClick={this.handleOrder}>Newest</a>
+                          <li className="last">
+                            <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
                           </li>
                         </ul>
-                        <div class="comment-wrap">
+                        
+                        <div className="comment-wrap">
                           <textarea className="comment-input"></textarea>
                           {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
                           <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                          {/* <span class="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
+                          {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
                         </div>
                         <button id="comment-btn">Post</button>
+                      
+                      </div>
                         
                         <ul className="comment-list">
-                          {
-                            this.state.comments.map((comment, i) => 
-                              <li key={comment.id}>
-                                <div className="comment-item">
-                                  <p className="userName"> {comment.userName || ''} </p>
+                          { this.state.orderBy === 'oldest' ? (
+                              
+                              objectComments.map((comment, i) => 
+                                <li key={i} className="comment-list-item">
+                                  <div className="comment-content">
+                                    <p className="username"> {comment.userName || ''} </p>
+                                    <p className="comment-text">
+                                      {comment.comment || ''} 
+                                      
+                                    </p>
+                                    <p className="comment-info">
+                                      <span className="comment-date"><TimeAgo date={comment.date} /> </span>
+                                      {/* Only when logged In */}
+                                      | 
+                                      <span className="reply"> Reply</span>
+                                    </p>
+                                  </div>
+                                </li>
+                              )
+
+                          ):(
+                            objectComments.reverse().map((comment, i) => 
+                              <li key={i} className="comment-list-item">
+                                <div className="comment-content">
+                                  <p className="username"> {comment.userName || ''} </p>
                                   <p className="comment-text">
                                     {comment.comment || ''} 
                                     
                                   </p>
                                   <p className="comment-info">
-                                    <span className="comment-date"><TimeAgo date={comment.date} /></span> | 
-                                    <span className="reply">Reply</span>
+                                    <span className="comment-date"><TimeAgo date={comment.date} /> </span>
+                                    {/* Only when logged In */}
+                                    | 
+                                    <span className="reply"> Reply</span>
                                   </p>
                                 </div>
                               </li>
                             )
+                          )
                           }
                         </ul>
                       </div>
