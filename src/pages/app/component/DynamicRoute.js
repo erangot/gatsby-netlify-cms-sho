@@ -20,13 +20,16 @@ class DynamicRoute extends React.Component {
       commentReply:'',
       orderBy: 'newest',
       isCommentValid: false,
-      isCommentInputTouched: false
+      isCommentInputTouched: false,
+      currentReply: '',
+      openReply: false
     }
 
     this.handleEditButton = this.handleEditButton.bind(this);
     this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
     this.handleFocus = this.handleFocus.bind(this);
     this.handleOrder = this.handleOrder.bind(this);
+    this.handleReplyButton = this.handleReplyButton.bind(this);    
   }
 
   componentWillMount() {
@@ -100,7 +103,6 @@ class DynamicRoute extends React.Component {
         .then(response => response.json())
         .then(data => {
           console.log(data);
-          console.log(this.state.comment.length);
           this.setState({comments: data[0]})
 
           //Arrange comments
@@ -227,6 +229,23 @@ class DynamicRoute extends React.Component {
     
     event.preventDefault();
     this.setState({isEditing:!this.state.isEditing});
+  }
+
+  handleReplyButton(commentId, event){
+    event.preventDefault();
+
+    console.log(commentId);
+
+    if(commentId === this.state.currentReply) {
+      this.setState({openReply: !this.state.openReply});
+    } else {
+      this.setState({
+        openReply: true,
+        currentReply: commentId
+      })
+    }
+    
+    
   }
 
   handleVisibilityOption(event) {
@@ -459,7 +478,23 @@ class DynamicRoute extends React.Component {
                                       <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                       {/* Only when logged In */}
                                       | 
-                                      <span className="reply"> Reply</span>
+                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
+                                      {
+                                        this.state.openReply && this.state.currentReply === comment.commentId ? (
+                                          <div>
+                                           <div className="comment-wrap">
+                                              <textarea className="comment-input-reply"></textarea>
+                                              {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
+                                              <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
+                                              {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
+                                            </div>
+                                            <button id="comment-btn-reply">Post</button>
+                                        </div>
+                                        ):(
+                                          <div></div>
+                                        )
+                                      }
+                                     
                                     </p>
                                   </div>
                                 </li>
