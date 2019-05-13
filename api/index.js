@@ -267,6 +267,34 @@ async function pathChecking(event) {
           resolve( rows );
       });
     break;
+
+    case 'getDetailsFromShortId':
+
+      var body = event.queryStringParameters;
+
+      console.log(`call shocogatsbymnl.get_details_from_shortId('${body.shortId}')`);
+      connection.query(`call shocogatsbymnl.get_details_from_shortId('${body.shortId}')`, function (err, rows, fields) {          
+        if(err) {
+          resolve(err);
+        }
+          resolve( rows );
+      });
+    break;
+
+    case 'saveDetailsForShortId':
+
+    var body = JSON.parse(event.body);
+
+    console.log(`call shocogatsbymnl.save_details_for_shortId('${body.shortId}', '${body.vidTitle}','${body.vidDesc}', '${body.ownerId}')`);
+    connection.query(`call shocogatsbymnl.save_details_for_shortId('${body.shortId}', '${body.vidTitle}','${body.vidDesc}', '${body.ownerId}')`, function (err, rows, fields) {          
+      if(err) {
+        resolve(err);
+      }
+        resolve( rows );
+      
+    });
+  break;
+  
     }
   });
 }

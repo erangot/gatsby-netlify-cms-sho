@@ -24,7 +24,8 @@ class DynamicRoute extends React.Component {
       mainCommentError: null,
       replyCommentError: null,
       currentReply: '',
-      openReply: false
+      openReply: false,
+      visibility: 'public'
     }
 
     this.handleEditButton = this.handleEditButton.bind(this);
@@ -281,10 +282,6 @@ class DynamicRoute extends React.Component {
     console.log(param);
   }
 
-  // handle changing of visibility
-
-
-
   handleEditButton(event){
     
     event.preventDefault();
@@ -306,10 +303,29 @@ class DynamicRoute extends React.Component {
     }
   }
 
-  handleVisibilityOption(event) {
+  async handleVisibilityOption(event) {
 
     event.preventDefault();
     console.log(event.target.value);
+
+    var payload = {
+      "shortId": `${this.props.shortId}`,
+      "visibility": event.target.value,
+      "ownerId": `${this.state.user.attributes.sub}`
+    };
+
+    console.log(payload);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changeVisibility', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content = await rawResponse.json();
+    this.setState({visibility: event.target.value});
   }
 
  handleFocus = (event) => event.target.select();
@@ -431,8 +447,8 @@ class DynamicRoute extends React.Component {
                   </div>
                   <div className="input-surround" id="visibility">
                       <label htmlFor="download-drop-down">Visibility</label>
-                      <select id="visibility-drop-down">
-                          <option value="public" defaultValue="">Public</option>
+                      <select id="visibility-drop-down" onChange={this.handleVisibilityOption} value={this.state.visibility}>
+                          <option value="public">Public</option>
                           <option value="unlisted">Unlisted</option>
                           <option value="private">Private</option>
                       </select>
