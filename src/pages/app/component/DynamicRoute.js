@@ -123,7 +123,9 @@ class DynamicRoute extends React.Component {
   // handle saving title and description
   handleSaveButton(event) {
     event.preventDefault();
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api`)
+    // update on the video
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/
+    default/test-api`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -135,7 +137,9 @@ class DynamicRoute extends React.Component {
   // handle clicking the block flag
   handleBlockButton(event) {
     event.preventDefault();
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=blockShortUrl&shortUrlId=${this.state.video.shortUrlId}`)
+    // applying 
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/
+    default/test-api?api=blockShortUrl&shortUrlId=${this.state.video.shortUrlId}`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -146,7 +150,9 @@ class DynamicRoute extends React.Component {
   // handle removing of the video
   handleRemoveButton(event) {
     event.preventDefault();
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=deleteShortUrl&shortUrl=${this.props.shortId}`)
+      // applying 
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/
+    default/test-api?api=deleteShortUrl&shortUrl=${this.props.shortId}`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -155,9 +161,9 @@ class DynamicRoute extends React.Component {
   }
 
   // handle adding a comment
-  
   async handleAddComment () {
     
+    // add difference for parent and children
     var payload = {
       "shortId": `${this.props.shortId}`,
       "parent": null,
@@ -244,8 +250,6 @@ class DynamicRoute extends React.Component {
         currentReply: commentId
       })
     }
-    
-    
   }
 
   handleVisibilityOption(event) {
@@ -296,7 +300,7 @@ class DynamicRoute extends React.Component {
                     <form>
                         <div className="form-group">
                             <label htmlFor="title" className="sr-only">Video title</label>
-                            <input type="text" className="form-control" id="video-title" placeholder="" value="" maxlength="100"/>
+                            <input type="text" className="form-control" id="video-title" placeholder="" maxLength="100"/>
                             <button type="submit" className="btn btn-default btn-save" id="save-btn"  onClick={this.handleEditButton}>Save</button>
                         </div>
                         <p className="upload-info">Created with 
@@ -309,7 +313,7 @@ class DynamicRoute extends React.Component {
                         
                             <div className="form-group">
                                 <label htmlFor="videoDesc" className="sr-only">Video description</label>
-                                <textarea rows="5" className="form-control" id="video-desc" maxlength="1000"></textarea>
+                                <textarea rows="5" className="form-control" id="video-desc" maxLength="1000"></textarea>
                             </div>
                     </form>
                 </div>
@@ -382,61 +386,8 @@ class DynamicRoute extends React.Component {
                   <p className="remove-video"><a href="#" className="confirmation">Remove video</a></p>
               </div>
               
-              {/* <div className="engagement col-sm-5">
-                  <div className="EngagementChart" data-wheelwidth="260" data-wheelheight="260" data-sho-co-id="1BMAF">
-                  </div>
-                  <ul className="video-stats">
-                      <li className="views"><span className="stat">3</span> <span className="stat-category">views</span></li>
-                  </ul>
-              </div> */}
           </div>
         </div>
-              {/* <div className="search">
-                  <div className="container text-left">
-                    {this.state.isEditing ? (
-                      <div>
-                        <input/>
-                        <button onClick={this.handleEditButton}>SAVE</button>
-                      </div>
-                    ):(
-                      <button onClick={this.handleEditButton}>Edit</button>
-                    )}
-                      <p className="upload-info">Created with 
-                        <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
-                        by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
-                        <span className="upload-date"><TimeAgo date={video.createdOn} /></span>
-                      </p>
-                      {this.state.isEditing ? (
-                      <input/> ):('')}
-                      
-                       
-                      <p> <span>Share</span><span>Tweet</span><span>Email</span> <span>Like</span> <span>Report</span> </p>
-                      <div>
-                        <p>Link </p>
-                        <input value={windowGlobal.location.href} readOnly />
-                        <p>Embed code </p>
-                        <input value='TBD' readOnly/>
-                      </div>
-                      <div>
-                        <p>Download</p>
-                        <select>
-                          <option>360p</option>
-                          <option>720p</option>
-                          <option>1080p</option>
-                        </select>
-                        <p>Visibility</p>
-                        <select onChange={this.handleVisibilityOption}>
-                          <option value="false">Private</option>
-                          <option value="true">Public</option>
-                        </select>
-                      </div>
-                  </div>
-                  <span className="icwrap3">
-                      <span className="ic1"></span>
-                      <span className="ic2"></span>
-                      <span className="ic3"></span>
-                  </span>
-              </div> */}
               <div className="videos" id="comments">
                 <div className="container2">
                   {this.state.user ? (
@@ -466,7 +417,9 @@ class DynamicRoute extends React.Component {
                         <ul className="comment-list">
                           { this.state.orderBy === 'oldest' ? (
                               
-                              objectComments.map((comment, i) => 
+                              objectComments
+                              .filter(comment => comment.parent === null)
+                              .map((comment, i) => 
                                 <li key={i} className="comment-list-item">
                                   <div className="comment-content">
                                     <p className="username"> {comment.userName || ''} </p>
@@ -478,30 +431,49 @@ class DynamicRoute extends React.Component {
                                       <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                       {/* Only when logged In */}
                                       | 
-                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
-                                      {
-                                        this.state.openReply && this.state.currentReply === comment.commentId ? (
-                                          <div className="comment-post">
-                                           <div className="comment-wrap">
-                                              <textarea className="comment-input"></textarea>
-                                              {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
-                                              <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                                              {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
-                                            </div>
-                                            <button id="comment-btn">Post</button>
-                                        </div>
-                                        ):(
-                                          <div></div>
-                                        )
-                                      }
-                                     
+                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
                                     </p>
+                                    {
+                                      this.state.openReply && this.state.currentReply === comment.commentId ? (
+                                        <div className="comment-post">
+                                          <div className="comment-wrap">
+                                            <textarea className="comment-input"></textarea>
+                                            {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
+                                            <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
+                                            {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
+                                          </div>
+                                          <button id="comment-btn">Post</button>
+                                      </div>
+                                      ):(
+                                        <div></div>
+                                      )
+                                    }
+                                    {
+                                      objectComments
+                                      .filter(comment1 => comment1.parent === comment.commentId)
+                                      .map((comment1, i) => 
+                                        <li key={i} className="comment-list-item">
+                                          <div className="comment-content">
+                                            <p className="username"> {comment1.userName || ''} </p>
+                                            <p className="comment-text">
+                                              {comment1.comment || ''} 
+                                              
+                                            </p>
+                                            <p className="comment-info">
+                                              <span className="comment-date"><TimeAgo date={comment1.date} /> </span>
+                                            </p>
+                                          </div>
+                                        </li>
+                                      )
+                                    }
                                   </div>
                                 </li>
                               )
 
                           ):(
-                            objectComments.reverse().map((comment, i) => 
+                            objectComments.reverse()
+                            .filter(comment => comment.parent === null)
+                            .map((comment, i) => 
                               <li key={i} className="comment-list-item">
                                 <div className="comment-content">
                                   <p className="username"> {comment.userName || ''} </p>
@@ -514,7 +486,8 @@ class DynamicRoute extends React.Component {
                                     {/* Only when logged In */}
                                     | 
                                     <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
-                                      {
+                                  </p>
+                                  {
                                         this.state.openReply && this.state.currentReply === comment.commentId ? (
                                           <div className="comment-post">
                                            <div className="comment-wrap">
@@ -529,7 +502,24 @@ class DynamicRoute extends React.Component {
                                           <div></div>
                                         )
                                       }
-                                  </p>
+                                      {
+                                    objectComments.reverse()
+                                    .filter(comment1 => comment1.parent === comment.commentId)
+                                    .map((comment1, i) => 
+                                      <li key={i} className="comment-list-item">
+                                        <div className="comment-content">
+                                          <p className="username"> {comment1.userName || ''} </p>
+                                          <p className="comment-text">
+                                            {comment1.comment || ''} 
+                                            
+                                          </p>
+                                          <p className="comment-info">
+                                            <span className="comment-date"><TimeAgo date={comment1.date} /> </span>
+                                          </p>
+                                        </div>
+                                      </li>
+                                    )
+                                  }
                                 </div>
                               </li>
                             )
@@ -540,7 +530,7 @@ class DynamicRoute extends React.Component {
                     ):(
                       <div className="text-center">
                         <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
-                        <h2>0 comments</h2>
+                        <h2>{commentLength} comments</h2>
                       </div>
                     )}
                 </div>

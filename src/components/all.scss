@@ -2161,6 +2161,11 @@ position: relative;
     float: left;
     width: 100%;
     margin: 10px 0;
+
+    li.comment-list-item {
+      clear: both;
+      margin: 0px 0 0 40px;
+    }
   }
 
   .comment-content {
@@ -2171,6 +2176,17 @@ position: relative;
     white-space: -pre-wrap;
     white-space: -o-pre-wrap;
     word-wrap: break-word;
+
+    .comment-post {
+      clear: both;
+      margin: 0px 0 0 40px;
+      .comment-wrap {
+        .comment-input {
+          width: 675px;
+        }
+      }
+
+    }
 
     p {
       margin: 0 0 16px;
@@ -2198,16 +2214,7 @@ position: relative;
           }
         }
 
-       .comment-post {
-          clear: both;
-          margin: 0px 0 0 40px;
-          .comment-wrap {
-            .comment-input {
-              width: 675px;
-            }
-          }
-
-        }
+       
         
         
       }
