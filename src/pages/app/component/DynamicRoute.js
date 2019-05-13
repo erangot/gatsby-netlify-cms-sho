@@ -25,7 +25,10 @@ class DynamicRoute extends React.Component {
       replyCommentError: null,
       currentReply: '',
       openReply: false,
-      visibility: 'public'
+      visibility: '',
+      videoTitle: '',
+      videoDesc: '',
+      shortUrlId: ''
     }
 
     this.handleEditButton = this.handleEditButton.bind(this);
@@ -35,6 +38,9 @@ class DynamicRoute extends React.Component {
     this.handleReplyButton = this.handleReplyButton.bind(this);    
     this.handleValidationComment = this.handleValidationComment.bind(this);  
     this.handleAddComment = this.handleAddComment.bind(this);  
+    this.handleChangeDesc = this.handleChangeDesc.bind(this);  
+    this.handleChangeTitle = this.handleChangeTitle.bind(this);  
+    this.handleSaveButton = this.handleSaveButton.bind(this);  
   }
 
   componentWillMount() {
@@ -110,6 +116,33 @@ class DynamicRoute extends React.Component {
           console.log(data);
           this.setState({comments: data[0]})
         });
+
+        // Get details
+        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.props.shortId}`)
+        .then(response => response.json())
+        .then(data1 => {
+          console.log(data1[0][0]);
+          this.setState({
+            videoTitle: data1[0][0].title,
+            videoDesc: data1[0][0].description,
+            visibility: data1[0][0].visibility,
+            shortUrlId: data1[0][0].shortUrlId
+          })
+        });
+
+        // Get engaged user
+        // fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.props.shortId}`)
+        // .then(response => response.json())
+        // .then(data1 => {
+        //   console.log(data1[0][0]);
+        //   this.setState({
+        //     videoTitle: data1[0][0].title,
+        //     videoDesc: data1[0][0].description,
+        //     visibility: data1[0][0].visibility,
+        //     shortUrlId: data1[0][0].shortUrlId
+        //   })
+        // });
+
       } else {
         this.setState({
           isRendered: false,
@@ -123,18 +156,29 @@ class DynamicRoute extends React.Component {
       // fetch
   }
 
-  // handle saving title and description
-  handleSaveButton(event) {
-    event.preventDefault();
-    // update on the video
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/
-    default/test-api`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      alert('Success');
-    });
 
+async  handleSaveButton(event) {
+    event.preventDefault();
+
+    var payload = {
+      "shortId": `${this.props.shortId}`,
+      "vidTitle": this.state.videoTitle,
+      "vidDesc": this.state.videoDesc,
+      "ownerId": `${this.state.user.attributes.sub}`
+    };
+    console.log(payload);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=saveDetailsForShortId', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content = await rawResponse.json();
+    
+    this.setState({isEditing:false});
   }
 
   // handle clicking the block flag
@@ -275,6 +319,17 @@ class DynamicRoute extends React.Component {
     event.preventDefault();
   }
 
+  handleChangeDesc(event) {
+    event.preventDefault();
+    this.setState({videoDesc: event.target.value})
+  }
+
+  handleChangeTitle(event) {
+    event.preventDefault();
+    this.setState({videoTitle: event.target.value})
+  }
+  
+
 
   handleOrder(param, event) {
     event.preventDefault();
@@ -285,7 +340,7 @@ class DynamicRoute extends React.Component {
   handleEditButton(event){
     
     event.preventDefault();
-    this.setState({isEditing:!this.state.isEditing});
+    this.setState({isEditing:true});
   }
 
   handleReplyButton(commentId, event){
@@ -325,7 +380,7 @@ class DynamicRoute extends React.Component {
         body: JSON.stringify(payload)
       });
     const content = await rawResponse.json();
-    this.setState({visibility: event.target.value});
+    this.setState({visibility: payload.visibility});
   }
 
  handleFocus = (event) => event.target.select();
@@ -370,8 +425,8 @@ class DynamicRoute extends React.Component {
                     <form>
                         <div className="form-group">
                             <label htmlFor="title" className="sr-only">Video title</label>
-                            <input type="text" className="form-control" id="video-title" placeholder="" maxLength="100"/>
-                            <button type="submit" className="btn btn-default btn-save" id="save-btn"  onClick={this.handleEditButton}>Save</button>
+                            <input type="text" className="form-control" id="video-title" placeholder="" value={this.state.videoTitle} onChange={this.handleChangeTitle}/>
+                            <button type="submit" className="btn btn-default btn-save" id="save-btn"  onClick={this.handleSaveButton}>Save</button>
                         </div>
                         <p className="upload-info">Created with 
                         <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
@@ -383,21 +438,22 @@ class DynamicRoute extends React.Component {
                         
                             <div className="form-group">
                                 <label htmlFor="videoDesc" className="sr-only">Video description</label>
-                                <textarea rows="5" className="form-control" id="video-desc" maxLength="1000"></textarea>
+                                <textarea rows="5" className="form-control" id="video-desc" value={this.state.videoDesc} onChange={this.handleChangeDesc}></textarea>
                             </div>
                     </form>
                 </div>
                     
                   ):(
                     <div id="video-detail-static">
-                      <h1></h1>
+                      <h1>{this.state.videoTitle}</h1>
                       <button type="submit" className="btn btn-default btn-edit" id="edit-btn" onClick={this.handleEditButton}>Edit</button>
                       <p className="upload-info">Created with 
                       <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
                       by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
                       <span className="upload-date"><TimeAgo date={video.createdOn} /></span></p>    
                       <div className="desc">
-                        <a className="show-more" href="#">Show more</a>
+                        {this.state.videoDesc}
+                        <a className="show-more">Show more</a>
                       </div>
                     </div>  
                   )}
