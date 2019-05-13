@@ -108,8 +108,6 @@ class DynamicRoute extends React.Component {
         .then(data => {
           console.log(data);
           this.setState({comments: data[0]})
-
-          //Arrange comments
         });
       } else {
         this.setState({
@@ -166,90 +164,52 @@ class DynamicRoute extends React.Component {
 
   // handle adding a comment
   async handleAddComment (event, commentParent) {
-    console.log(event.target.className)
+
     console.log(event.target)
-    let commentVariableId = Math.random().toString(36).substring(7);
-   
-    // after effect
-    if(event.target.className === "main") {
-      this.setState({ comments: this.state.comments.concat({
-        comment: this.state.comment,
-        commentId: commentVariableId,
-        commentid: commentVariableId,
-        conversationId: this.props.shortId,
-        date: new Date(),
-        id: 2,
-        parent: null,
-        shortUrlId: 14776337,
-        uid: this.state.user.attributes.sub,
-        userName: this.state.user.username
-      }),
-      comment: '',
-      mainAddCommentDisabled: true,
-      mainCommentError: null,
-     })
-    } else {
-      this.setState({ comments: this.state.comments.concat({
-        comment: this.state.commentReply,
-        commentId: commentVariableId,
-        commentid: commentVariableId,
-        conversationId: this.props.shortId,
-        date: new Date(),
-        id: 2,
-        parent: commentParent,
-        shortUrlId: 14776337,
-        uid: this.state.user.attributes.sub,
-        userName: this.state.user.username
-      }),
-      commentReply: '',
-      replyAddCommentDisabled: true,
-      replyCommentError: null,
-      openReply: false
-     })
-    }
-    // add difference for parent and children
-    // var payload = {
-    //   "shortId": `${this.props.shortId}`,
-    //   "parent": null,
-    //   "username":  `${this.state.user.username}`,
-    //   "comment": `${this.state.comment}`,
-    //   "uid": `${this.state.user.attributes.sub}`
-    // };
+    var payload = {
+      "shortId": `${this.props.shortId}`,
+      "parent": commentParent || null,
+      "username":  `${this.state.user.username}`,
+      "comment": event.target.className === "main" ? `${this.state.comment}`: `${this.state.commentReply}`,
+      "uid": `${this.state.user.attributes.sub}`
+    };
 
-  //  const proxyurl = "https://cors-anywhere.herokuapp.com/";
-  //  const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=addComment', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(payload)
-  //   });
-    // const content = await rawResponse.json();
+   console.log(payload);
+   const proxyurl = "https://cors-anywhere.herokuapp.com/";
+   const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=addComment', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+  const content = await rawResponse.json();
+
+  // Get comments
+  const rawResponseComments = await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.props.shortId}&orderBy=asc`);
+  const commentsRaw = await rawResponseComments.json();
+  this.setState({comments:commentsRaw[0]});
+
+     // after effect
+     console.log(commentParent)
+    if(commentParent === undefined) 
+      this.setState({
+        comments:commentsRaw[0],
+        comment: '',
+        mainAddCommentDisabled: true,
+        mainCommentError: null,
+      })
+     else 
+      this.setState({
+        comments:commentsRaw[0],
+        commentReply: '',
+        replyAddCommentDisabled: true,
+        replyCommentError: null,
+        openReply: false
+      })
     
-    //after success full commenting and updating the comment list 
 
-    // this.setState({ comments: this.state.comments.concat({
-    //   comment: "Sweet video",
-    //   commentId: "8e60d1f0-0df4-11e6-9455-1980901455fa",
-    //   commentid: "8e60d1f0-0df4-11e6-9455-1980901455fa",
-    //   conversationId: "9CI",
-    //   date: "2016-04-29T10:24:30.000Z",
-    //   id: 2,
-    //   parent: null,
-    //   shortUrlId: 14776337,
-    //   uid: "5000009",
-    //   userName: "James Fitzgerald"
-    // }) })
-
-    // var els = document.getElementsByClassName('search-input');
-    // Array.from(els).forEach((el) => {
-    //     el.value = '';
-    //     el.placeholder = 'Video Page Added'
-    // });
-    // console.log(document.getElementsByClassName('search-input'));
-    
-    // console.log(content);
  }
 
   // handle validation of the comment
