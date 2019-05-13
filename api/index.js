@@ -2,6 +2,7 @@
 
 const mysql = require('mysql');
 const exec = require('child_process').exec;
+const uuidv1 = require('uuid/v1');
 
 var connection = mysql.createConnection({
     host     : process.env.dbhost,
@@ -205,13 +206,19 @@ async function pathChecking(event) {
           
         });
       break;
-
+      
       case 'addComment':
 
         var body = JSON.parse(event.body);
-
-        console.log(`call shocogatsbymnl.add_comment('${body.shortId}', 'sampleuuid', '${body.parent}', '${body.username}', '${body.comment}', '${body.uid}')`);
-        connection.query(`call shocogatsbymnl.add_comment('${body.shortId}', 'sampleuuid', null, '${body.username}', '${body.comment}', '${body.uid}')`, function (err, rows, fields) {          
+        const uuidComment = uuidv1();
+        var query = '';
+        if(body.parent) 
+          query = `call shocogatsbymnl.add_comment('${body.shortId}', '${uuidComment}', '${body.parent}', '${body.username}', '${body.comment}', '${body.uid}')`;
+        else 
+          query = `call shocogatsbymnl.add_comment('${body.shortId}', '${uuidComment}', null, '${body.username}', '${body.comment}', '${body.uid}')`;
+        
+        console.log(query);
+        connection.query(query, function (err, rows, fields) {          
           if(err) {
             resolve(err);
           }
