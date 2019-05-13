@@ -19,8 +19,10 @@ class DynamicRoute extends React.Component {
       comment:'',
       commentReply:'',
       orderBy: 'newest',
-      isCommentValid: false,
-      isCommentInputTouched: false,
+      mainAddCommentDisabled: true,
+      replyAddCommentDisabled: true,
+      mainCommentError: null,
+      replyCommentError: null,
       currentReply: '',
       openReply: false
     }
@@ -30,6 +32,8 @@ class DynamicRoute extends React.Component {
     this.handleFocus = this.handleFocus.bind(this);
     this.handleOrder = this.handleOrder.bind(this);
     this.handleReplyButton = this.handleReplyButton.bind(this);    
+    this.handleValidationComment = this.handleValidationComment.bind(this);  
+    this.handleAddComment = this.handleAddComment.bind(this);  
   }
 
   componentWillMount() {
@@ -161,43 +165,81 @@ class DynamicRoute extends React.Component {
   }
 
   // handle adding a comment
-  async handleAddComment () {
-    
+  async handleAddComment (event, commentParent) {
+    console.log(event.target.className)
+    console.log(event.target)
+    let commentVariableId = Math.random().toString(36).substring(7);
+   
+    // after effect
+    if(event.target.className === "main") {
+      this.setState({ comments: this.state.comments.concat({
+        comment: this.state.comment,
+        commentId: commentVariableId,
+        commentid: commentVariableId,
+        conversationId: this.props.shortId,
+        date: new Date(),
+        id: 2,
+        parent: null,
+        shortUrlId: 14776337,
+        uid: this.state.user.attributes.sub,
+        userName: this.state.user.username
+      }),
+      comment: '',
+      mainAddCommentDisabled: true,
+      mainCommentError: null,
+     })
+    } else {
+      this.setState({ comments: this.state.comments.concat({
+        comment: this.state.commentReply,
+        commentId: commentVariableId,
+        commentid: commentVariableId,
+        conversationId: this.props.shortId,
+        date: new Date(),
+        id: 2,
+        parent: commentParent,
+        shortUrlId: 14776337,
+        uid: this.state.user.attributes.sub,
+        userName: this.state.user.username
+      }),
+      commentReply: '',
+      replyAddCommentDisabled: true,
+      replyCommentError: null,
+      openReply: false
+     })
+    }
     // add difference for parent and children
-    var payload = {
-      "shortId": `${this.props.shortId}`,
-      "parent": null,
-      "username":  `${this.state.user.username}`,
-      "comment": `${this.state.comment}`,
-      "uid": `${this.state.user.attributes.sub}`
-    };
+    // var payload = {
+    //   "shortId": `${this.props.shortId}`,
+    //   "parent": null,
+    //   "username":  `${this.state.user.username}`,
+    //   "comment": `${this.state.comment}`,
+    //   "uid": `${this.state.user.attributes.sub}`
+    // };
 
-   const proxyurl = "https://cors-anywhere.herokuapp.com/";
-   const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=addComment', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+  //  const proxyurl = "https://cors-anywhere.herokuapp.com/";
+  //  const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=addComment', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(payload)
+  //   });
     // const content = await rawResponse.json();
     
     //after success full commenting and updating the comment list 
 
-    // this.setState({ videos: this.state.videos.concat({
-    //   shortId: content.shorturl.shortId,
-    //   path: this.form._thumbnail.value,
-    //   bucketPath: content.media[0][0].bucketPath,
-    //   format: content.media[0][0].format,
-    //   formatDescription: "",
-    //   owner: this.state.user.attributes.sub,
-    //   application: this.form._application.value,
-    //   applicationDisplayName: this.form._application.value,
-    //   title: null,
-    //   timeInSeconds: null,
-    //   username: this.state.user.username,
-    //   visibility: "public"
+    // this.setState({ comments: this.state.comments.concat({
+    //   comment: "Sweet video",
+    //   commentId: "8e60d1f0-0df4-11e6-9455-1980901455fa",
+    //   commentid: "8e60d1f0-0df4-11e6-9455-1980901455fa",
+    //   conversationId: "9CI",
+    //   date: "2016-04-29T10:24:30.000Z",
+    //   id: 2,
+    //   parent: null,
+    //   shortUrlId: 14776337,
+    //   uid: "5000009",
+    //   userName: "James Fitzgerald"
     // }) })
 
     // var els = document.getElementsByClassName('search-input');
@@ -213,6 +255,58 @@ class DynamicRoute extends React.Component {
   // handle validation of the comment
   handleValidationComment(event) {
     event.preventDefault();
+    if(event.target.id === "main-AddComment") {
+      this.setState({comment: event.target.value});
+
+      switch(true) {
+
+        case (event.target.value.length == 0): 
+        this.setState({mainCommentError: null,
+        mainAddCommentDisabled: true});
+        break;
+
+        case (event.target.value.length < 10): 
+        this.setState({mainCommentError: 'Your comment is too short, please type a longer message',
+        mainAddCommentDisabled: true});
+        break;
+
+        case (event.target.value.length >= 50):
+        this.setState({mainCommentError: 'Your comment is too long, please type a shorter message',
+        mainAddCommentDisabled: true});
+        break;
+
+        default: this.setState({mainCommentError: null,
+        mainAddCommentDisabled: false
+        })
+      }
+    } else {
+
+      this.setState({commentReply: event.target.value});
+
+      switch(true) {
+
+        case (event.target.value.length == 0): 
+        this.setState({replyCommentError: null,
+        replyAddCommentDisabled: true});
+        break;
+
+        case (event.target.value.length < 10): 
+        this.setState({replyCommentError: 'Your comment is too short, please type a longer message',
+        replyAddCommentDisabled: true});
+        break;
+
+        case (event.target.value.length >= 50):
+        this.setState({replyCommentError: 'Your comment is too long, please type a shorter message',
+        replyAddCommentDisabled: true});
+        break;
+
+        default: this.setState({replyCommentError: null,
+        replyAddCommentDisabled: false
+        })
+      }
+    }
+    
+
   }
 
   // handle event on likes
@@ -405,12 +499,16 @@ class DynamicRoute extends React.Component {
                         </ul>
                         
                         <div className="comment-wrap">
-                          <textarea className="comment-input"></textarea>
-                          {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
-                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
+                          <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
+                           <span className="error-comment-input">{this.state.mainCommentError}</span>
+{/*                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
                           {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
                         </div>
-                        <button id="comment-btn">Post</button>
+                        <button id="comment-btn" 
+                          className="main"
+                          disabled = {(this.state.mainAddCommentDisabled)? "disabled" : ""}
+                          onClick={this.handleAddComment}
+                          >Post</button>
                       
                       </div>
                         
@@ -437,19 +535,24 @@ class DynamicRoute extends React.Component {
                                       this.state.openReply && this.state.currentReply === comment.commentId ? (
                                         <div className="comment-post">
                                           <div className="comment-wrap">
-                                            <textarea className="comment-input"></textarea>
+                                          <textarea className={(this.state.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.commentReply} onChange={this.handleValidationComment}></textarea>
+                                          <span className="error-comment-input">{this.state.replyCommentError}</span>
                                             {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
                                             <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
                                             {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
                                           </div>
-                                          <button id="comment-btn">Post</button>
+                                          <button id="comment-btn"
+                                          disabled = {(this.state.replyAddCommentDisabled)? "disabled" : ""}
+                                          onClick={(evt) => this.handleAddComment(evt, comment.commentId)}
+                                          >Post</button>
                                       </div>
                                       ):(
                                         <div></div>
                                       )
                                     }
+                                    <ul>
                                     {
-                                      objectComments
+                                      objectComments.reverse()
                                       .filter(comment1 => comment1.parent === comment.commentId)
                                       .map((comment1, i) => 
                                         <li key={i} className="comment-list-item">
@@ -466,6 +569,7 @@ class DynamicRoute extends React.Component {
                                         </li>
                                       )
                                     }
+                                  </ul>
                                   </div>
                                 </li>
                               )
@@ -488,22 +592,27 @@ class DynamicRoute extends React.Component {
                                     <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
                                   </p>
                                   {
-                                        this.state.openReply && this.state.currentReply === comment.commentId ? (
-                                          <div className="comment-post">
-                                           <div className="comment-wrap">
-                                              <textarea className="comment-input"></textarea>
-                                              {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
-                                              <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                                              {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
-                                            </div>
-                                            <button id="comment-btn">Post</button>
+                                    this.state.openReply && this.state.currentReply === comment.commentId ? (
+                                      <div className="comment-post">
+                                        <div className="comment-wrap">
+                                        <textarea className={(this.state.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.commentReply} onChange={this.handleValidationComment}></textarea>
+                                        <span className="error-comment-input">{this.state.replyCommentError}</span>
+                                          {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
+                                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
+                                          {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
                                         </div>
-                                        ):(
-                                          <div></div>
-                                        )
-                                      }
+                                        <button id="comment-btn"
+                                        disabled = {(this.state.replyAddCommentDisabled)? "disabled" : ""}
+                                        onClick={(evt) => this.handleAddComment(evt, comment.commentId)}
+                                        >Post</button>
+                                    </div>
+                                    ):(
+                                      <div></div>
+                                    )
+                                  }
+                                  <ul>
                                       {
-                                    objectComments.reverse()
+                                    objectComments
                                     .filter(comment1 => comment1.parent === comment.commentId)
                                     .map((comment1, i) => 
                                       <li key={i} className="comment-list-item">
@@ -520,6 +629,7 @@ class DynamicRoute extends React.Component {
                                       </li>
                                     )
                                   }
+                                  </ul>
                                 </div>
                               </li>
                             )
