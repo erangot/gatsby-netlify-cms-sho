@@ -163,7 +163,7 @@ async function pathChecking(event) {
           }
           
           console.log(rows[0].completionEmailSent);
-          if(rows[0].completionEmailSent) {
+          // if(rows[0].completionEmailSent) {
 
             console.log(`SELECT * FROM shocogatsbymnl.shortUrls su inner JOIN shocogatsbymnl.media m ON m.shortUrlId = su.id WHERE su.shortId ='${shortId}'`)
             connection.query(`SELECT * FROM shocogatsbymnl.shortUrls su inner JOIN shocogatsbymnl.media m ON m.shortUrlId = su.id WHERE su.shortId ='${shortId}'`, function (err, rows, fields) {          
@@ -173,9 +173,9 @@ async function pathChecking(event) {
               console.log(rows);
               resolve(rows);
             });
-          } else {
-            resolve( false );
-          }
+          // } else {
+          //   resolve( false );
+          // }
           
         });
       break;
