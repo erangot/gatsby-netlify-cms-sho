@@ -73,7 +73,9 @@ class DynamicRoute extends React.Component {
     fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
     .then(response => response.json())
     .then(data => {
-      if(data) {
+      
+      // Remove rendering page
+      // if(data) {
         console.log(data);
         var videoPageData = {
           videopath: '',
@@ -152,12 +154,13 @@ class DynamicRoute extends React.Component {
           })
         });
 
-      } else {
-        this.setState({
-          isRendered: false,
-          message: 'Hang in there. Your video will be ready soon. '
-        });
-      }
+      // } 
+      // else {
+      //   this.setState({
+      //     isRendered: false,
+      //     message: 'Hang in there. Your video will be ready soon. '
+      //   });
+      // }
 
     })
 
