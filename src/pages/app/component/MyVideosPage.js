@@ -139,10 +139,10 @@ class MyVideosPage extends React.Component {
               <div className="container text-center">
                 <h1 className="jumbo text-padding">My Videos</h1>
                 {/* <form className="search-box"> */}
-                    <label className="">Add a video</label><br/>                   
-                    <input className="search-input" type="text" placeholder="application"   ref={input => this.form._application = input}/><br/>
-                    <input className="search-input" type="text" placeholder="video" ref={input => this.form._video = input}/><br/>
-                    <input className="search-input" type="text" placeholder="thumbnail" ref={input => this.form._thumbnail = input}/><br/>
+                    <label className="">Add a mock video</label><br/>                   
+                    <input className="search-input" type="text" placeholder="storypix/videoscribe/tawe/funscribe"   ref={input => this.form._application = input}/><br/>
+                    <input className="search-input" type="text" placeholder="http://video.mp4" ref={input => this.form._video = input}/><br/>
+                    <input className="search-input" type="text" placeholder="http://image.png" ref={input => this.form._thumbnail = input}/><br/>
                     <button className="addButton-video" onClick={this.handleAdd}>Submit</button>
                 {/* </form>            */}
               </div>
