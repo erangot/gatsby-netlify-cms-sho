@@ -28,7 +28,9 @@ class DynamicRoute extends React.Component {
       visibility: '',
       videoTitle: '',
       videoDesc: '',
-      shortUrlId: ''
+      shortUrlId: '',
+      isEngaged: false,
+      isBlocked: false
     }
 
     this.handleEditButton = this.handleEditButton.bind(this);
@@ -41,6 +43,8 @@ class DynamicRoute extends React.Component {
     this.handleChangeDesc = this.handleChangeDesc.bind(this);  
     this.handleChangeTitle = this.handleChangeTitle.bind(this);  
     this.handleSaveButton = this.handleSaveButton.bind(this);  
+    this.handleLikeButton = this.handleLikeButton.bind(this);  
+    this.handleBlockButton = this.handleBlockButton.bind(this);  
   }
 
   componentWillMount() {
@@ -131,17 +135,14 @@ class DynamicRoute extends React.Component {
         });
 
         // Get engaged user
-        // fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.props.shortId}`)
-        // .then(response => response.json())
-        // .then(data1 => {
-        //   console.log(data1[0][0]);
-        //   this.setState({
-        //     videoTitle: data1[0][0].title,
-        //     videoDesc: data1[0][0].description,
-        //     visibility: data1[0][0].visibility,
-        //     shortUrlId: data1[0][0].shortUrlId
-        //   })
-        // });
+        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.props.shortId}&ownerId=${this.state.user.attributes.sub}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log("isEngaged",data[0][0]);
+          this.setState({
+            isEngaged: data[0][0].engaged,
+          })
+        });
 
       } else {
         this.setState({
@@ -181,16 +182,16 @@ async  handleSaveButton(event) {
     this.setState({isEditing:false});
   }
 
-  // handle clicking the block flag
+  
   handleBlockButton(event) {
     event.preventDefault();
-    // applying 
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/
-    default/test-api?api=blockShortUrl&shortUrlId=${this.state.video.shortUrlId}`)
+    
+    this.setState({isBlocked: true});
+
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=blockShortUrl&shortUrlId=${this.state.shortUrlId}`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
-      alert('Success');
     });
   }
 
@@ -198,8 +199,7 @@ async  handleSaveButton(event) {
   handleRemoveButton(event) {
     event.preventDefault();
       // applying 
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/
-    default/test-api?api=deleteShortUrl&shortUrl=${this.props.shortId}`)
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=deleteShortUrl&shortUrl=${this.props.shortId}`)
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -315,8 +315,30 @@ async  handleSaveButton(event) {
   }
 
   // handle event on likes
-  handleLikeButton(event) {
+  async handleLikeButton(event) {
     event.preventDefault();
+
+    var toggleEngaged = !this.state.isEngaged;
+    var payload = {
+      "shortId": `${this.props.shortId}`,
+      "engaged": toggleEngaged,
+      "ownerId": `${this.state.user.attributes.sub}`
+    };
+    console.log("toggleEngaged",toggleEngaged)
+    this.setState({isEngaged: toggleEngaged});
+
+    console.log(payload);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content = await rawResponse.json();
+    
   }
 
   handleChangeDesc(event) {
@@ -478,8 +500,8 @@ async  handleSaveButton(event) {
                           </li>
                       </ul>
                       <ul className="action-links">
-                          <li><button className="eng-link active" data-url="1BMAF">Like<span className="icon"></span></button></li>
-                          <li className="last"><button className="report-link" data-url="1BMAF">Report<span className="icon"></span></button></li>
+                          <li><button className="eng-link active" onClick={this.handleLikeButton}>Like<span className={"icon " + (this.state.isEngaged ? 'active' : '') }></span></button></li>
+                          <li className="last"><button className="report-link" onClick={this.handleBlockButton}>Report<span className={"icon " + (this.state.isBlocked ? 'active' : '') }></span></button></li>
                       </ul>
                   </div>
 

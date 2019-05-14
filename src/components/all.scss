@@ -1370,6 +1370,11 @@ writing-mode: horizontal-tb;
                   width: 19px;
                   word-spacing: 0px;
                   writing-mode: horizontal-tb;
+
+                  &.active, &:hover {
+                    background-position-x: -19px;
+                    background-position-y: 0px;
+                  }
                 }
               }
 
@@ -1409,6 +1414,11 @@ vertical-align: text-bottom;
 width: 27px;
 word-spacing: 0px;
 writing-mode: horizontal-tb;
+
+        &.active, &:hover {
+          background-position-x: -27px;
+          background-position-y: 0px;
+        }
                 }
               }
 
@@ -1488,6 +1498,11 @@ vertical-align: text-bottom;
 width: 19px;
 word-spacing: 0px;
 writing-mode: horizontal-tb;
+
+  &.active, &:hover {
+    background-position-x: -19px;
+    background-position-y: 0px;
+  }
                 }
               }
 

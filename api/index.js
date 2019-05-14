@@ -293,7 +293,34 @@ async function pathChecking(event) {
         resolve( rows );
       
     });
-  break;
+    break;
+
+    case 'getEngagedForShortIdUser':
+
+      var body = event.queryStringParameters;
+
+      console.log(`call shocogatsbymnl.get_engaged_for_shortId_user('${body.shortId}','${body.ownerId}')`);
+      connection.query(`call shocogatsbymnl.get_engaged_for_shortId_user('${body.shortId}','${body.ownerId}')`, function (err, rows, fields) {          
+        if(err) {
+          resolve(err);
+        }
+          resolve( rows );
+      });
+    break;
+
+    case 'changedEngagedForShortIdUser':
+
+    var body = JSON.parse(event.body);
+
+    console.log(`call shocogatsbymnl.change_engaged_for_shortId_user('${body.shortId}', '${body.ownerId}', ${body.engaged})`);
+    connection.query(`call shocogatsbymnl.change_engaged_for_shortId_user('${body.shortId}', '${body.ownerId}', ${body.engaged})`, function (err, rows, fields) {          
+      if(err) {
+        resolve(err);
+      }
+        resolve( rows );
+      
+    });
+    break;
   
     }
   });
