@@ -30,6 +30,7 @@ const App = () => {
   return (
       <Router>
         <PrivateRoute path="/app/myvideos" component={MyVideosPage} />
+        <PrivateRoute path="/app/myvideos/:deleted" component={MyVideosPage} />
         <PublicRoute path="/app">
           <PrivateRoute path="/" component={IndexPageTemplate} />
         </PublicRoute>

@@ -7,8 +7,8 @@ import Layout from '../../../components/Layout';
 
 class MyVideosPage extends React.Component {
   
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       value: '',
       videos: [],
@@ -19,6 +19,7 @@ class MyVideosPage extends React.Component {
         bucketpath:''
       },
       user:{},
+      isVideoDeleted: false
     }
 
     this.form = {
@@ -30,6 +31,10 @@ class MyVideosPage extends React.Component {
   }
 
   componentWillMount() {
+
+    if(this.props.deleted) 
+      this.setState({isVideoDeleted: true});
+    
     Auth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
     }).then(user => {
@@ -123,9 +128,14 @@ class MyVideosPage extends React.Component {
               </form>      
             </div>
           </div> */}
+
+
           <div className="videos">
             <div className="text-center">
-
+              { (this.state.isVideoDeleted) ? 
+                <h3 className="video-deleted-banner">Your video has been deleted.</h3> :
+                <div></div>
+              }
               <div className="container text-center">
                 <h1 className="jumbo text-padding">My Videos</h1>
                 {/* <form className="search-box"> */}

@@ -1,12 +1,19 @@
 import React from "react"
-import { Link } from 'gatsby';
+import { Link,  } from 'gatsby';
 import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
 import { Auth } from 'aws-amplify';
 
+
+import { navigate } from "@reach/router" // comes with gatsby v2
+
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 const windowGlobal = typeof window !== 'undefined' && window
 
 class DynamicRoute extends React.Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -45,6 +52,7 @@ class DynamicRoute extends React.Component {
     this.handleSaveButton = this.handleSaveButton.bind(this);  
     this.handleLikeButton = this.handleLikeButton.bind(this);  
     this.handleBlockButton = this.handleBlockButton.bind(this);  
+    this.handleRemoveButton = this.handleRemoveButton.bind(this);
   }
 
   componentWillMount() {
@@ -198,13 +206,29 @@ async  handleSaveButton(event) {
   // handle removing of the video
   handleRemoveButton(event) {
     event.preventDefault();
-      // applying 
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=deleteShortUrl&shortUrl=${this.props.shortId}`)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      alert('Success');
+    const isVideoDeleted = true;
+    
+    
+    confirmAlert({
+      title: 'sho.co says',
+      message: 'Are you sure you wish to remove this video?',
+      buttons: [
+        {
+          label: 'Yes',
+           onClick: () =>  fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=blockShortUrl&shortUrlId=${this.state.shortUrlId}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            navigate('/app/myvideos/deleted');
+          })
+        },
+        {
+          label: 'No',
+          onClick: () => console.log('Clicked No for confirm')
+        }
+      ]
     });
+    
   }
 
   // handle adding a comment
@@ -531,7 +555,7 @@ async  handleSaveButton(event) {
                           <option value="private">Private</option>
                       </select>
                   </div>     
-                  <p className="remove-video"><a href="#" className="confirmation">Remove video</a></p>
+                  <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
               </div>
               
           </div>
