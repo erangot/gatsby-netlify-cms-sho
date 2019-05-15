@@ -2,8 +2,9 @@ import React from "react"
 import { Link,  } from 'gatsby';
 import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
-import { Auth } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 
+Amplify.configure(aws_exports);
 
 import { navigate } from "@reach/router" // comes with gatsby v2
 
