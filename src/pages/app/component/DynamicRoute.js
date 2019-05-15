@@ -3,14 +3,15 @@ import { Link,  } from 'gatsby';
 import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
 import Amplify, { Auth } from 'aws-amplify';
+import aws_exports from '../../../aws-exports'; // if you are using Amplify CLI
 
-Amplify.configure(aws_exports);
 
 import { navigate } from "@reach/router" // comes with gatsby v2
 
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
+Amplify.configure(aws_exports);
 const windowGlobal = typeof window !== 'undefined' && window
 
 class DynamicRoute extends React.Component {
