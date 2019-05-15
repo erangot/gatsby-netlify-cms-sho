@@ -1,6 +1,6 @@
 ---
 templateKey: about-page
-title: 'Test: The lo-down '
+title: 'The lo-down '
 ---
 **Sho.co is a sharing website for videos made with Sparkol apps.**
 
