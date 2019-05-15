@@ -11,7 +11,7 @@ import { navigate } from "@reach/router" // comes with gatsby v2
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
-Amplify.configure(aws_exports);
+
 const windowGlobal = typeof window !== 'undefined' && window
 
 class DynamicRoute extends React.Component {
@@ -66,8 +66,9 @@ class DynamicRoute extends React.Component {
 
   async componentWillMount() {
 
+    Amplify.configure(aws_exports);
     // after checking the video is isRendered
-    await Auth.currentAuthenticatedUser({
+    await Amplify.Auth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
     }).then(user => {
         this.setState({user: user});
