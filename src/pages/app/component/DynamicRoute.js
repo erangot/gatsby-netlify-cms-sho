@@ -68,6 +68,8 @@ class DynamicRoute extends React.Component {
         console.log(err);        
     });
 
+    console.log(this.props);
+
     // Show video page when rendered but not yet built
     // Show video when it is being rendered
     fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
