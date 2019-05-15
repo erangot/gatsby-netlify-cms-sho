@@ -133,7 +133,7 @@ class DynamicRoute extends React.Component {
         });
 
         // Get comments
-        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.props.shortId}&orderBy=asc`)
+        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.shortId}&orderBy=asc`)
         .then(response => response.json())
         .then(data => {
           console.log(data);
@@ -141,7 +141,7 @@ class DynamicRoute extends React.Component {
         });
 
         // Get details
-         fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.props.shortId}`)
+         fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.state.shortId}`)
         .then(response => response.json())
         .then(data1 => {
           console.log(data1[0][0]);
@@ -154,7 +154,7 @@ class DynamicRoute extends React.Component {
         });
 
         // Get engaged user
-        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.props.shortId}&ownerId=${this.state.user.attributes.sub}`)
+        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.shortId}&ownerId=${this.state.user.attributes.sub}`)
         .then(response => response.json())
         .then(data => {
           console.log("isEngaged",data[0][0]);
@@ -182,7 +182,7 @@ async  handleSaveButton(event) {
     event.preventDefault();
 
     var payload = {
-      "shortId": `${this.props.shortId}`,
+      "shortId": `${this.state.shortId}`,
       "vidTitle": this.state.videoTitle,
       "vidDesc": this.state.videoDesc,
       "ownerId": `${this.state.user.attributes.sub}`
@@ -248,7 +248,7 @@ async  handleSaveButton(event) {
 
     console.log(event.target)
     var payload = {
-      "shortId": `${this.props.shortId}`,
+      "shortId": `${this.state.shortId}`,
       "parent": commentParent || null,
       "username":  `${this.state.user.username}`,
       "comment": event.target.className === "main" ? `${this.state.comment}`: `${this.state.commentReply}`,
@@ -268,7 +268,7 @@ async  handleSaveButton(event) {
   const content = await rawResponse.json();
 
   // Get comments
-  const rawResponseComments = await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.props.shortId}&orderBy=asc`);
+  const rawResponseComments = await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.shortId}&orderBy=asc`);
   const commentsRaw = await rawResponseComments.json();
   this.setState({comments:commentsRaw[0]});
 
@@ -356,7 +356,7 @@ async  handleSaveButton(event) {
 
     var toggleEngaged = !this.state.isEngaged;
     var payload = {
-      "shortId": `${this.props.shortId}`,
+      "shortId": `${this.state.shortId}`,
       "engaged": toggleEngaged,
       "ownerId": `${this.state.user.attributes.sub}`
     };
@@ -422,7 +422,7 @@ async  handleSaveButton(event) {
     console.log(event.target.value);
 
     var payload = {
-      "shortId": `${this.props.shortId}`,
+      "shortId": `${this.state.shortId}`,
       "visibility": event.target.value,
       "ownerId": `${this.state.user.attributes.sub}`
     };
@@ -543,11 +543,11 @@ async  handleSaveButton(event) {
 
                   <div className="input-surround" id="url">
                       <label htmlFor="url-input">Link</label>
-                      <input id="url-input" type="text" value={`http://shoco-sparkol.unosoft.ph/app/${this.props.shortId}`} onFocus={this.handleFocus} onClick={this.handleFocus}  readOnly/>
+                      <input id="url-input" type="text" value={`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`} onFocus={this.handleFocus} onClick={this.handleFocus}  readOnly/>
                   </div>
                   <div className="input-surround" id="embed-code">
                       <label htmlFor="embed-code-input">Embed code</label>
-                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.props.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
+                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
                   </div>
 
                   <div className="input-surround" id="download">
