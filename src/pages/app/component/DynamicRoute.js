@@ -70,12 +70,7 @@ class DynamicRoute extends React.Component {
     }).then(user => {
         this.setState({user: user});
         // insert getting comments
-    })
-    .catch(err => {
-        console.log(err);        
-    });
 
-    console.log(this.props);
 
     // Show video page when rendered but not yet built
     // Show video when it is being rendered
@@ -172,6 +167,13 @@ class DynamicRoute extends React.Component {
       // }
 
     })
+    
+    })
+    .catch(err => {
+        console.log(err);        
+    });
+
+    console.log(this.props);
 
     // Redirect to site static page is ready
       // fetch
