@@ -74,7 +74,7 @@ class DynamicRoute extends React.Component {
 
     // Show video page when rendered but not yet built
     // Show video when it is being rendered
-    await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.state.shortId}`)
+     fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.state.shortId}`)
     .then(response => response.json())
     .then(data => {
       
@@ -167,7 +167,7 @@ class DynamicRoute extends React.Component {
       // }
 
     })
-    
+
     })
     .catch(err => {
         console.log(err);        
