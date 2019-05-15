@@ -37,8 +37,15 @@ class DynamicRoute extends React.Component {
       videoDesc: '',
       shortUrlId: '',
       isEngaged: false,
-      isBlocked: false
+      isBlocked: false,
+      shortId: ''
     }
+
+
+    if(process.env.NODE_ENV == 'development') 
+      this.state.shortId = String(props["uri"]).split('/')[2]
+    else 
+      this.state.shortId = String(props["*"]).split('/')[1]
 
     this.handleEditButton = this.handleEditButton.bind(this);
     this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
@@ -55,10 +62,10 @@ class DynamicRoute extends React.Component {
     this.handleRemoveButton = this.handleRemoveButton.bind(this);
   }
 
-  componentWillMount() {
+  async componentWillMount() {
 
     // after checking the video is isRendered
-    Auth.currentAuthenticatedUser({
+    await Auth.currentAuthenticatedUser({
       bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
     }).then(user => {
         this.setState({user: user});
@@ -72,7 +79,7 @@ class DynamicRoute extends React.Component {
 
     // Show video page when rendered but not yet built
     // Show video when it is being rendered
-    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.props.shortId}`)
+    await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.state.shortId}`)
     .then(response => response.json())
     .then(data => {
       
@@ -134,7 +141,7 @@ class DynamicRoute extends React.Component {
         });
 
         // Get details
-        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.props.shortId}`)
+         fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.props.shortId}`)
         .then(response => response.json())
         .then(data1 => {
           console.log(data1[0][0]);
