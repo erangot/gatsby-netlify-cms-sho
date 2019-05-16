@@ -31,9 +31,7 @@ const App = () => {
       <Router>
         <PrivateRoute path="/app/myvideos" component={MyVideosPage} />
         <PrivateRoute path="/app/myvideos/:deleted" component={MyVideosPage} />
-        <PublicRoute path="/app">
-          <PrivateRoute path="/" component={IndexPageTemplate} />
-        </PublicRoute>
+        <PrivateRoute path="/app/" component={IndexPageTemplate} />
         <DynamicRoute path="/app/:shortId"/>
       </Router>
   )

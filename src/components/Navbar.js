@@ -2,7 +2,8 @@ import React, { Component } from "react"
 import shocologo from "../images/shoco_logo.png"
 import SlantedEndge from '../components/slantedEdge'
 import { Link, navigate } from 'gatsby'
-import { Auth } from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
+import aws_exports from '../aws-exports'; // if you are using Amplify CLI
 
 
 
@@ -20,6 +21,7 @@ import "./styles/header.scss"
       }
 
     componentWillMount() {
+        Amplify.configure(aws_exports);
         Auth.currentAuthenticatedUser({
             bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
         }).then(user => {
