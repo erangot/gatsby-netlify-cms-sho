@@ -36,11 +36,11 @@ import "./styles/header.scss"
     }
 
     signOut() {
-        navigate("/");
         this.setState({authState: 'signIn'});  
         Auth.signOut().then(() => {
         }).catch(e => {
           console.log(e);
+          navigate("/");
         });
       }
 
