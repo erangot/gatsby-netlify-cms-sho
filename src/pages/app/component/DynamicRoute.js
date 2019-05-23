@@ -183,7 +183,7 @@ class DynamicRoute extends React.Component {
   }
 
 
-async  handleSaveButton(event) {
+async handleSaveButton(event) {
     event.preventDefault();
 
     var payload = {
