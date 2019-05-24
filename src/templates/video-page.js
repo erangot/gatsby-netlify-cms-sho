@@ -50,18 +50,18 @@ class videoPage extends React.Component {
                   return response.json();
                 })
                 .then(data => {
-                    console.log("isEngaged",data[0][0]);
+                    // console.log("isEngaged",data[0][0]);
                     this.setState({
                         isEngaged: data[0][0].engaged,
                     })
                 });
               
-                console.log('User Logged In - ', user);
+                // console.log('User Logged In - ', user);
 
                 resolve(user);
                 }) .catch(err => {
 
-                    console.log(err);        
+                    // console.log(err);        
                 });
          
           // Get comments
@@ -73,12 +73,12 @@ class videoPage extends React.Component {
 
          })
          .then(data => {
-           console.log(data);
+          //  console.log(data);
            this.setState({comments: data[0]})
            resolve(data[0]);
          }).catch(err => {
 
-            console.log(err);        
+            // console.log(err);        
         });
  
          // Get details
@@ -88,7 +88,7 @@ class videoPage extends React.Component {
           return response.json();
          })
          .then(data1 => {
-           console.log(data1[0][0]);
+          //  console.log(data1[0][0]);
            this.setState({
              videoTitle: data1[0][0].title,
              videoDesc: data1[0][0].description,
@@ -98,7 +98,7 @@ class videoPage extends React.Component {
            resolve(data1[0][0]);
          }).catch(err => {
 
-            console.log(err);        
+            // console.log(err);        
         });
  
     }
