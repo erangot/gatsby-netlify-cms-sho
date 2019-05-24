@@ -6,8 +6,7 @@ import Amplify from 'aws-amplify';
 import { resolve } from 'url';
 
 class videoPage extends React.Component {
-   
-   
+  
     constructor(props) {
         super(props);
         this.state = {
