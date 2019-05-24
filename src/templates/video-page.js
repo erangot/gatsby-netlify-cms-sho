@@ -46,7 +46,10 @@ class videoPage extends React.Component {
                 
               // Get engaged user
                 fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.video.shortId}&ownerId=${this.state.user.attributes.sub}`)
-                .then(response => response.json())
+                .then(response => {
+                  if(!response.ok) { throw response }
+                  return response.json();
+                })
                 .then(data => {
                     console.log("isEngaged",data[0][0]);
                     this.setState({
@@ -57,14 +60,19 @@ class videoPage extends React.Component {
                 console.log('User Logged In - ', user);
 
                 resolve(user);
-          }) .catch(err => {
+                }) .catch(err => {
 
-              console.log(err);        
-          });
+                    console.log(err);        
+                });
          
           // Get comments
          await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.video.shortId}&orderBy=asc`)
-         .then(response => response.json())
+         .then(response => {
+           
+          if(!response.ok) { throw response }
+          return response.json();
+
+         })
          .then(data => {
            console.log(data);
            this.setState({comments: data[0]})
@@ -76,7 +84,10 @@ class videoPage extends React.Component {
  
          // Get details
         await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.state.video.shortId}`)
-         .then(response => response.json())
+         .then(response => {
+          if(!response.ok) { throw response }
+          return response.json();
+         })
          .then(data1 => {
            console.log(data1[0][0]);
            this.setState({
