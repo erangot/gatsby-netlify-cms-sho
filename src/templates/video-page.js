@@ -27,6 +27,7 @@ class videoPage extends React.Component {
             replyCommentError: null,
             currentReply: '',
             openReply: false,
+            isLoggedIn: false,
         }
 
         this.handleOrder = this.handleOrder.bind(this);
@@ -41,7 +42,10 @@ class videoPage extends React.Component {
             bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
           }).then(user => {
               
-              this.setState({user: user});
+              this.setState({
+                user: user,
+                isLoggedIn: true
+              });
                 
               // Get engaged user
                 fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.video.shortId}&ownerId=${this.state.user.attributes.sub}`)
@@ -273,7 +277,6 @@ class videoPage extends React.Component {
                     </div>
                     <div className="videos" id="comments">
                 <div className="container2">
-                  {this.state.user ? (
                       <div className="comment-section comments">
                       <div className="comment-post">
                         <h2>{commentLength} comments of {commentLength}</h2>
@@ -286,19 +289,22 @@ class videoPage extends React.Component {
                             <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
                           </li>
                         </ul>
-                        
-                        <div className="comment-wrap">
-                          <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
-                           <span className="error-comment-input">{this.state.mainCommentError}</span>
-{/*                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                          {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
-                        </div>
-                        <button id="comment-btn" 
-                          className="main"
-                          disabled = {(this.state.mainAddCommentDisabled)? "disabled" : ""}
-                          onClick={this.handleAddComment}
-                          >Post</button>
-                      
+                        {this.state.isLoggedIn ?(
+                          <div>
+                            <div className="comment-wrap">
+                              <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
+                              <span className="error-comment-input">{this.state.mainCommentError}</span>
+                            </div>
+                            <button id="comment-btn" 
+                              className="main"
+                              disabled = {(this.state.mainAddCommentDisabled)? "disabled" : ""}
+                              onClick={this.handleAddComment}>Post</button>
+                          </div>
+                        ):(
+                          <div className="text-center notLoggedIn-message">
+                            <p>You must <Link to="/app">log in</Link> or <Link to="/app">sign up</Link> to comment on this video</p>
+                          </div>
+                        )}
                       </div>
                         
                         <ul className="comment-list">
@@ -316,9 +322,11 @@ class videoPage extends React.Component {
                                     </p>
                                     <p className="comment-info">
                                       <span className="comment-date"><TimeAgo date={comment.date} /> </span>
-                                      {/* Only when logged In */}
-                                      | 
+                                      
+                                      |
+                                      {this.state.isLoggedIn ?( 
                                       <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
+                                      ):('')}
                                     </p>
                                     {
                                       this.state.openReply && this.state.currentReply === comment.commentId ? (
@@ -377,8 +385,9 @@ class videoPage extends React.Component {
                                   <p className="comment-info">
                                     <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                     {/* Only when logged In */}
-                                    | 
-                                    <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
+                                    {this.state.isLoggedIn ?( 
+                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
+                                      ):('')}
                                   </p>
                                   {
                                     this.state.openReply && this.state.currentReply === comment.commentId ? (
@@ -426,12 +435,6 @@ class videoPage extends React.Component {
                           }
                         </ul>
                       </div>
-                    ):(
-                      <div className="text-center">
-                        <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
-                        <h2>{commentLength} comments</h2>
-                      </div>
-                    )}
                 </div>
                   
               </div>
