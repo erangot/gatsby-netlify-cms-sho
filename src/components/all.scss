@@ -1541,10 +1541,12 @@ writing-mode: horizontal-tb;
           position: absolute;
           background-color: #fff;
           opacity: 0.85;
-          padding: 7px 0 0 0;
+          padding: 7px;
           margin: 0;
           top: 0;
           left: 0;
+          font-size: 13px;
+          z-index: 999;
         }
         
         li {

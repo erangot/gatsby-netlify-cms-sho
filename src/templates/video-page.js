@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import Layout from '../components/Layout'
 import TimeAgo from 'react-timeago'
 import Amplify from 'aws-amplify'
@@ -31,6 +31,7 @@ class videoPage extends React.Component {
             currentReply: '',
             openReply: false,
             isLoggedIn: false,
+            userUUID:''
         }
 
         this.handleOrder = this.handleOrder.bind(this);
@@ -52,7 +53,8 @@ class videoPage extends React.Component {
               
               this.setState({
                 user: user,
-                isLoggedIn: true
+                isLoggedIn: true,
+                userUUID: user.attributes.sub
               });
                 
               // Get engaged user
@@ -119,27 +121,31 @@ class videoPage extends React.Component {
   async handleLikeButton(event) {
     event.preventDefault();
 
-    var toggleEngaged = !this.state.isEngaged;
-    var payload = {
-      "shortId": `${this.state.shortId}`,
-      "engaged": toggleEngaged,
-      "ownerId": `${this.state.user.attributes.sub}`
-    };
-    console.log("toggleEngaged",toggleEngaged)
-    this.setState({isEngaged: toggleEngaged});
 
-    console.log(payload);
-    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-    const content = await rawResponse.json();
-    
+    if(this.state.isLoggedIn) {
+      var toggleEngaged = !this.state.isEngaged;
+      var payload = {
+        "shortId": `${this.state.shortId}`,
+        "engaged": toggleEngaged,
+        "ownerId": `${this.state.user.attributes.sub}`
+      };
+      console.log("toggleEngaged",toggleEngaged)
+      this.setState({isEngaged: toggleEngaged});
+
+      console.log(payload);
+      const proxyurl = "https://cors-anywhere.herokuapp.com/";
+      const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      const content = await rawResponse.json();
+    } else {
+      navigate('/app');
+    }
   }
 
      // handle adding a comment
@@ -323,7 +329,9 @@ class videoPage extends React.Component {
                   ):(
                     <div id="video-detail-static">
                       <h1>{this.state.videoTitle}</h1>
-                      <button type="submit" className="btn btn-default btn-edit" id="edit-btn" onClick={this.handleEditButton}>Edit</button>
+                      {(this.state.video.createdBy === this.state.userUUID)?
+                      (<button type="submit" className="btn btn-default btn-edit" id="edit-btn" onClick={this.handleEditButton}>Edit</button>):('') }
+                      
                       <p className="upload-info">Created with 
                       <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
                       by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
@@ -355,9 +363,9 @@ class videoPage extends React.Component {
                           </li>
                       </ul>
                       <ul className="action-links">
-                             {this.state.isLoggedIn ? (<li><button className="eng-link active" onClick={this.handleLikeButton}>Like<span className={"icon " + (this.state.isEngaged ? 'active' : '') }></span></button></li>)
-                              : 
-                              (<li className="login-required-overlay"><p> Please login to rate </p></li>)}
+                          <li><button className="eng-link active" onClick={this.handleLikeButton} disabled>
+                           {this.state.isLoggedIn ? (''):(<span className="login-required-overlay"><span> Please login to rate </span></span>)}
+                            Like<span className={"icon " + (this.state.isEngaged ? 'active' : '') }></span></button></li>
                           <li className="last"><button className="report-link" onClick={this.handleBlockButton}>Report<span className={"icon " + (this.state.isBlocked ? 'active' : '') }></span></button></li>
                       </ul>
                   </div>
@@ -370,25 +378,28 @@ class videoPage extends React.Component {
                       <label htmlFor="embed-code-input">Embed code</label>
                       <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
                   </div>
-
-                  <div className="input-surround" id="download">
-                      <label htmlFor="download-drop-down">Download</label>
-                      <select id="download-drop-down">
-                          <option defaultValue="" disabled="">Select a format</option>
-                              <option value="1080MP4_H264">1080 MP4</option>
-                              <option value="720MP4_H264">720 MP4</option>
-                              <option value="360MP4_H264">360 MP4</option>
-                      </select>
-                  </div>
-                  <div className="input-surround" id="visibility">
-                      <label htmlFor="download-drop-down">Visibility</label>
-                      <select id="visibility-drop-down" onChange={this.handleVisibilityOption} value={this.state.visibility}>
-                          <option value="public">Public</option>
-                          <option value="unlisted">Unlisted</option>
-                          <option value="private">Private</option>
-                      </select>
-                  </div>     
-                  <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
+                  {(this.state.video.createdBy === this.state.userUUID)?
+                      (<div>
+                         <div className="input-surround" id="download">
+                            <label htmlFor="download-drop-down">Download</label>
+                            <select id="download-drop-down">
+                                <option defaultValue="" disabled="">Select a format</option>
+                                    <option value="1080MP4_H264">1080 MP4</option>
+                                    <option value="720MP4_H264">720 MP4</option>
+                                    <option value="360MP4_H264">360 MP4</option>
+                            </select>
+                          </div>
+                          <div className="input-surround" id="visibility">
+                              <label htmlFor="download-drop-down">Visibility</label>
+                              <select id="visibility-drop-down" onChange={this.handleVisibilityOption} value={this.state.visibility}>
+                                  <option value="public">Public</option>
+                                  <option value="unlisted">Unlisted</option>
+                                  <option value="private">Private</option>
+                              </select>
+                          </div>     
+                          <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
+                        </div>):('') }
+                 
               </div>
               
           </div>
