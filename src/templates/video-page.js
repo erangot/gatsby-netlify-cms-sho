@@ -34,13 +34,17 @@ class videoPage extends React.Component {
             userUUID:''
         }
 
+        if(process.env.NODE_ENV == 'development') 
+          this.state.urlLocation = `http://localhost:8000/${this.state.video.shortId}`
+        else 
+          this.state.urlLocation = `http://shoco-sparkol.unosoft.ph/${this.state.video.shortId}`
+
         this.handleOrder = this.handleOrder.bind(this);
         this.handleReplyButton = this.handleReplyButton.bind(this);    
         this.handleValidationComment = this.handleValidationComment.bind(this);  
         this.handleAddComment = this.handleAddComment.bind(this);  
         this.handleLikeButton = this.handleLikeButton.bind(this);  
-
-
+        this.handleBlockButton = this.handleBlockButton.bind(this);  
     }
 
 
@@ -146,6 +150,18 @@ class videoPage extends React.Component {
     } else {
       navigate('/app');
     }
+  }
+
+  handleBlockButton(event) {
+    event.preventDefault();
+    
+    this.setState({isBlocked: true});
+
+    fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=blockShortUrl&shortUrlId=${this.state.shortUrlId}`)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    });
   }
 
      // handle adding a comment
@@ -348,17 +364,17 @@ class videoPage extends React.Component {
                       <ul className="social-links">
                           <li className="first">
                               <a 
-                              // href={`https://www.facebook.com/sharer.php?u=+${windowGlobal.location.href}`} 
+                              href={`https://www.facebook.com/sharer.php?u=+${this.state.urlLocation}`} 
                               rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
                           </li>
                           <li>
                               <a 
-                              // href={`http://twitter.com/intent/tweet?url=${windowGlobal.location.href}&amp;via=SparkolHQ`} 
+                              href={`http://twitter.com/intent/tweet?url=${this.state.urlLocation}&amp;via=SparkolHQ`} 
                               rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
                           </li>
                           <li>
                               <a 
-                              // href={`mailto:?to=&Subject=Share%20a%20sho,&body=${windowGlobal.location.href}`} 
+                              href={`mailto:?to=&Subject=Share%20a%20sho,&body=${this.state.urlLocation}`} 
                               data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
                           </li>
                       </ul>
