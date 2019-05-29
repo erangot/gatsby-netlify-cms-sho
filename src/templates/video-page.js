@@ -400,6 +400,7 @@ class videoPage extends React.Component {
                 <div className="container2">
                       <div className="comment-section comments">
                       <div className="comment-post">
+<<<<<<< HEAD
                         <h2>{commentLength} comments of {commentLength}</h2>
                         <ul className="list-inline comment-sort" >
                           <li>
@@ -411,6 +412,26 @@ class videoPage extends React.Component {
                           </li>
                         </ul>
                         {this.state.isLoggedIn ? (
+=======
+                        {(commentLength == 0)?(
+                          <h2>{commentLength} comments</h2>
+                        ):(
+                          <div>
+                            <h2>{commentLength} comments of {commentLength}</h2>
+                            <ul className="list-inline comment-sort" >
+                              <li>
+                                <a onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
+                                |
+                              </li>
+                              <li className="last">
+                                <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
+                              </li>
+                            </ul>  
+                          </div>
+                        )}
+                        
+                        {this.state.isLoggedIn ?(
+>>>>>>> master
                           <div>
                             <div className="comment-wrap">
                               <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
