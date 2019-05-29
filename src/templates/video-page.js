@@ -4,7 +4,8 @@ import Layout from '../components/Layout'
 import TimeAgo from 'react-timeago'
 import Amplify from 'aws-amplify'
 import { resolve } from 'url'
-
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
 
@@ -43,8 +44,20 @@ class videoPage extends React.Component {
         this.handleReplyButton = this.handleReplyButton.bind(this);    
         this.handleValidationComment = this.handleValidationComment.bind(this);  
         this.handleAddComment = this.handleAddComment.bind(this);  
+        
         this.handleLikeButton = this.handleLikeButton.bind(this);  
         this.handleBlockButton = this.handleBlockButton.bind(this);  
+
+        this.handleEditButton = this.handleEditButton.bind(this);
+        this.handleChangeDesc = this.handleChangeDesc.bind(this);  
+        this.handleChangeTitle = this.handleChangeTitle.bind(this);  
+        this.handleSaveButton = this.handleSaveButton.bind(this);  
+
+        this.handleFocus = this.handleFocus.bind(this);
+
+        this.handleRemoveButton = this.handleRemoveButton.bind(this);
+
+        this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
     }
 
 
@@ -292,6 +305,100 @@ class videoPage extends React.Component {
     }
   }
 
+  handleEditButton(event){
+    
+    event.preventDefault();
+    this.setState({isEditing:true});
+  }
+
+  handleChangeDesc(event) {
+    event.preventDefault();
+    this.setState({videoDesc: event.target.value})
+  }
+
+  handleChangeTitle(event) {
+    event.preventDefault();
+    this.setState({videoTitle: event.target.value})
+  }
+
+  async handleSaveButton(event) {
+    event.preventDefault();
+
+    var payload = {
+      "shortId": `${this.state.video.shortId}`,
+      "vidTitle": this.state.videoTitle,
+      "vidDesc": this.state.videoDesc,
+      "ownerId": `${this.state.user.attributes.sub}`
+    };
+    console.log(payload);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=saveDetailsForShortId', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content = await rawResponse.json();
+    
+    this.setState({isEditing:false});
+  }
+
+  handleFocus = (event) => event.target.select();
+
+  // handle removing of the video
+  handleRemoveButton(event) {
+    event.preventDefault();
+    const isVideoDeleted = true;
+    
+    
+    confirmAlert({
+      title: 'sho.co says',
+      message: 'Are you sure you wish to remove this video?',
+      buttons: [
+        {
+          label: 'Yes',
+           onClick: () =>  fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=blockShortUrl&shortUrlId=${this.state.video.shortUrlId}`)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            navigate('/app/myvideos/deleted');
+          })
+        },
+        {
+          label: 'No',
+          onClick: () => console.log('Clicked No for confirm')
+        }
+      ]
+    });
+    
+  }
+
+  async handleVisibilityOption(event) {
+
+    event.preventDefault();
+    console.log(event.target.value);
+
+    var payload = {
+      "shortId": `${this.state.video.shortId}`,
+      "visibility": event.target.value,
+      "ownerId": `${this.state.user.attributes.sub}`
+    };
+
+    console.log(payload);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changeVisibility', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content = await rawResponse.json();
+    this.setState({visibility: payload.visibility});
+  }
 
     render() {
 
