@@ -2,8 +2,11 @@ import React from 'react'
 import { Link } from 'gatsby'
 import Layout from '../components/Layout'
 import TimeAgo from 'react-timeago'
-import Amplify from 'aws-amplify';
-import { resolve } from 'url';
+import Amplify from 'aws-amplify'
+import { resolve } from 'url'
+
+
+
 
 class videoPage extends React.Component {
   
@@ -34,7 +37,12 @@ class videoPage extends React.Component {
         this.handleReplyButton = this.handleReplyButton.bind(this);    
         this.handleValidationComment = this.handleValidationComment.bind(this);  
         this.handleAddComment = this.handleAddComment.bind(this);  
+        this.handleLikeButton = this.handleLikeButton.bind(this);  
+
+
     }
+
+
 
     async componentWillMount() {
 
@@ -106,6 +114,33 @@ class videoPage extends React.Component {
         });
  
     }
+
+    // handle event on likes
+  async handleLikeButton(event) {
+    event.preventDefault();
+
+    var toggleEngaged = !this.state.isEngaged;
+    var payload = {
+      "shortId": `${this.state.shortId}`,
+      "engaged": toggleEngaged,
+      "ownerId": `${this.state.user.attributes.sub}`
+    };
+    console.log("toggleEngaged",toggleEngaged)
+    this.setState({isEngaged: toggleEngaged});
+
+    console.log(payload);
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content = await rawResponse.json();
+    
+  }
 
      // handle adding a comment
   async handleAddComment (event, commentParent) {
@@ -259,23 +294,109 @@ class videoPage extends React.Component {
                             <span className="ic1"></span>
                         </span>
                     </div>
-                    <div className="search">
-                        <div className="container text-left">
-        
-                            <p className="upload-info">Created with 
-                            <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
-                            by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
-                            <span className="upload-date"><TimeAgo date={video.createdOn} /></span>
-                            </p>                     
-        
+                     <div className="container1 dynamic-videopage">
+                <div className="row">
+                  <div className="stats col-sm-7">
+                  {this.state.isEditing ? (
+                    <div id="video-detail-editable">
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="title" className="sr-only">Video title</label>
+                            <input type="text" className="form-control" id="video-title" placeholder="" value={this.state.videoTitle} onChange={this.handleChangeTitle}/>
+                            <button type="submit" className="btn btn-default btn-save" id="save-btn"  onClick={this.handleSaveButton}>Save</button>
                         </div>
-                        <span className="icwrap3">
-                            <span className="ic1"></span>
-                            <span className="ic2"></span>
-                            <span className="ic3"></span>
-                        </span>
-                    </div>
-                    <div className="videos" id="comments">
+                        <p className="upload-info">Created with 
+                        <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
+                        
+                        
+                            by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
+                        
+                        <span className="upload-date"><TimeAgo date={video.createdOn} /></span></p>
+                        
+                            <div className="form-group">
+                                <label htmlFor="videoDesc" className="sr-only">Video description</label>
+                                <textarea rows="5" className="form-control" id="video-desc" value={this.state.videoDesc} onChange={this.handleChangeDesc}></textarea>
+                            </div>
+                    </form>
+                </div>
+                    
+                  ):(
+                    <div id="video-detail-static">
+                      <h1>{this.state.videoTitle}</h1>
+                      <button type="submit" className="btn btn-default btn-edit" id="edit-btn" onClick={this.handleEditButton}>Edit</button>
+                      <p className="upload-info">Created with 
+                      <Link to={"/application/"+video.applicationName || ''}> {video.applicationDisplayName || ''} </Link>
+                      by <Link to={"/user/"+video.createdBy || ''}> {video.username || ''} </Link>
+                      <span className="upload-date"><TimeAgo date={video.createdOn} /></span></p>    
+                      <div className="desc">
+                        {this.state.videoDesc}
+                        <a className="show-more">Show more</a>
+                      </div>
+                    </div>  
+                  )}
+                  
+                  <div className="social-surround">
+                      <p>Share</p>
+                      <ul className="social-links">
+                          <li className="first">
+                              <a 
+                              // href={`https://www.facebook.com/sharer.php?u=+${windowGlobal.location.href}`} 
+                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
+                          </li>
+                          <li>
+                              <a 
+                              // href={`http://twitter.com/intent/tweet?url=${windowGlobal.location.href}&amp;via=SparkolHQ`} 
+                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
+                          </li>
+                          <li>
+                              <a 
+                              // href={`mailto:?to=&Subject=Share%20a%20sho,&body=${windowGlobal.location.href}`} 
+                              data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
+                          </li>
+                      </ul>
+                      <ul className="action-links">
+                             {this.state.isLoggedIn ? (<li><button className="eng-link active" onClick={this.handleLikeButton}>Like<span className={"icon " + (this.state.isEngaged ? 'active' : '') }></span></button></li>)
+                              : 
+                              (<li className="login-required-overlay"><p> Please login to rate </p></li>)}
+                          <li className="last"><button className="report-link" onClick={this.handleBlockButton}>Report<span className={"icon " + (this.state.isBlocked ? 'active' : '') }></span></button></li>
+                      </ul>
+                  </div>
+
+                  <div className="input-surround" id="url">
+                      <label htmlFor="url-input">Link</label>
+                      <input id="url-input" type="text" value={`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`} onFocus={this.handleFocus} onClick={this.handleFocus}  readOnly/>
+                  </div>
+                  <div className="input-surround" id="embed-code">
+                      <label htmlFor="embed-code-input">Embed code</label>
+                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
+                  </div>
+
+                  <div className="input-surround" id="download">
+                      <label htmlFor="download-drop-down">Download</label>
+                      <select id="download-drop-down">
+                          <option defaultValue="" disabled="">Select a format</option>
+                              <option value="1080MP4_H264">1080 MP4</option>
+                              <option value="720MP4_H264">720 MP4</option>
+                              <option value="360MP4_H264">360 MP4</option>
+                      </select>
+                  </div>
+                  <div className="input-surround" id="visibility">
+                      <label htmlFor="download-drop-down">Visibility</label>
+                      <select id="visibility-drop-down" onChange={this.handleVisibilityOption} value={this.state.visibility}>
+                          <option value="public">Public</option>
+                          <option value="unlisted">Unlisted</option>
+                          <option value="private">Private</option>
+                      </select>
+                  </div>     
+                  <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
+              </div>
+              
+          </div>
+        </div>
+
+                      
+                      
+              <div className="videos" id="comments">
                 <div className="container2">
                       <div className="comment-section comments">
                       <div className="comment-post">
@@ -289,7 +410,7 @@ class videoPage extends React.Component {
                             <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
                           </li>
                         </ul>
-                        {this.state.isLoggedIn ?(
+                        {this.state.isLoggedIn ? (
                           <div>
                             <div className="comment-wrap">
                               <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
@@ -443,8 +564,4 @@ class videoPage extends React.Component {
         )
     }
 }
-
-
-
-
 export default videoPage
