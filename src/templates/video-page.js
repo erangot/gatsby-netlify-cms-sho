@@ -364,7 +364,7 @@ class videoPage extends React.Component {
                       <ul className="social-links">
                           <li className="first">
                               <a 
-                              href={`https://www.facebook.com/sharer.php?u=+${this.state.urlLocation}`} 
+                              href={`https://www.facebook.com/sharer.php?u=+${encodeURIComponent(this.state.urlLocation)}`} 
                               rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
                           </li>
                           <li>
