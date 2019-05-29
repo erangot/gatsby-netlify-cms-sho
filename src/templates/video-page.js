@@ -478,9 +478,10 @@ class videoPage extends React.Component {
                                     <p className="comment-info">
                                       <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                       
-                                      |
+                                      
                                       {this.state.isLoggedIn ?( 
-                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
+                                        <span>|
+                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                                       ):('')}
                                     </p>
                                     {
@@ -541,8 +542,9 @@ class videoPage extends React.Component {
                                     <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                     {/* Only when logged In */}
                                     {this.state.isLoggedIn ?( 
-                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
-                                      ):('')}
+                                     <span>|
+                                     <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
+                                     ):('')}
                                   </p>
                                   {
                                     this.state.openReply && this.state.currentReply === comment.commentId ? (
