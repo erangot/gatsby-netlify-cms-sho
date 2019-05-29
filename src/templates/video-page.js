@@ -129,7 +129,7 @@ class videoPage extends React.Component {
     if(this.state.isLoggedIn) {
       var toggleEngaged = !this.state.isEngaged;
       var payload = {
-        "shortId": `${this.state.shortId}`,
+        "shortId": `${this.state.video.shortId}`,
         "engaged": toggleEngaged,
         "ownerId": `${this.state.user.attributes.sub}`
       };
@@ -379,7 +379,7 @@ class videoPage extends React.Component {
                           </li>
                       </ul>
                       <ul className="action-links">
-                          <li><button className="eng-link active" onClick={this.handleLikeButton} disabled>
+                          <li><button className="eng-link active" onClick={this.handleLikeButton}>
                            {this.state.isLoggedIn ? (''):(<span className="login-required-overlay"><span> Please login to rate </span></span>)}
                             Like<span className={"icon " + (this.state.isEngaged ? 'active' : '') }></span></button></li>
                           <li className="last"><button className="report-link" onClick={this.handleBlockButton}>Report<span className={"icon " + (this.state.isBlocked ? 'active' : '') }></span></button></li>
