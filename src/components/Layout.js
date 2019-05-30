@@ -30,7 +30,7 @@ const TemplateWrapper = ({ children }) => (
           />
 
           <meta name="theme-color" content="#fff" />
-
+          <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /> 
           <meta property="og:type" content="business.business" />
           <meta property="og:title" content={data.site.siteMetadata.title} />
           <meta property="og:url" content="/" />
