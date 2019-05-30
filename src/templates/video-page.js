@@ -245,7 +245,7 @@ class videoPage extends React.Component {
         mainAddCommentDisabled: true});
         break;
 
-        case (event.target.value.length >= 50):
+        case (event.target.value.length >= 6000):
         this.setState({mainCommentError: 'Your comment is too long, please type a shorter message',
         mainAddCommentDisabled: true});
         break;
