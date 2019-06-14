@@ -76,7 +76,7 @@ class videoPage extends React.Component {
     }
 
     componentDidMount() {
-      window.addEventListener('load', this.handleLoad);
+      // window.addEventListener('load', this.handleLoad);
    }
 
 
