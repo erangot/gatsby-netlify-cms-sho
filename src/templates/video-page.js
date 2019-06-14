@@ -32,7 +32,18 @@ class videoPage extends React.Component {
             currentReply: '',
             openReply: false,
             isLoggedIn: false,
-            userUUID:''
+            userUUID:'',
+            analytics: {
+              fullScreens:0,
+              engaged:0,
+              disengaged:0,
+              repeatPlays:0,
+              shares:0,
+              loaded:0,
+              finished:0,
+              uniquePlays:0,
+              score:0
+            }
         }
 
         if(process.env.NODE_ENV == 'development') 
@@ -131,6 +142,23 @@ class videoPage extends React.Component {
 
             // console.log(err);        
         });
+
+        // Get analytics
+        await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getVideoStatistics&shortId=${this.state.video.shortId}`)
+         .then(response => {
+          if(!response.ok) { throw response }
+          return response.json();
+         })
+         .then(data2 => {
+           console.log(data2[0][0]);
+           this.setState({
+             analytics: data2[0][0],
+           });
+           resolve(data2[0][0]);
+         }).catch(err => {
+
+            // console.log(err);        
+        });
  
     }
 
@@ -160,6 +188,8 @@ class videoPage extends React.Component {
           body: JSON.stringify(payload)
         });
       const content = await rawResponse.json();
+
+      
     } else {
       navigate('/app');
     }
@@ -524,7 +554,9 @@ class videoPage extends React.Component {
                         </div>):('') }
                  
               </div>
-              
+              <div className="col-sm-4">
+                  <h1>Likes: {this.state.analytics.engaged}</h1>
+              </div>
           </div>
         </div>
 
