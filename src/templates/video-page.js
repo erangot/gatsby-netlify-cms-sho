@@ -35,15 +35,15 @@ class videoPage extends React.Component {
             isLoggedIn: false,
             userUUID:'',
             analytics: {
-              fullScreens:0,
-              engaged:0,
-              disengaged:0,
-              repeatPlays:0,
-              shares:0,
-              loaded:0,
-              finished:0,
-              uniquePlays:0,
-              score:0
+              fullScreens:1,
+              engaged:1,
+              disengaged:1,
+              repeatPlays:1,
+              shares:1,
+              loaded:1,
+              finished:1,
+              uniquePlays:1,
+              score:1
             },
             VideoPlaying: false,
         }
@@ -195,6 +195,26 @@ class videoPage extends React.Component {
           body: JSON.stringify(payload)
         });
       const content = await rawResponse.json();
+
+      // Create analytics to be a function
+      var payload = {
+        "shortId": `${this.state.video.shortId}`,
+        "eventType": `${toggleEngaged?'engaged':'disengaged'}`,
+        "ownerId": `${this.state.user.attributes.sub}`
+      };
+  
+     console.log(payload);
+     const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
+     const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content1 = await rawResponse1.json();
+
 
       
     } else {
@@ -635,7 +655,7 @@ class videoPage extends React.Component {
                   </div>
                   <div className="legend eng-stats">
                     <ul>
-                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score))}%<br /><span class="stat-category">Likes</span></li>
+                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span class="stat-category">Likes</span></li>
                       <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span class="stat-category">Repeats</span></li>
                       <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span class="stat-category">Fullscreens</span></li>
                       <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span class="stat-category">Shares</span></li>
