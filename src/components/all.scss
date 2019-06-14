@@ -818,6 +818,7 @@ h1.jumbo {
   background: url(https://sho.co/assets/images/eng_bg.png) #2d3743 no-repeat bottom right;
   background-size: 50%;
   color: #fff;
+  width: 100%;
   padding: 55px 0;
   position: relative;
   // display: -webkit-box;
@@ -1570,7 +1571,13 @@ writing-mode: horizontal-tb;
     min-height: 1px;
     padding-left: 15px;
     padding-right: 15px;
-    display: block;
+    display: inline-block;
+  }
+
+  .col-sm-5{
+    display: inline-block;
+    width: 40%;
+    float: right;
   }
 
 
@@ -1735,8 +1742,6 @@ text-transform: uppercase;
 
   .col-sm-5 {
     width: 41.66667%;
-    float: left;
-    padding-right: 15px;
     position: relative;
   }
 
@@ -1978,9 +1983,7 @@ writing-mode: horizontal-tb;
           margin-right: 0px;
           margin-bottom: 0px;
           margin-left: -1px;
-          padding-top: 2px;
-          padding-right: 18px;
-          padding-bottom: 5px;
+          padding: 6px 16px;
           text-align: center;
 
           .stat {
@@ -2289,4 +2292,189 @@ div.videos > div.text-center {
 
 div.videoPage div#comments.videos {
   display: -webkit-box;
+}
+
+
+.videoscribe-skin {
+  color: #5dbfd9;
+  width: 640px;
+  font-weight: 300;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .vjs-tech{
+    position: relative;
+  }
+
+  .vjs-big-play-button{
+    background: url(https://sho.co/assets/images/vs-skin/player-logo-play@2x.png) center no-repeat;
+    background-size: 80px 80px;
+    left: 0;
+    right: 0;
+    // top: 40%;
+    margin: 0 auto;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+  }
+
+  .vjs-control-bar{
+    border-top: 2px solid #f8f8f8;
+    position: relative;
+    background-color: #fff;
+    background-color: #fff;
+    width: 100%;
+  }
+
+  .vjs-play-control{
+    width: 6em;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+    float: left;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 4.2em;
+    font-size: 10px;
+
+    .vjs-control-text {
+      border: 0;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+  }
+
+  .vjs-control{
+    
+    &::before{
+      content: '';
+      font-family: VideoJS;
+      font-size: 1.8em;
+      line-height: 2.25;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      text-shadow: none;
+    }
+    &.vjs-paused::before {
+      background: url(https://sho.co/assets/images/vs-skin/player-icon-play-1@2x.png) center no-repeat;
+      background-size: 19px 24px;
+    }
+    &.vjs-playing::before{
+      background: url(https://sho.co/assets/images/vs-skin/player-icon-pause-1@2x.png) center no-repeat;
+      background-size: 19px 24px;
+    }
+    
+  }
+
+  .vjs-progress-control {
+    position: absolute;
+    top: 1.5em;
+    right: 280px;
+    bottom: 0;
+    left: 56px;
+    width: auto;
+    font-size: 1em;
+    height: 1em;
+    float: left;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    outline: none;
+
+    .vjs-progress-holder {
+      cursor: pointer;
+      height: 5px;
+      margin-top: -2.5px;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      left: 0;
+      padding: 0;
+      outline: 0;
+      background-color: #d8d8d8;
+    }
+  }
+
+
+}
+
+
+.engagement{
+
+  .wheel{
+    width: 300px;
+    float: left;
+  }
+
+  .legend{
+    
+    &.eng-stats{
+      float: right;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    ul{
+      li{
+        &:first-child{
+          color:#f19987
+        }
+        &:nth-child(2){
+          color:#ead691
+        }
+        &:nth-child(3){
+          color:#d4a6cc
+        }
+        &:nth-child(4){
+          color:#a9d39c
+        }
+        &:last-child{
+          color:#98aad3
+        }
+      }
+    }
+
+    .video-stats {
+      padding: 6px 16px;
+      margin: 0 0 10px;
+      list-style: none;
+      text-align: right;
+      clear: both;
+      font-size: 24px;
+      color: #6f6f6f;
+      font-weight: 700;
+      li {
+        display: inline-block;
+        border-top-width: 1px;
+        border: 1px solid #d0d0d0;
+        margin-top: -1px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        padding: 0;
+        margin-left: -1px;
+        text-align: center;
+      }
+    }
+  }
+  
+  .stat-category{
+    font-size: 12px;
+    margin-top: -4px;
+    display: block;
+    text-transform: uppercase;
+  }
 }

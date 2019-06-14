@@ -4,6 +4,7 @@ import Layout from '../components/Layout'
 import TimeAgo from 'react-timeago'
 import Amplify from 'aws-amplify'
 import { resolve } from 'url'
+import  videojs  from 'video.js'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -32,7 +33,8 @@ class videoPage extends React.Component {
             currentReply: '',
             openReply: false,
             isLoggedIn: false,
-            userUUID:''
+            userUUID:'',
+            VideoPlaying: false,
         }
 
         if(process.env.NODE_ENV == 'development') 
@@ -58,8 +60,13 @@ class videoPage extends React.Component {
         this.handleRemoveButton = this.handleRemoveButton.bind(this);
 
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
+
+        this.handleVideoPlay = this.handleVideoPlay.bind(this);
     }
 
+    componentDidMount() {
+      window.addEventListener('load', this.handleLoad);
+   }
 
 
     async componentWillMount() {
@@ -176,6 +183,8 @@ class videoPage extends React.Component {
       console.log(data);
     });
   }
+
+  
 
      // handle adding a comment
   async handleAddComment (event, commentParent) {
@@ -400,22 +409,87 @@ class videoPage extends React.Component {
     this.setState({visibility: payload.visibility});
   }
 
+  handleVideoPlay(event){
+    event.preventDefault();
+    var stat = false;
+    var vid = document.getElementById("vid");
+    var smallBtn = document.getElementById("smallPlay");
+    
+    vid.pause();
+
+    if(!this.state.VideoPlaying){
+      stat = true;
+      vid.play(); 
+    }
+    
+    if(smallBtn.classList[2] == "vjs-paused"){
+      smallBtn.classList.remove("vjs-paused");
+      smallBtn.classList.add("vjs-playing");
+    }else{
+      smallBtn.classList.remove("vjs-playing");
+      smallBtn.classList.add("vjs-paused");
+    }
+    this.setState({VideoPlaying: stat});
+
+  }
+
+  handleLoad() {
+    // var player = videojs('vid');
+  }
+
+
+
     render() {
 
         let video = this.state.video;
+        
         const objectComments = this.state.comments.filter(comment => comment.id)
         const commentLength = objectComments.length;
+        const playStatus = this.state.VideoPlaying;
 
+        let playBtn = "";
+        if(!playStatus){
+          playBtn = <div className="vjs-big-play-button" role="button" onClick={this.handleVideoPlay}><span aria-hidden="true"></span></div>
+        }else{
+          playBtn = "";
+        }
+        
         return (
             <Layout>
                 <div className="videoPage">
                     <div className="intro">
                         {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
                         <div className="container text-center">
-                            <video width="640" height="480" controls>
+                            <div className="videoscribe-skin " onClick={this.handleVideoPlay}>
+                              <video className="vjs-tech"
+                                id="vid"
+                                preload="auto" width="640px" height="480px"
+                                disablepictureinpicture 
+                                poster={video.thumbnail ||''}
+                                src={video.videopath || ''}
+                                controlsList="nodownload"
+                                >
                                 <source src={video.videopath || ''} type="video/mp4"/>
-                            Your browser does not support the video tag.
-                            </video>
+                                <p className="vjs-no-js">Your browser does not support the video tag.</p>
+                              </video>
+                              {playBtn}
+                              <div className="vjs-control-bar">
+                                <div className="vjs-play-control vjs-control  vjs-paused" id="smallPlay" role="button">
+                                  <div className="vjs-control-content">
+                                    <span className="vjs-control-text">Play</span>
+                                  </div>
+                                </div>
+                                {/* <div className="vjs-progress-control vjs-control">
+                                  <div role="slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabindex="0" className="vjs-progress-holder vjs-slider" aria-label="video progress bar" aria-valuetext="0:00">
+                                      <div className="vjs-load-progress"><span className="vjs-control-text"><span>Loaded</span>: 0%</span></div>
+                                      <div className="vjs-play-progress"><span className="vjs-control-text"><span>Progress</span>: 0%</span></div>
+                                      <div className="vjs-seek-handle vjs-slider-handle" aria-live="off"><span className="vjs-control-text">0:00</span></div>
+                                  </div>
+                                </div> */}
+                              </div>
+
+                              
+                            </div>
                         </div>
                         <span className="icwrap2">
                             <span className="ic3"></span>
@@ -523,6 +597,24 @@ class videoPage extends React.Component {
                           <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
                         </div>):('') }
                  
+              </div>
+
+              <div className="engagement col-sm-5">
+                  <div className="wheel">
+                    <img src="https://sho.co/assets/images/engagement_wheel.png" alt="Sho.co engagment wheel" className="img-padding img-responsive" width="200" height="200"/>
+                  </div>
+                  <div className="legend eng-stats">
+                    <ul>
+                      <li >0%<br /><span class="stat-category">Likes</span></li>
+                      <li >0%<br /><span class="stat-category">Repeats</span></li>
+                      <li >100%<br /><span class="stat-category">Fullscreens</span></li>
+                      <li >0%<br /><span class="stat-category">Shares</span></li>
+                      <li >46%<br /><span class="stat-category">Completes</span></li>
+                    </ul>
+                  </div>
+                  <ul class="video-stats">
+                    <li class="views"><span class="stat">9183</span> <span class="stat-category">views</span></li>
+                  </ul>
               </div>
               
           </div>
