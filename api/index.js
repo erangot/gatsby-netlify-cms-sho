@@ -321,6 +321,33 @@ async function pathChecking(event) {
       
     });
     break;
+    
+    case 'createAnalyticEntry':
+
+    var body = JSON.parse(event.body);
+
+    console.log(`call shocogatsbymnl.create_analytic_entry('', 0, '', '', '${body.shortId}', '${body.eventType}', '', '', '', '', '${body.ownerId}')`);
+    connection.query(`call shocogatsbymnl.create_analytic_entry('', 0, '', '', '${body.shortId}', '${body.eventType}', '', '', '', '', '${body.ownerId}')`, function (err, rows, fields) {          
+      if(err) {
+        resolve(err);
+      }
+        resolve( rows );
+      
+    });
+    break;
+
+    case 'getVideoStatistics':
+      
+      var body = event.queryStringParameters;
+
+      console.log(`call shocogatsbymnl.get_video_statistics('${body.shortId}')`);
+      connection.query(`call shocogatsbymnl.get_video_statistics('${body.shortId}')`, function (err, rows, fields) {          
+        if(err) {
+          resolve(err);
+        }
+          resolve( rows );
+      });
+    break;
   
     }
   });
