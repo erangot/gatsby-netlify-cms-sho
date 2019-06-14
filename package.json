@@ -40,7 +40,8 @@
     "react-helmet": "^5.2.0",
     "react-timeago": "^4.4.0",
     "universal-cookie": "^3.0.7",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "video.js": "^7.5.5"
   },
   "keywords": [
     "gatsby"
