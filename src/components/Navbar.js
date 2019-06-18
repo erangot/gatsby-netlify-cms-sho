@@ -4,7 +4,7 @@ import SlantedEndge from '../components/slantedEdge'
 import { Link, navigate } from 'gatsby'
 import Amplify, { Auth } from 'aws-amplify';
 import aws_exports from '../aws-exports'; // if you are using Amplify CLI
-
+import {connect} from 'react-redux'
 
 
 import "./styles/header.scss"
@@ -20,32 +20,21 @@ import "./styles/header.scss"
         this.signOut = this.signOut.bind(this);
       }
 
-    componentWillMount() {
-        Amplify.configure(aws_exports);
-        Auth.currentAuthenticatedUser({
-            bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-        }).then(user => {
-            console.log(user);
-            this.setState({authState: 'signedIn'});
-            this.setState({user: user.username});
-        })
-        .catch(err => {
-            console.log(err);
-            this.setState({authState: 'signIn'});  
-        });
-    }
+    
 
     signOut() {
         this.setState({authState: 'signIn'});  
         Auth.signOut().then(() => {
         }).catch(e => {
           console.log(e);
+          this.props.signOut(false,"")
           navigate("/");
         });
       }
 
     render() {
-        if(this.state.authState === 'signedIn') 
+
+        if(this.props.user.status) 
             return (
             <header id="header" className="navbar navbar-default">
                     <div className="container">
@@ -70,7 +59,7 @@ import "./styles/header.scss"
                                     <li><Link to="/about">About</Link></li>
                                     <li><Link to="/app/myvideos">My videos</Link></li>
                                     <li className="last">   
-                                        Yo, {this.state.user} |                     
+                                        Yo, {this.props.user.username} |                     
                                         <span onClick={this.signOut}>Logout</span>
                                     </li>
                                 </ul>
@@ -105,7 +94,7 @@ import "./styles/header.scss"
                                     <li><Link to="/about">About</Link></li>
                                     <li><Link to="/app/myvideos">My videos</Link></li>
                                     <li className="last">   
-                                        Who's there? |                     
+                                        Who's there? |         
                                         <Link to="/app">Login</Link>
                                     </li>
                                 </ul>
@@ -119,4 +108,23 @@ import "./styles/header.scss"
     }
 }
 
-export default Header;
+const mapStateToProps = (state) => 
+{ 
+  return {
+    user:state.user
+  }
+}
+
+const mapDispatchProps = (dispatch) => {
+    return{
+      signOut:(status,username) => {
+        dispatch({
+          type:"SIGN_OUT",
+          payload:{status,username}
+        });
+      }
+    }
+  }
+
+
+export default connect(mapStateToProps)(Header);
