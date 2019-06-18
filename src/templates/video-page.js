@@ -73,6 +73,8 @@ class videoPage extends React.Component {
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
 
         this.handleVideoPlay = this.handleVideoPlay.bind(this);
+
+        this.handleSharerAnalytics = this.handleSharerAnalytics.bind(this);
     }
 
     componentDidMount() {
@@ -222,6 +224,50 @@ class videoPage extends React.Component {
     }
   }
 
+   async handleSharerAnalytics ( event ) {
+    event.preventDefault(); 
+    
+    var payload = {};
+    switch (event.target.innerText) {
+      case "Share":
+        payload = {
+          "shortId": `${this.state.video.shortId}`,
+          "eventType": "shared-facebook",
+          "ownerId": `${this.state.user.attributes.sub}`
+        };
+        break;
+      case "Tweet":
+        payload = {
+          "shortId": `${this.state.video.shortId}`,
+          "eventType": "shared-twitter",
+          "ownerId": `${this.state.user.attributes.sub}`
+        };
+        break;
+      case "Email":
+        payload = {
+          "shortId": `${this.state.video.shortId}`,
+          "eventType": "shared-email",
+          "ownerId": `${this.state.user.attributes.sub}`
+        };
+      break;
+    
+      default:
+        break;
+    }
+    console.log(payload);
+    const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify(payload)
+     });
+   const content1 =  await rawResponse1.json();
+   console.log(content1);
+  }
+
   handleBlockButton(event) {
     event.preventDefault();
     
@@ -283,6 +329,25 @@ class videoPage extends React.Component {
         openReply: false
       })
     
+      // Create analytics to be a function
+      var payload = {
+        "shortId": `${this.state.video.shortId}`,
+        "eventType": `added-comment`,
+        "ownerId": `${this.state.user.attributes.sub}`
+      };
+  
+     console.log(payload);
+     const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
+     const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content1 = await rawResponse1.json();
+    console.log(content1);
 
  }
 
@@ -596,17 +661,20 @@ class videoPage extends React.Component {
                           <li className="first">
                               <a 
                               href={`https://www.facebook.com/sharer.php?u=+${encodeURIComponent(this.state.urlLocation)}`} 
-                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
+                              onClick={this.handleSharerAnalytics}
+                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon" name="facebook">Share</span></a>
                           </li>
                           <li>
                               <a 
                               href={`http://twitter.com/intent/tweet?url=${this.state.urlLocation}&amp;via=SparkolHQ`} 
-                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
+                              onClick={this.handleSharerAnalytics}
+                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon" name="twitter">Tweet</span></a>
                           </li>
                           <li>
                               <a 
                               href={`mailto:?to=&Subject=Share%20a%20sho,&body=${this.state.urlLocation}`} 
-                              data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
+                              onClick={this.handleSharerAnalytics}
+                              data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon" name="email">Email</span></a>
                           </li>
                       </ul>
                       <ul className="action-links">
