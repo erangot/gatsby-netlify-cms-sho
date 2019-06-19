@@ -4,10 +4,9 @@ import Layout from '../components/Layout'
 import TimeAgo from 'react-timeago'
 import Amplify from 'aws-amplify'
 import { resolve } from 'url'
-import  videojs  from 'video.js'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-
+import {connect} from 'react-redux'
 
 
 class videoPage extends React.Component {
@@ -32,7 +31,7 @@ class videoPage extends React.Component {
             replyCommentError: null,
             currentReply: '',
             openReply: false,
-            isLoggedIn: false,
+            isLoggedIn:false,
             userUUID:'',
             analytics: {
               fullScreens:1,
@@ -88,7 +87,7 @@ class videoPage extends React.Component {
               
               this.setState({
                 user: user,
-                isLoggedIn: true,
+                isLoggedIn: this.props.user.userStatus,
                 userUUID: user.attributes.sub
               });
                 
@@ -849,4 +848,15 @@ class videoPage extends React.Component {
         )
     }
 }
-export default videoPage
+
+const mapStateToProps = (state) => 
+{ 
+  console.log(state)
+  return {
+    user:state.userReducer
+  }
+}
+
+
+
+export default connect(mapStateToProps)(videoPage)

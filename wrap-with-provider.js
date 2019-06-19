@@ -1,7 +1,6 @@
 import React from "react"
 import { Provider } from "react-redux"
-import { createStore } from 'redux'
-import reducers from "./src/reducers"
+import store from "./src/reducers/store"
 
 // eslint-disable-next-line react/display-name,react/prop-types
 export default ({ element }) => {
@@ -9,5 +8,5 @@ export default ({ element }) => {
   //  - there is fresh store for each SSR page
   //  - it will be called only once in browser, when React mounts
  
-  return <Provider store={createStore(reducers)}>{element}</Provider>
+  return <Provider store={store}>{element}</Provider>
 }

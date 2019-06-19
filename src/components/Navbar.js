@@ -2,9 +2,8 @@ import React, { Component } from "react"
 import shocologo from "../images/shoco_logo.png"
 import SlantedEndge from '../components/slantedEdge'
 import { Link, navigate } from 'gatsby'
-import Amplify, { Auth } from 'aws-amplify';
-import aws_exports from '../aws-exports'; // if you are using Amplify CLI
 import {connect} from 'react-redux'
+import {signOut} from '../actions/userAction'
 
 
 import "./styles/header.scss"
@@ -22,19 +21,15 @@ import "./styles/header.scss"
 
     
 
-    signOut() {
-        this.setState({authState: 'signIn'});  
-        Auth.signOut().then(() => {
-        }).catch(e => {
-          console.log(e);
-          this.props.signOut(false,"")
-          navigate("/");
-        });
+    signOut(e) {
+        e.preventDefault()
+        this.props.signOut()
       }
 
     render() {
-
-        if(this.props.user.status) 
+           const {user} = this.props
+    
+        if(user.status) 
             return (
             <header id="header" className="navbar navbar-default">
                     <div className="container">
@@ -59,7 +54,7 @@ import "./styles/header.scss"
                                     <li><Link to="/about">About</Link></li>
                                     <li><Link to="/app/myvideos">My videos</Link></li>
                                     <li className="last">   
-                                        Yo, {this.props.user.username} |                     
+                                        Yo, {user.username} |                     
                                         <span onClick={this.signOut}>Logout</span>
                                     </li>
                                 </ul>
@@ -111,20 +106,8 @@ import "./styles/header.scss"
 const mapStateToProps = (state) => 
 { 
   return {
-    user:state.user
+    user:state.userReducer
   }
 }
 
-const mapDispatchProps = (dispatch) => {
-    return{
-      signOut:(status,username) => {
-        dispatch({
-          type:"SIGN_OUT",
-          payload:{status,username}
-        });
-      }
-    }
-  }
-
-
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps,{signOut})(Header);

@@ -4,10 +4,8 @@ import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
 import Amplify, { Auth } from 'aws-amplify';
 import aws_exports from '../../../aws-exports'; // if you are using Amplify CLI
-
-
+import {connect} from 'react-redux'
 import { navigate } from "@reach/router" // comes with gatsby v2
-
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -747,4 +745,14 @@ async handleSaveButton(event) {
   }
 }
 
-export default DynamicRoute
+const mapStateToProps = (state) => 
+{ 
+  console.log(state)
+  return {
+    user:state.userReducer
+  }
+}
+
+
+
+export default connect(mapStateToProps)(DynamicRoute)
