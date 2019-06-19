@@ -45,7 +45,6 @@ class videoPage extends React.Component {
               uniquePlays:1,
               score:1
             },
-            VideoPlaying: false,
         }
 
         if(process.env.NODE_ENV == 'development') 
@@ -72,13 +71,12 @@ class videoPage extends React.Component {
 
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
 
-        this.handleVideoPlay = this.handleVideoPlay.bind(this);
 
         this.handleSharerAnalytics = this.handleSharerAnalytics.bind(this);
     }
 
     componentDidMount() {
-      // window.addEventListener('load', this.handleLoad);
+      this.handleLoad();
    }
 
 
@@ -169,6 +167,8 @@ class videoPage extends React.Component {
             // console.log(err);        
         });
  
+        
+        this.handleLoad();
     }
 
     // handle event on likes
@@ -524,32 +524,27 @@ class videoPage extends React.Component {
     this.setState({visibility: payload.visibility});
   }
 
-  handleVideoPlay(event){
-    event.preventDefault();
-    var stat = false;
-    var vid = document.getElementById("vid");
-    var smallBtn = document.getElementById("smallPlay");
-    
-    vid.pause();
-
-    if(!this.state.VideoPlaying){
-      stat = true;
-      vid.play(); 
-    }
-    
-    if(smallBtn.classList[2] == "vjs-paused"){
-      smallBtn.classList.remove("vjs-paused");
-      smallBtn.classList.add("vjs-playing");
-    }else{
-      smallBtn.classList.remove("vjs-playing");
-      smallBtn.classList.add("vjs-paused");
-    }
-    this.setState({VideoPlaying: stat});
-
-  }
-
   handleLoad() {
-    // var player = videojs('vid');
+    var player = videojs("vid", {
+      controlBar: {
+        children: [
+            "playToggle",
+            "volumeMenuButton",
+            // "durationDisplay",
+            // "timeDivider",
+            // "currentTimeDisplay",
+            "progressControl",
+            "remainingTimeDisplay",
+            "MuteToggle",
+            "VolumeControl",
+            "fullscreenToggle"
+        ]
+      },
+    }, function(){
+
+    });
+
+
   }
 
 
@@ -560,50 +555,26 @@ class videoPage extends React.Component {
         
         const objectComments = this.state.comments.filter(comment => comment.id)
         const commentLength = objectComments.length;
-        const playStatus = this.state.VideoPlaying;
 
-        let playBtn = "";
-        if(!playStatus){
-          playBtn = <div className="vjs-big-play-button" role="button" onClick={this.handleVideoPlay}><span aria-hidden="true"></span></div>
-        }else{
-          playBtn = "";
-        }
-        
         return (
             <Layout>
                 <div className="videoPage">
                     <div className="intro">
-                        {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
                         <div className="container text-center">
-                            <div className="videoscribe-skin " onClick={this.handleVideoPlay}>
-                              <video className="vjs-tech"
+                            <div className="video-skin videoscribe" >
+                              <video className="video-js vjs-tech vjs-big-play-centered"
                                 id="vid"
-                                preload="auto" width="640px" height="480px"
-                                disablepictureinpicture 
+                                width="640"
+                                height="480"
+                                preload="auto"
                                 poster={video.thumbnail ||''}
                                 src={video.videopath || ''}
                                 controlsList="nodownload"
+                                controls
                                 >
                                 <source src={video.videopath || ''} type="video/mp4"/>
                                 <p className="vjs-no-js">Your browser does not support the video tag.</p>
                               </video>
-                              {playBtn}
-                              <div className="vjs-control-bar">
-                                <div className="vjs-play-control vjs-control  vjs-paused" id="smallPlay" role="button">
-                                  <div className="vjs-control-content">
-                                    <span className="vjs-control-text">Play</span>
-                                  </div>
-                                </div>
-                                {/* <div className="vjs-progress-control vjs-control">
-                                  <div role="slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabindex="0" className="vjs-progress-holder vjs-slider" aria-label="video progress bar" aria-valuetext="0:00">
-                                      <div className="vjs-load-progress"><span className="vjs-control-text"><span>Loaded</span>: 0%</span></div>
-                                      <div className="vjs-play-progress"><span className="vjs-control-text"><span>Progress</span>: 0%</span></div>
-                                      <div className="vjs-seek-handle vjs-slider-handle" aria-live="off"><span className="vjs-control-text">0:00</span></div>
-                                  </div>
-                                </div> */}
-                              </div>
-
-                              
                             </div>
                         </div>
                         <span className="icwrap2">
@@ -723,15 +694,18 @@ class videoPage extends React.Component {
                   </div>
                   <div className="legend eng-stats">
                     <ul>
-                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span class="stat-category">Likes</span></li>
-                      <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span class="stat-category">Repeats</span></li>
-                      <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span class="stat-category">Fullscreens</span></li>
-                      <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span class="stat-category">Shares</span></li>
-                      <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span class="stat-category">Completes</span></li>
+                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span className="stat-category">Likes</span></li>
+                      <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span className="stat-category">Repeats</span></li>
+                      <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span className="stat-category">Fullscreens</span></li>
+                      <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span className="stat-category">Shares</span></li>
+                      <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span className="stat-category">Completes</span></li>
                     </ul>
                   </div>
-                  <ul class="video-stats">
-                    <li class="views"><span class="stat">{this.state.analytics.score}</span> <span class="stat-category">views</span></li>
+                  <ul className="video-stats">
+                    <li className="views">
+                      <span className="stat">{this.state.analytics.score}</span> 
+                      <span className="stat-category">views</span>
+                    </li>
                   </ul>
               </div>
               

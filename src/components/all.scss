@@ -20,6 +20,11 @@ $screen-tablet:              768px;
 $screen-desktop:             992px;
 $screen-lg-desktop:          1200px;
 
+$videoscribe: #5dbfd9;
+$sparkol: #ed8d1a;
+$storypix: #01ABB3;
+
+
 @mixin transform($property) {
     -webkit-transform: $property;
     -ms-transform: $property;
@@ -2294,123 +2299,261 @@ div.videoPage div#comments.videos {
   display: -webkit-box;
 }
 
+@import "styles/video-js";
 
-.videoscribe-skin {
-  color: #5dbfd9;
-  width: 640px;
+
+.video-skin{
   font-weight: 300;
-  margin: 0 auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 
-  .vjs-tech{
-    position: relative;
-  }
-
-  .vjs-big-play-button{
-    background: url(https://sho.co/assets/images/vs-skin/player-logo-play@2x.png) center no-repeat;
-    background-size: 80px 80px;
-    left: 0;
-    right: 0;
-    // top: 40%;
-    margin: 0 auto;
-    width: 80px;
-    height: 80px;
-    position: absolute;
-  }
-
-  .vjs-control-bar{
-    border-top: 2px solid #f8f8f8;
-    position: relative;
-    background-color: #fff;
-    background-color: #fff;
-    width: 100%;
-  }
-
-  .vjs-play-control{
-    width: 6em;
-    cursor: pointer;
-    outline: none;
-    position: relative;
-    float: left;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    height: 4.2em;
-    font-size: 10px;
-
-    .vjs-control-text {
-      border: 0;
-      clip: rect(0 0 0 0);
-      height: 1px;
-      margin: -1px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      width: 1px;
-    }
-  }
-
-  .vjs-control{
+  &.videoscribe{
+    color: $videoscribe;
     
-    &::before{
-      content: '';
-      font-family: VideoJS;
-      font-size: 1.8em;
-      line-height: 2.25;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      text-shadow: none;
+    .vjs-progress-control .vjs-progress-holder .vjs-play-progress {
+      background-color: $videoscribe;
+    } 
+
+    .vjs-slider-handle:before{
+      border: 2px solid $videoscribe;
     }
-    &.vjs-paused::before {
-      background: url(https://sho.co/assets/images/vs-skin/player-icon-play-1@2x.png) center no-repeat;
-      background-size: 19px 24px;
+
+    .vjs-play-progress:before,
+    .vjs-seek-to-live-control .vjs-icon-placeholder:before {
+      border-color: $videoscribe;
     }
-    &.vjs-playing::before{
-      background: url(https://sho.co/assets/images/vs-skin/player-icon-pause-1@2x.png) center no-repeat;
-      background-size: 19px 24px;
+    .vjs-control,
+    .vjs-mute-control,
+    .vjs-fullscreen-control{
+
+      &:focus,
+      &:hover{
+        transition: all 0.4s ease;
+
+        &:before{
+          color: $videoscribe;
+        }
+        .vjs-fullscreen-control:before,
+        .vjs-icon-volume-high:before, 
+        .vjs-icon-placeholder:before{
+          color: $videoscribe;
+        }
+
+      }
     }
+
+
+
+  }
+  
+  &.sparkol{
+    color: $sparkol;
     
+    .vjs-progress-control .vjs-progress-holder .vjs-play-progress {
+      background-color: $sparkol;
+    } 
+
+    .vjs-slider-handle:before{
+      border: 2px solid $sparkol;
+    }
+
+    .vjs-play-progress:before,
+    .vjs-seek-to-live-control .vjs-icon-placeholder:before {
+      border-color: $sparkol;
+    }
+
   }
 
-  .vjs-progress-control {
+  &.storypix{
+    color: $storypix;
+    
+    .vjs-progress-control .vjs-progress-holder .vjs-play-progress {
+      background-color: $storypix;
+    } 
+
+    .vjs-slider-handle:before{
+      border: 2px solid $storypix;
+    }
+
+    .vjs-play-progress:before,
+    .vjs-seek-to-live-control .vjs-icon-placeholder:before {
+      border-color: $storypix;
+    }
+
+  }
+
+  .vjs-progress-control{
     position: absolute;
-    top: 1.5em;
-    right: 280px;
+    top: 1.4em;
+    right: 250px;
     bottom: 0;
-    left: 56px;
+    left: 58px;
     width: auto;
     font-size: 1em;
     height: 1em;
-    float: left;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    outline: none;
+  }
 
-    .vjs-progress-holder {
-      cursor: pointer;
+  .vjs-fullscreen-control {
+    width: 5em;
+    cursor: pointer;
+    float: right;
+  }
+
+  .vjs-progress{
+    background: rgba(255,255,255,0.4);
+  }
+  .vjs-mute-control,
+  .vjs-volume-menu-button {
+    color: #D8D8D8;
+    cursor: pointer;
+    float: right;
+  }
+
+  .vjs-volume-bar {
+    width: 5em;
+    height: 0.6em;
+    margin: 1.7em auto 0;
+
+    .vjs-icon-circle:before{
+      border: 2px solid #D8D8D8 !important;
+    }
+    
+    .vjs-volume-level {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 0.5em;
+      background: #ABABAB -50% 0 repeat;
+    }
+    .vjs-volume-handle {
+      color: #D8D8D8;
+      width: 0.5em;
+      height: 0.5em;
+    }
+  }
+
+  
+  .vjs-progress-holder{
+
+    &:after {
+      background-color: rgba(255,255,255,0.3);
+      border-radius: 2.5px;
+      content: "";
+      display: block;
       height: 5px;
       margin-top: -2.5px;
       position: absolute;
       top: 50%;
       right: 0;
       left: 0;
-      padding: 0;
-      outline: 0;
-      background-color: #d8d8d8;
     }
   }
 
+  .vjs-slider{
+    background-color: #d8d8d8;
+  }
 
+  .vjs-time-tooltip,
+  .vjs-mouse-display{
+    display: none !important;
+    opacity: 0;
+  }
+
+  .vjs-remaining-time-display,
+  .vjs-time-control{
+    font-family: "effra", Arial, sans-serif;  
+  }
+  
+
+  .vjs-tech{
+    background-color: #fff;
+  }
+
+  .vjs-big-play-button{
+    background: url(https://sho.co/assets/images/vs-skin/player-logo-play@2x.png) center no-repeat;
+    background-size: 80px 80px;
+  }
+
+  .vjs-control-bar {
+    border-top: 2px solid #f8f8f8;
+    height: 4.2em;
+    background-color: #fff;
+    background-color: #fff;
+    justify-content: flex-end;
+    align-items: center;
+    
+
+    .vjs-play-control{
+      width: 6em;
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+
+      &:before{
+        content: '';
+        background: url(https://sho.co/assets/images/vs-skin/player-icon-play-1@2x.png) center no-repeat;
+        background-size: 19px 24px;
+        font-family: VideoJS;
+        font-size: 1.8em;
+        line-height: 2.25;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        text-shadow: none;
+      }
+    }
+    
+    .vjs-playing{
+      width: 6em;
+      cursor: pointer;
+
+      &:before{
+        background: url(https://sho.co/assets/images/vs-skin/player-icon-pause-1@2x.png) center no-repeat;
+        background-size: 19px 24px;
+      }
+    }
+
+    .vjs-time-controls {
+      font-size: 1em;
+      line-height: 4.2em;
+    }
+
+    .vjs-control{
+        &:before {
+          font-family: VideoJS;
+          font-size: 1.8em;
+          line-height: 2.25;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          text-shadow: none;
+      }
+    }
+
+
+    .vjs-slider-handle:before{
+      content: '';
+      font-size: 1em;
+      line-height: 1;
+      text-align: center;
+      text-shadow: none;
+      position: absolute;
+      top: -8px;
+      left: 0;
+      padding: 15px 8px;
+      background: #fff;
+      border-radius: 50%;
+    }
+  }
+
+  
 }
+
+
 
 
 .engagement{
@@ -2478,3 +2621,4 @@ div.videoPage div#comments.videos {
     text-transform: uppercase;
   }
 }
+
