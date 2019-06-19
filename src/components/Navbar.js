@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import shocologo from "../images/shoco_logo.png"
 import SlantedEndge from '../components/slantedEdge'
-import { Link, navigate } from 'gatsby'
+import {Link} from 'gatsby'
 import {connect} from 'react-redux'
 import {signOut} from '../actions/userAction'
 
@@ -103,6 +103,7 @@ import "./styles/header.scss"
     }
 }
 
+//setting up the props to access to this component and calling the signOut action
 const mapStateToProps = (state) => 
 { 
   return {

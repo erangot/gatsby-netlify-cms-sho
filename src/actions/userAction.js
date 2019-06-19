@@ -2,13 +2,10 @@ import Amplify, { Auth } from 'aws-amplify';
 import aws_exports from '../aws-exports'; // if you are using Amplify CLI 
 
 
-
-
-
-
-
 export const signIn =  () => async (dispatch) => 
-{
+{  
+
+   //calling the ampliy to set the current user status and username
     Amplify.configure(aws_exports);
      const response = await  Auth.currentAuthenticatedUser({
           bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
@@ -27,8 +24,6 @@ export const signIn =  () => async (dispatch) =>
           }
       });
 
-       console.log(response)
-
    dispatch({
        type:'SIGN_IN', 
        payload:{status:response.userStatus, username:response.username}
@@ -37,14 +32,15 @@ export const signIn =  () => async (dispatch) =>
 
 
 export const signOut = () => async (dispatch) => {
-
+  //Logging out
   const response = await Auth.signOut().then(() => {
-  
+
     }).catch(e => {
     console.log(e);
 
   });
     console.log(response)
+
    dispatch({
     type:"SIGN_OUT", 
     payload:{status:false,username:""}

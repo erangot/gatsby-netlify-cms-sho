@@ -42,6 +42,7 @@ class TemplateWrapper extends React.Component{
             `}
             render={data => (
               <div>
+                
                 <Helmet html={[{lang:"en"}]}/>
                 <Navbar/>
                 <div>{children}</div>
@@ -54,6 +55,7 @@ class TemplateWrapper extends React.Component{
   
 }
 
+//setting up the props to access to this component and calling the signIn action
 const mapStateToProps = (state) => 
 { 
   console.log(state)

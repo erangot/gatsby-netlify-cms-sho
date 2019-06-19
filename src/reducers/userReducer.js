@@ -14,8 +14,7 @@ const userReducer = (state = {
                ...state, status:action.payload.status, username:""
                };
           break;
-          default:
-             return "exit"
+          
      }
   return state;
 }
