@@ -10,7 +10,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
-const windowGlobal = typeof window !== 'undefined' && window
+
 
 class DynamicRoute extends React.Component {
   
@@ -62,6 +62,11 @@ class DynamicRoute extends React.Component {
     this.handleRemoveButton = this.handleRemoveButton.bind(this);
   }
 
+
+   componentDidMount()
+   {
+    const windowGlobal = typeof window !== 'undefined' && window
+   }
   async componentWillMount() {
 
     Amplify.configure(aws_exports);
