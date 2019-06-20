@@ -11,8 +11,8 @@ export const initAuth = () => {
   }
 }
 export const getUser = () =>
-  isBrowser() && localStorage.getItem("shocoUser")
-    ? JSON.parse(localStorage.getItem("shocoUser"))
+  isBrowser() && window.localStorage.getItem("shocoUser")
+    ? JSON.parse(window.localStorage.getItem("shocoUser"))
     : {}
 
 const setUser = user =>
