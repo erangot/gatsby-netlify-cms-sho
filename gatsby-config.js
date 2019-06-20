@@ -20,10 +20,10 @@ module.exports = {
       resolve: `gatsby-source-mysql`,
       options: {
         connectionDetails: {
-          host: 'db4free.net',
-          user: 'shocogatsbymnl',
-          password: 'rykku8-raqGib-wugtah',
-          database: 'shocogatsbymnl'
+          host: dbHost,
+          user: dbUser,
+          password: dbPassword,
+          database: dbDatabase
         },
         query: 'SELECT * FROM shocogatsbymnl.shortUrls a, shocogatsbymnl.media b WHERE a.id = b.shortUrlId;',
         idFieldName: 'id',
@@ -34,10 +34,10 @@ module.exports = {
       resolve: `gatsby-source-mysql`,
       options: {
         connectionDetails: {
-          host: 'db4free.net',
-          user: 'shocogatsbymnl',
-          password: 'rykku8-raqGib-wugtah',
-          database: 'shocogatsbymnl'
+          host: dbHost,
+          user: dbUser,
+          password: dbPassword,
+          database: dbDatabase
         },
         query: 'SELECT * FROM shocogatsbymnl.media;',
         idFieldName: 'id',
