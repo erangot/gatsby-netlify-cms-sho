@@ -87,7 +87,7 @@ class videoPage extends React.Component {
               
               this.setState({
                 user: user,
-                isLoggedIn: this.props.user.userStatus,
+                isLoggedIn: this.props.user.status,
                 userUUID: user.attributes.sub
               });
                 
@@ -661,8 +661,8 @@ class videoPage extends React.Component {
                       <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span class="stat-category">Completes</span></li>
                     </ul>
                   </div>
-                  <ul class="video-stats">
-                    <li class="views"><span class="stat">{this.state.analytics.score}</span> <span class="stat-category">views</span></li>
+                  <ul className="video-stats">
+                    <li className="views"><span className="stat">{this.state.analytics.score}</span> <span className="stat-category">views</span></li>
                   </ul>
               </div>
               
