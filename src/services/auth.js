@@ -11,12 +11,12 @@ export const initAuth = () => {
   }
 }
 export const getUser = () =>
-  isBrowser() && window.localStorage.getItem("shocoUser")
-    ? JSON.parse(window.localStorage.getItem("shocoUser"))
+  isBrowser() && localStorage.getItem("shocoUser")
+    ? JSON.parse(localStorage.getItem("shocoUser"))
     : {}
 
 const setUser = user =>
-  window.localStorage.setItem("shocoUser", JSON.stringify(user))
+  localStorage.setItem("shocoUser", JSON.stringify(user))
 
 export const handleLogin = callback => {
   if (isLoggedIn()) {
