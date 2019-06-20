@@ -31,7 +31,6 @@ class videoPage extends React.Component {
             replyCommentError: null,
             currentReply: '',
             openReply: false,
-            isLoggedIn:false,
             userUUID:'',
             analytics: {
               fullScreens:1,
@@ -76,6 +75,7 @@ class videoPage extends React.Component {
 
     componentDidMount() {
       // window.addEventListener('load', this.handleLoad);
+    
    }
 
 
@@ -87,7 +87,6 @@ class videoPage extends React.Component {
               
               this.setState({
                 user: user,
-                isLoggedIn: this.props.user.status,
                 userUUID: user.attributes.sub
               });
                 
@@ -173,7 +172,7 @@ class videoPage extends React.Component {
     event.preventDefault();
 
 
-    if(this.state.isLoggedIn) {
+    if(this.props.user.status) {
       var toggleEngaged = !this.state.isEngaged;
       var payload = {
         "shortId": `${this.state.video.shortId}`,
@@ -490,6 +489,8 @@ class videoPage extends React.Component {
 
     render() {
 
+      console.log(this.props.user.status)
+
         let video = this.state.video;
         
         const objectComments = this.state.comments.filter(comment => comment.id)
@@ -610,7 +611,7 @@ class videoPage extends React.Component {
                       </ul>
                       <ul className="action-links">
                           <li><button className="eng-link active" onClick={this.handleLikeButton}>
-                           {this.state.isLoggedIn ? (''):(<span className="login-required-overlay"><span> Please login to rate </span></span>)}
+                           {this.props.user.status? (''):(<span className="login-required-overlay"><span> Please login to rate </span></span>)}
                             Like<span className={"icon " + (this.state.isEngaged ? 'active' : '') }></span></button></li>
                           <li className="last"><button className="report-link" onClick={this.handleBlockButton}>Report<span className={"icon " + (this.state.isBlocked ? 'active' : '') }></span></button></li>
                       </ul>
@@ -692,7 +693,7 @@ class videoPage extends React.Component {
                           </div>
                         )}
                         
-                        {this.state.isLoggedIn ?(
+                        {this.props.user.status ?(
                           <div>
                             <div className="comment-wrap">
                               <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
@@ -727,7 +728,7 @@ class videoPage extends React.Component {
                                       <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                       
                                       
-                                      {this.state.isLoggedIn ?( 
+                                      {this.props.user.status ?( 
                                         <span>|
                                       <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                                       ):('')}
@@ -789,7 +790,7 @@ class videoPage extends React.Component {
                                   <p className="comment-info">
                                     <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                     {/* Only when logged In */}
-                                    {this.state.isLoggedIn ?( 
+                                    {this.props.user.status ?( 
                                      <span>|
                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                                      ):('')}
