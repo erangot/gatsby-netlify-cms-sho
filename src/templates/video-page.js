@@ -46,7 +46,7 @@ class videoPage extends React.Component {
             VideoPlaying: false,
         }
 
-        if(process.env.NODE_ENV == 'development') 
+        if(process.env.NODE_ENV === 'development') 
           this.state.urlLocation = `http://localhost:8000/${this.state.video.shortId}`
         else 
           this.state.urlLocation = `http://shoco-sparkol.unosoft.ph/${this.state.video.shortId}`
@@ -80,36 +80,35 @@ class videoPage extends React.Component {
 
 
     async componentWillMount() {
-
-        await Amplify.Auth.currentAuthenticatedUser({
+      await Amplify.Auth.currentAuthenticatedUser({
             bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-          }).then(user => {
-              
+        }).then(user => {
+            
+        this.setState({
+          user: user,
+          userUUID: user.attributes.sub
+        });
+          
+        // Get engaged user
+          fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.video.shortId}&ownerId=${this.state.user.attributes.sub}`)
+          .then(response => {
+            if(!response.ok) { throw response }
+            return response.json();
+          })
+          .then(data => {
+              // console.log("isEngaged",data[0][0]);
               this.setState({
-                user: user,
-                userUUID: user.attributes.sub
-              });
-                
-              // Get engaged user
-                fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.video.shortId}&ownerId=${this.state.user.attributes.sub}`)
-                .then(response => {
-                  if(!response.ok) { throw response }
-                  return response.json();
-                })
-                .then(data => {
-                    // console.log("isEngaged",data[0][0]);
-                    this.setState({
-                        isEngaged: data[0][0].engaged,
-                    })
-                });
-              
-                // console.log('User Logged In - ', user);
+                  isEngaged: data[0][0].engaged,
+              })
+          });
+        
+          // console.log('User Logged In - ', user);
 
-                resolve(user);
-                }) .catch(err => {
+          resolve(user);
+          }).catch(err => {
 
-                    // console.log(err);        
-                });
+              // console.log(err);        
+          });
          
           // Get comments
          await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.video.shortId}&orderBy=asc`)
@@ -192,16 +191,16 @@ class videoPage extends React.Component {
           },
           body: JSON.stringify(payload)
         });
-      const content = await rawResponse.json();
+       await rawResponse.json();
 
       // Create analytics to be a function
-      var payload = {
+      var payload1 = {
         "shortId": `${this.state.video.shortId}`,
         "eventType": `${toggleEngaged?'engaged':'disengaged'}`,
         "ownerId": `${this.state.user.attributes.sub}`
       };
   
-     console.log(payload);
+     console.log(payload1);
      const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
      const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
         method: 'POST',
@@ -209,9 +208,9 @@ class videoPage extends React.Component {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload1)
       });
-    const content1 = await rawResponse1.json();
+     await rawResponse1.json();
 
 
       
@@ -256,7 +255,8 @@ class videoPage extends React.Component {
       },
       body: JSON.stringify(payload)
     });
-  const content = await rawResponse.json();
+  
+    await rawResponse.json();
 
   // Get comments
   const rawResponseComments = await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.video.shortId}&orderBy=asc`);
@@ -292,7 +292,7 @@ class videoPage extends React.Component {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({mainCommentError: null,
         mainAddCommentDisabled: true});
         break;
@@ -317,7 +317,7 @@ class videoPage extends React.Component {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({replyCommentError: null,
         replyAddCommentDisabled: true});
         break;
@@ -397,7 +397,7 @@ class videoPage extends React.Component {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+    await rawResponse.json();
     
     this.setState({isEditing:false});
   }
@@ -407,8 +407,6 @@ class videoPage extends React.Component {
   // handle removing of the video
   handleRemoveButton(event) {
     event.preventDefault();
-    const isVideoDeleted = true;
-    
     
     confirmAlert({
       title: 'sho.co says',
@@ -453,7 +451,8 @@ class videoPage extends React.Component {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+    
+    await rawResponse.json();
     this.setState({visibility: payload.visibility});
   }
 
@@ -470,7 +469,7 @@ class videoPage extends React.Component {
       vid.play(); 
     }
     
-    if(smallBtn.classList[2] == "vjs-paused"){
+    if(smallBtn.classList[2] === "vjs-paused"){
       smallBtn.classList.remove("vjs-paused");
       smallBtn.classList.add("vjs-playing");
     }else{
@@ -514,7 +513,7 @@ class videoPage extends React.Component {
                               <video className="vjs-tech"
                                 id="vid"
                                 preload="auto" width="640px" height="480px"
-                                disablepictureinpicture 
+                                disablepictureinpicture="true"
                                 poster={video.thumbnail ||''}
                                 src={video.videopath || ''}
                                 controlsList="nodownload"
@@ -585,7 +584,7 @@ class videoPage extends React.Component {
                       <span className="upload-date"><TimeAgo date={video.createdOn} /></span></p>    
                       <div className="desc">
                         {this.state.videoDesc}
-                        <a className="show-more">Show more</a>
+                        <a href="/" className="show-more">Show more</a>
                       </div>
                     </div>  
                   )}
@@ -596,12 +595,12 @@ class videoPage extends React.Component {
                           <li className="first">
                               <a 
                               href={`https://www.facebook.com/sharer.php?u=+${encodeURIComponent(this.state.urlLocation)}`} 
-                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
+                              data-site="facebook" className="share-social share-fb prevent-default" target="_blank" rel="noopener noreferrer" title="Share this sho on Facebook"><span className="icon">Share</span></a>
                           </li>
                           <li>
                               <a 
                               href={`http://twitter.com/intent/tweet?url=${this.state.urlLocation}&amp;via=SparkolHQ`} 
-                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
+                              data-site="twitter" target="_blank" rel="noopener noreferrer" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
                           </li>
                           <li>
                               <a 
@@ -623,7 +622,7 @@ class videoPage extends React.Component {
                   </div>
                   <div className="input-surround" id="embed-code">
                       <label htmlFor="embed-code-input">Embed code</label>
-                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
+                      <input id="embed-code-input" type="text" value={`<iframe width='560' height='360' src='"http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}" frameborder='0' allowfullscreen></iframe>`} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
                   </div>
                   {(this.state.video.createdBy === this.state.userUUID)?
                       (<div>
@@ -644,7 +643,7 @@ class videoPage extends React.Component {
                                   <option value="private">Private</option>
                               </select>
                           </div>     
-                          <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
+                          <p className="remove-video"><a href="/" className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
                         </div>):('') }
                  
               </div>
@@ -655,11 +654,11 @@ class videoPage extends React.Component {
                   </div>
                   <div className="legend eng-stats">
                     <ul>
-                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span class="stat-category">Likes</span></li>
-                      <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span class="stat-category">Repeats</span></li>
-                      <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span class="stat-category">Fullscreens</span></li>
-                      <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span class="stat-category">Shares</span></li>
-                      <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span class="stat-category">Completes</span></li>
+                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span className="stat-category">Likes</span></li>
+                      <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span className="stat-category">Repeats</span></li>
+                      <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span className="stat-category">Fullscreens</span></li>
+                      <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span className="stat-category">Shares</span></li>
+                      <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span className="stat-category">Completes</span></li>
                     </ul>
                   </div>
                   <ul className="video-stats">
@@ -676,18 +675,18 @@ class videoPage extends React.Component {
                 <div className="container2">
                       <div className="comment-section comments">
                       <div className="comment-post">
-                        {(commentLength == 0)?(
+                        {(commentLength === 0)?(
                           <h2>{commentLength} comments</h2>
                         ):(
                           <div>
                             <h2>{commentLength} comments of {commentLength}</h2>
                             <ul className="list-inline comment-sort" >
                               <li>
-                                <a onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
+                                <a href="/" onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
                                 |
                               </li>
                               <li className="last">
-                                <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
+                                <a href="/" onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
                               </li>
                             </ul>  
                           </div>
@@ -730,7 +729,7 @@ class videoPage extends React.Component {
                                       
                                       {this.props.user.status ?( 
                                         <span>|
-                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
+                                      <a href="/" className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                                       ):('')}
                                     </p>
                                     {
@@ -792,7 +791,7 @@ class videoPage extends React.Component {
                                     {/* Only when logged In */}
                                     {this.props.user.status ?( 
                                      <span>|
-                                     <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
+                                     <a href="/" className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                                      ):('')}
                                   </p>
                                   {
