@@ -35,13 +35,13 @@ const VideoComments = (props) => {
                 {props.data.isLoggedIn ?(
                   <div>
                     <div className="comment-wrap">
-                      <textarea id="main-AddComment" className={(props.data.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.comment} onChange={this.handleValidationComment}></textarea>
+                      <textarea id="main-AddComment" className={(props.data.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.comment} onChange={props.handleValidationComment}></textarea>
                       <span className="error-comment-input">{props.data.mainCommentError}</span>
                     </div>
                     <button id="comment-btn" 
                       className="main"
                       disabled = {(props.data.mainAddCommentDisabled)? "disabled" : ""}
-                      onClick={this.handleAddComment}>Post</button>
+                      onClick={props.handleAddComment}>Post</button>
                   </div>
                 ):(
                   <div className="text-center notLoggedIn-message">
@@ -69,14 +69,14 @@ const VideoComments = (props) => {
                               
                               {props.data.isLoggedIn ?( 
                                 <span>|
-                              <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
+                              <a className="reply" onClick={(evt) => props.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                               ):('')}
                             </p>
                             {
                               props.data.openReply && props.data.currentReply === comment.commentId ? (
                                 <div className="comment-post">
                                   <div className="comment-wrap">
-                                  <textarea className={(props.data.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.commentReply} onChange={this.handleValidationComment}></textarea>
+                                  <textarea className={(props.data.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.commentReply} onChange={props.handleValidationComment}></textarea>
                                   <span className="error-comment-input">{props.data.replyCommentError}</span>
                                     {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
                                     <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
@@ -84,7 +84,7 @@ const VideoComments = (props) => {
                                   </div>
                                   <button id="comment-btn"
                                   disabled = {(props.data.replyAddCommentDisabled)? "disabled" : ""}
-                                  onClick={(evt) => this.handleAddComment(evt, comment.commentId)}
+                                  onClick={(evt) => props.handleAddComment(evt, comment.commentId)}
                                   >Post</button>
                               </div>
                               ):(
@@ -131,14 +131,14 @@ const VideoComments = (props) => {
                             {/* Only when logged In */}
                             {props.data.isLoggedIn ?( 
                              <span>|
-                             <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
+                             <a className="reply" onClick={(evt) => props.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                              ):('')}
                           </p>
                           {
                             props.data.openReply && props.data.currentReply === comment.commentId ? (
                               <div className="comment-post">
                                 <div className="comment-wrap">
-                                <textarea className={(props.data.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.commentReply} onChange={this.handleValidationComment}></textarea>
+                                <textarea className={(props.data.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.commentReply} onChange={props.handleValidationComment}></textarea>
                                 <span className="error-comment-input">{props.data.replyCommentError}</span>
                                   {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
                                   <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
@@ -146,7 +146,7 @@ const VideoComments = (props) => {
                                 </div>
                                 <button id="comment-btn"
                                 disabled = {(props.data.replyAddCommentDisabled)? "disabled" : ""}
-                                onClick={(evt) => this.handleAddComment(evt, comment.commentId)}
+                                onClick={(evt) => props.handleAddComment(evt, comment.commentId)}
                                 >Post</button>
                             </div>
                             ):(

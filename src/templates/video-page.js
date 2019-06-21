@@ -571,7 +571,13 @@ class videoPage extends React.Component {
 
              <VideoPlayer playBtn={playBtn} video ={this.state.video} handleVideoPlay = {this.handleVideoPlay}/>
              <VideoDetails data={this.state} handleSharerAnalytics={this.handleSharerAnalytics} handleLikeButton={this.handleLikeButton} handleBlockButton ={this.handleBlockButton} />
-             <VideoComments data={this.state} commentLength={commentLength} objectComments={{objectComments}} handleOrder={this.handleOrder}/>
+             <VideoComments data={this.state} 
+             commentLength={commentLength} 
+             objectComments={{objectComments}}
+             handleOrder={this.handleOrder}  
+             handleValidationComment={this.handleValidationComment} 
+             handleAddComment={this.handleAddComment} 
+             handleReplyButton={this.handleReplyButton}/>
           
             </div>
             </Layout>
