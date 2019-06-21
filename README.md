@@ -12,8 +12,13 @@
 ```
 $ git clone https://github.com/[GITHUB_USERNAME]/[REPO_NAME].git
 $ cd [REPO_NAME]
-$ yarn
-$ npm run develop
+$ npm i
+$ npm start
+```
+### Access Staging Build Locally
+```
+#Make sure you have the dependencies installed
+$ npm build
 ```
 To test the CMS locally, you'll need run a production build of the site:
 ```
