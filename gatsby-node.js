@@ -159,8 +159,8 @@ exports.createPages = async ({ actions: { createPage }, graphql }) => {
         }
       }
     }
-  `).then(result => {
-    if (result.errors) {
+  `).then(results => {
+    if (results.errors) {
       result.errors.forEach(e => console.error(e.toString()))
       return Promise.reject(result.errors)
     }
