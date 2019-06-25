@@ -3,7 +3,7 @@
 
 //Component for Video Skin or Player
 
-  const VideoSkinComponent = (props) => { 
+  const VideoPlayer = (props) => { 
    
   const {video, playBtn,handleVideoPlay} = props
 
@@ -40,4 +40,4 @@
   );
   }
 
-  export default VideoSkinComponent
+  export default VideoPlayer
