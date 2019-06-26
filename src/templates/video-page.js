@@ -6,9 +6,9 @@ import Amplify from 'aws-amplify'
 import { resolve } from 'url'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-import  VideoPlayer from '../components/VideoPlayer'
-import  VideoDetails from '../components/VideoDetails'
-import  VideoComments from '../components/VideoComments'
+import  VideoPlayer from '../components/video/VideoPlayer'
+import  VideoDetails from '../components/video/VideoDetails'
+import  VideoComments from '../components/video/VideoComments'
 
 
 class videoPage extends React.Component {
