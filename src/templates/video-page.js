@@ -45,7 +45,6 @@ class videoPage extends React.Component {
               uniquePlays:1,
               score:1
             },
-            VideoPlaying: false,
         }
 
         if(process.env.NODE_ENV == 'development') 
@@ -72,11 +71,12 @@ class videoPage extends React.Component {
 
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
 
-        this.handleVideoPlay = this.handleVideoPlay.bind(this);
+
+        this.handleSharerAnalytics = this.handleSharerAnalytics.bind(this);
     }
 
     componentDidMount() {
-      window.addEventListener('load', this.handleLoad);
+      this.handleLoad();
    }
 
 
@@ -167,6 +167,8 @@ class videoPage extends React.Component {
             // console.log(err);        
         });
  
+        
+        this.handleLoad();
     }
 
     // handle event on likes
@@ -220,6 +222,50 @@ class videoPage extends React.Component {
     } else {
       navigate('/app');
     }
+  }
+
+   async handleSharerAnalytics ( event ) {
+    event.preventDefault(); 
+    
+    var payload = {};
+    switch (event.target.innerText) {
+      case "Share":
+        payload = {
+          "shortId": `${this.state.video.shortId}`,
+          "eventType": "shared-facebook",
+          "ownerId": `${this.state.user.attributes.sub}`
+        };
+        break;
+      case "Tweet":
+        payload = {
+          "shortId": `${this.state.video.shortId}`,
+          "eventType": "shared-twitter",
+          "ownerId": `${this.state.user.attributes.sub}`
+        };
+        break;
+      case "Email":
+        payload = {
+          "shortId": `${this.state.video.shortId}`,
+          "eventType": "shared-email",
+          "ownerId": `${this.state.user.attributes.sub}`
+        };
+      break;
+    
+      default:
+        break;
+    }
+    console.log(payload);
+    const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
+    const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify(payload)
+     });
+   const content1 =  await rawResponse1.json();
+   console.log(content1);
   }
 
   handleBlockButton(event) {
@@ -283,6 +329,25 @@ class videoPage extends React.Component {
         openReply: false
       })
     
+      // Create analytics to be a function
+      var payload = {
+        "shortId": `${this.state.video.shortId}`,
+        "eventType": `added-comment`,
+        "ownerId": `${this.state.user.attributes.sub}`
+      };
+  
+     console.log(payload);
+     const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
+     const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+    const content1 = await rawResponse1.json();
+    console.log(content1);
 
  }
 
@@ -459,32 +524,27 @@ class videoPage extends React.Component {
     this.setState({visibility: payload.visibility});
   }
 
-  handleVideoPlay(event){
-    event.preventDefault();
-    var stat = false;
-    var vid = document.getElementById("vid");
-    var smallBtn = document.getElementById("smallPlay");
-    
-    vid.pause();
-
-    if(!this.state.VideoPlaying){
-      stat = true;
-      vid.play(); 
-    }
-    
-    if(smallBtn.classList[2] == "vjs-paused"){
-      smallBtn.classList.remove("vjs-paused");
-      smallBtn.classList.add("vjs-playing");
-    }else{
-      smallBtn.classList.remove("vjs-playing");
-      smallBtn.classList.add("vjs-paused");
-    }
-    this.setState({VideoPlaying: stat});
-
-  }
-
   handleLoad() {
-    // var player = videojs('vid');
+    var player = videojs("vid", {
+      controlBar: {
+        children: [
+            "playToggle",
+            "volumeMenuButton",
+            // "durationDisplay",
+            // "timeDivider",
+            // "currentTimeDisplay",
+            "progressControl",
+            "remainingTimeDisplay",
+            "MuteToggle",
+            "VolumeControl",
+            "fullscreenToggle"
+        ]
+      },
+    }, function(){
+
+    });
+
+
   }
 
 
@@ -495,50 +555,26 @@ class videoPage extends React.Component {
         
         const objectComments = this.state.comments.filter(comment => comment.id)
         const commentLength = objectComments.length;
-        const playStatus = this.state.VideoPlaying;
 
-        let playBtn = "";
-        if(!playStatus){
-          playBtn = <div className="vjs-big-play-button" role="button" onClick={this.handleVideoPlay}><span aria-hidden="true"></span></div>
-        }else{
-          playBtn = "";
-        }
-        
         return (
             <Layout>
                 <div className="videoPage">
                     <div className="intro">
-                        {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
                         <div className="container text-center">
-                            <div className="videoscribe-skin " onClick={this.handleVideoPlay}>
-                              <video className="vjs-tech"
+                            <div className="video-skin videoscribe" >
+                              <video className="video-js vjs-tech vjs-big-play-centered"
                                 id="vid"
-                                preload="auto" width="640px" height="480px"
-                                disablepictureinpicture 
+                                width="640"
+                                height="480"
+                                preload="auto"
                                 poster={video.thumbnail ||''}
                                 src={video.videopath || ''}
                                 controlsList="nodownload"
+                                controls
                                 >
                                 <source src={video.videopath || ''} type="video/mp4"/>
                                 <p className="vjs-no-js">Your browser does not support the video tag.</p>
                               </video>
-                              {playBtn}
-                              <div className="vjs-control-bar">
-                                <div className="vjs-play-control vjs-control  vjs-paused" id="smallPlay" role="button">
-                                  <div className="vjs-control-content">
-                                    <span className="vjs-control-text">Play</span>
-                                  </div>
-                                </div>
-                                {/* <div className="vjs-progress-control vjs-control">
-                                  <div role="slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" tabindex="0" className="vjs-progress-holder vjs-slider" aria-label="video progress bar" aria-valuetext="0:00">
-                                      <div className="vjs-load-progress"><span className="vjs-control-text"><span>Loaded</span>: 0%</span></div>
-                                      <div className="vjs-play-progress"><span className="vjs-control-text"><span>Progress</span>: 0%</span></div>
-                                      <div className="vjs-seek-handle vjs-slider-handle" aria-live="off"><span className="vjs-control-text">0:00</span></div>
-                                  </div>
-                                </div> */}
-                              </div>
-
-                              
                             </div>
                         </div>
                         <span className="icwrap2">
@@ -596,17 +632,20 @@ class videoPage extends React.Component {
                           <li className="first">
                               <a 
                               href={`https://www.facebook.com/sharer.php?u=+${encodeURIComponent(this.state.urlLocation)}`} 
-                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
+                              onClick={this.handleSharerAnalytics}
+                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon" name="facebook">Share</span></a>
                           </li>
                           <li>
                               <a 
                               href={`http://twitter.com/intent/tweet?url=${this.state.urlLocation}&amp;via=SparkolHQ`} 
-                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
+                              onClick={this.handleSharerAnalytics}
+                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon" name="twitter">Tweet</span></a>
                           </li>
                           <li>
                               <a 
                               href={`mailto:?to=&Subject=Share%20a%20sho,&body=${this.state.urlLocation}`} 
-                              data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
+                              onClick={this.handleSharerAnalytics}
+                              data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon" name="email">Email</span></a>
                           </li>
                       </ul>
                       <ul className="action-links">
@@ -655,15 +694,18 @@ class videoPage extends React.Component {
                   </div>
                   <div className="legend eng-stats">
                     <ul>
-                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span class="stat-category">Likes</span></li>
-                      <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span class="stat-category">Repeats</span></li>
-                      <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span class="stat-category">Fullscreens</span></li>
-                      <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span class="stat-category">Shares</span></li>
-                      <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span class="stat-category">Completes</span></li>
+                      <li >{Math.ceil(this.state.analytics.engaged/this.state.analytics.score)}%<br /><span className="stat-category">Likes</span></li>
+                      <li >{Math.ceil(this.state.analytics.repeatPlays/this.state.analytics.score)}%<br /><span className="stat-category">Repeats</span></li>
+                      <li >{Math.ceil(this.state.analytics.fullScreens/this.state.analytics.score)}%<br /><span className="stat-category">Fullscreens</span></li>
+                      <li >{Math.ceil(this.state.analytics.shares/this.state.analytics.score)}%<br /><span className="stat-category">Shares</span></li>
+                      <li >{Math.ceil(this.state.analytics.finished/this.state.analytics.score)}%<br /><span className="stat-category">Completes</span></li>
                     </ul>
                   </div>
-                  <ul class="video-stats">
-                    <li class="views"><span class="stat">{this.state.analytics.score}</span> <span class="stat-category">views</span></li>
+                  <ul className="video-stats">
+                    <li className="views">
+                      <span className="stat">{this.state.analytics.score}</span> 
+                      <span className="stat-category">views</span>
+                    </li>
                   </ul>
               </div>
               
