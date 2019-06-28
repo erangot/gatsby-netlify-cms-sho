@@ -168,7 +168,11 @@ class videoPage extends React.Component {
         });
  
         
-        this.handleLoad();
+    }
+
+
+    componentWillUnmount(){
+      this.handleLoad();
     }
 
     // handle event on likes
@@ -526,13 +530,11 @@ class videoPage extends React.Component {
 
   handleLoad() {
     var player = videojs("vid", {
+      controls: true,
       controlBar: {
         children: [
             "playToggle",
             "volumeMenuButton",
-            // "durationDisplay",
-            // "timeDivider",
-            // "currentTimeDisplay",
             "progressControl",
             "remainingTimeDisplay",
             "MuteToggle",
@@ -540,9 +542,8 @@ class videoPage extends React.Component {
             "fullscreenToggle"
         ]
       },
-    }, function(){
-
     });
+
 
 
   }

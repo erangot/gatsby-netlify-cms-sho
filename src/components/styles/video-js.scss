@@ -686,7 +686,7 @@ body.vjs-full-window {
 }
 .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
     visibility: visible;
-    opacity: 0;
+    opacity: 1;
     transition: visibility 1s, opacity 1s;
 }
 .vjs-controls-disabled .vjs-control-bar,
