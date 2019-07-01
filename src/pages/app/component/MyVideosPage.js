@@ -118,18 +118,7 @@ class MyVideosPage extends React.Component {
     return (
       <Layout>
         <div>
-          {/* <div className="search">
-            <div className="container text-center">
-              <h1 className="jumbo text-padding">My Videos</h1>
-              <form className="search-box">
-                  <label className="search-label">Add a video</label>
-                  <input className="search-input" type="text" placeholder="shortcode" value={this.state.value} onKeyDown={this.keyPress} onChange={this.handleChange}>
-                  </input>
-              </form>      
-            </div>
-          </div> */}
-
-
+         
           <div className="videos">
             <div className="text-center">
               { (this.state.isVideoDeleted) ? 

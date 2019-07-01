@@ -1,8 +1,5 @@
 import React, { Component } from "react"
-import {navigate} from 'gatsby'
-import Amplify, { Auth } from 'aws-amplify';
-import aws_exports from '../aws-exports'; // if you are using Amplify CLI
-import RenderNavbar from './navbar/RenderNavbar'
+
 import "./styles/header.scss"
      
 
@@ -19,37 +16,26 @@ import "./styles/header.scss"
         this.signOut = this.signOut.bind(this);
       }
 
-    componentWillMount() {
-        Amplify.configure(aws_exports);
-        Auth.currentAuthenticatedUser({
-            bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-        }).then(user => {
-            console.log(user);
-            this.setState({authState: 'signedIn'});
-            this.setState({user: user.username});
-        })
-        .catch(err => {
-            console.log(err);
-            this.setState({authState: 'signIn'});  
-        });
-    }
+    
 
-    signOut() {
-        this.setState({authState: 'signIn'});  
-        Auth.signOut().then(() => {
-        }).catch(e => {
-          console.log(e);
-          navigate("/");
-        });
+    signOut(e) {
+        e.preventDefault()
+        this.props.signOut()
       }
 
  
 
     render() {
-        
-       
         return(<RenderNavbar data ={this.state} signOut={this.signOut}/> )
     }
 }
 
-export default Header;
+//setting up the props to access to this component and calling the signOut action
+const mapStateToProps = (state) => 
+{ 
+  return {
+    user:state.userReducer
+  }
+}
+
+export default connect(mapStateToProps,{signOut})(Header);
