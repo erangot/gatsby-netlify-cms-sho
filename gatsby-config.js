@@ -1,5 +1,9 @@
 let activeEnv = process.env.ACTIVE_ENV || process.env.NODE_ENV || "development"
-
+var dbHost = "db4free.net"
+    dbDatabase = "shocogatsbymnl"
+    dbUser =  "shocogatsbymnl"
+    dbPassword = "rykku8-raqGib-wugtah"
+    
 console.log(`Using environment config: '${activeEnv}'`)
 
 require("dotenv").config({
