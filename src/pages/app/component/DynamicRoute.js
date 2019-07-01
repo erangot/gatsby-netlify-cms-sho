@@ -2,15 +2,17 @@ import React from "react"
 import { Link,  } from 'gatsby';
 import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
-import Amplify from 'aws-amplify';
+import Amplify, { Auth } from 'aws-amplify';
 import aws_exports from '../../../aws-exports'; // if you are using Amplify CLI
-import {connect} from 'react-redux'
+
+
 import { navigate } from "@reach/router" // comes with gatsby v2
+
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
-
+const windowGlobal = typeof window !== 'undefined' && window
 
 class DynamicRoute extends React.Component {
   
@@ -42,15 +44,10 @@ class DynamicRoute extends React.Component {
     }
 
 
-    if(process.env.NODE_ENV === 'development') 
+    if(process.env.NODE_ENV == 'development') 
       this.state.shortId = String(props["uri"]).split('/')[2]
     else 
       this.state.shortId = String(props["*"]).split('/')[1]
-
-    if(process.env.NODE_ENV === 'development') 
-      this.state.urlLocation = `http://localhost:8000/${this.state.shortId}`
-    else 
-      this.state.urlLocation = `http://shoco-sparkol.unosoft.ph/${this.state.shortId}`
 
     this.handleEditButton = this.handleEditButton.bind(this);
     this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
@@ -205,8 +202,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    
-    await rawResponse.json();
+    const content = await rawResponse.json();
     
     this.setState({isEditing:false});
   }
@@ -227,6 +223,8 @@ async handleSaveButton(event) {
   // handle removing of the video
   handleRemoveButton(event) {
     event.preventDefault();
+    const isVideoDeleted = true;
+    
     
     confirmAlert({
       title: 'sho.co says',
@@ -272,8 +270,7 @@ async handleSaveButton(event) {
       },
       body: JSON.stringify(payload)
     });
-  
-  await rawResponse.json();
+  const content = await rawResponse.json();
 
   // Get comments
   const rawResponseComments = await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.shortId}&orderBy=asc`);
@@ -309,7 +306,7 @@ async handleSaveButton(event) {
 
       switch(true) {
 
-        case (event.target.value.length === 0): 
+        case (event.target.value.length == 0): 
         this.setState({mainCommentError: null,
         mainAddCommentDisabled: true});
         break;
@@ -334,7 +331,7 @@ async handleSaveButton(event) {
 
       switch(true) {
 
-        case (event.target.value.length === 0): 
+        case (event.target.value.length == 0): 
         this.setState({replyCommentError: null,
         replyAddCommentDisabled: true});
         break;
@@ -381,8 +378,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    
-    await rawResponse.json();
+    const content = await rawResponse.json();
     
   }
 
@@ -446,7 +442,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    await rawResponse.json();
+    const content = await rawResponse.json();
     this.setState({visibility: payload.visibility});
   }
 
@@ -520,7 +516,7 @@ async handleSaveButton(event) {
                       <span className="upload-date"><TimeAgo date={video.createdOn} /></span></p>    
                       <div className="desc">
                         {this.state.videoDesc}
-                        <a href="/" className="show-more">Show more</a>
+                        <a className="show-more">Show more</a>
                       </div>
                     </div>  
                   )}
@@ -530,17 +526,17 @@ async handleSaveButton(event) {
                       <ul className="social-links">
                           <li className="first">
                               <a 
-                              href={`https://www.facebook.com/sharer.php?u=+${encodeURIComponent(this.state.urlLocation)}`} 
-                              rel="noopener noreferrer" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
+                              // href={`https://www.facebook.com/sharer.php?u=+${windowGlobal.location.href}`} 
+                              rel="nofollow" data-site="facebook" className="share-social share-fb prevent-default" target="_blank" title="Share this sho on Facebook"><span className="icon">Share</span></a>
                           </li>
                           <li>
                               <a 
-                              href={`http://twitter.com/intent/tweet?url=${this.state.urlLocation}&amp;via=SparkolHQ`} 
-                              rel="noopener noreferrer" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
+                              // href={`http://twitter.com/intent/tweet?url=${windowGlobal.location.href}&amp;via=SparkolHQ`} 
+                              rel="nofollow" data-site="twitter" target="_blank" className="share-social share-twitter prevent-default" title="Share this sho on Twitter"><span className="icon">Tweet</span></a>
                           </li>
                           <li>
                               <a 
-                              href={`mailto:?to=&Subject=Share%20a%20sho,&body=${this.state.urlLocation}`} 
+                              // href={`mailto:?to=&Subject=Share%20a%20sho,&body=${windowGlobal.location.href}`} 
                               data-site="email" className="share-social share-email" target="_self" title="Share this sho by Email"><span className="icon">Email</span></a>
                           </li>
                       </ul>
@@ -556,7 +552,7 @@ async handleSaveButton(event) {
                   </div>
                   <div className="input-surround" id="embed-code">
                       <label htmlFor="embed-code-input">Embed code</label>
-                      <input id="embed-code-input" type="text" value={`<iframe width='560' height='360' src="http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}" frameborder='0' allowfullscreen></iframe>`} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
+                      <input id="embed-code-input" type="text" value={"<iframe width='560' height='360' src='"+`http://shoco-sparkol.unosoft.ph/app/${this.state.shortId}`+"' frameborder='0' allowfullscreen></iframe>"} onFocus={this.handleFocus} onClick={this.handleFocus} readOnly/>
                   </div>
 
                   <div className="input-surround" id="download">
@@ -576,7 +572,7 @@ async handleSaveButton(event) {
                           <option value="private">Private</option>
                       </select>
                   </div>     
-                  <p className="remove-video"><a href="/" className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
+                  <p className="remove-video"><a className="confirmation" onClick={this.handleRemoveButton}>Remove video</a></p>
               </div>
               
           </div>
@@ -589,11 +585,11 @@ async handleSaveButton(event) {
                         <h2>{commentLength} comments of {commentLength}</h2>
                         <ul className="list-inline comment-sort" >
                           <li>
-                            <a href="/" onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
+                            <a onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
                              |
                           </li>
                           <li className="last">
-                            <a href="/" onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
+                            <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
                           </li>
                         </ul>
                         
@@ -628,7 +624,7 @@ async handleSaveButton(event) {
                                       <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                       {/* Only when logged In */}
                                       | 
-                                      <a href="/" className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
+                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
                                     </p>
                                     {
                                       this.state.openReply && this.state.currentReply === comment.commentId ? (
@@ -688,7 +684,7 @@ async handleSaveButton(event) {
                                     <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                                     {/* Only when logged In */}
                                     | 
-                                    <a href="/" className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
+                                    <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
                                   </p>
                                   {
                                     this.state.openReply && this.state.currentReply === comment.commentId ? (
@@ -751,14 +747,4 @@ async handleSaveButton(event) {
   }
 }
 
-const mapStateToProps = (state) => 
-{ 
-  console.log(state)
-  return {
-    user:state.userReducer
-  }
-}
-
-
-
-export default connect(mapStateToProps)(DynamicRoute)
+export default DynamicRoute
