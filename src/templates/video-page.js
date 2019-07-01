@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link, navigate } from 'gatsby'
+import {navigate } from 'gatsby'
 import Layout from '../components/Layout'
-import TimeAgo from 'react-timeago'
 import Amplify from 'aws-amplify'
 import { resolve } from 'url'
 import { confirmAlert } from 'react-confirm-alert'; // Import
@@ -49,7 +48,7 @@ class videoPage extends React.Component {
             VideoPlaying: false,
         }
 
-        if(process.env.NODE_ENV == 'development') 
+        if(process.env.NODE_ENV === 'development') 
           this.state.urlLocation = `http://localhost:8000/${this.state.video.shortId}`
         else 
           this.state.urlLocation = `http://shoco-sparkol.unosoft.ph/${this.state.video.shortId}`
@@ -88,11 +87,12 @@ class videoPage extends React.Component {
         await Amplify.Auth.currentAuthenticatedUser({
             bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
           }).then(user => {
-              
               this.setState({
                 user: user,
                 isLoggedIn: true,
                 userUUID: user.attributes.sub
+              }).catch(error => {
+
               });
                 
               // Get engaged user
@@ -197,7 +197,7 @@ class videoPage extends React.Component {
           },
           body: JSON.stringify(payload)
         });
-      const content = await rawResponse.json();
+
 
       // Create analytics to be a function
       var payload = {
@@ -216,10 +216,7 @@ class videoPage extends React.Component {
         },
         body: JSON.stringify(payload)
       });
-    const content1 = await rawResponse1.json();
 
-
-      
     } else {
       navigate('/app');
     }
@@ -265,8 +262,7 @@ class videoPage extends React.Component {
        },
        body: JSON.stringify(payload)
      });
-   const content1 =  await rawResponse1.json();
-   console.log(content1);
+ 
   }
 
   handleBlockButton(event) {
@@ -305,7 +301,9 @@ class videoPage extends React.Component {
       },
       body: JSON.stringify(payload)
     });
-  const content = await rawResponse.json();
+
+
+
 
   // Get comments
   const rawResponseComments = await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.video.shortId}&orderBy=asc`);
@@ -347,8 +345,6 @@ class videoPage extends React.Component {
         },
         body: JSON.stringify(payload)
       });
-    const content1 = await rawResponse1.json();
-    console.log(content1);
 
  }
 
@@ -385,7 +381,7 @@ class videoPage extends React.Component {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({replyCommentError: null,
         replyAddCommentDisabled: true});
         break;
@@ -465,7 +461,7 @@ class videoPage extends React.Component {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+ 
     
     this.setState({isEditing:false});
   }
@@ -475,9 +471,8 @@ class videoPage extends React.Component {
   // handle removing of the video
   handleRemoveButton(event) {
     event.preventDefault();
-    const isVideoDeleted = true;
-    
-    
+
+
     confirmAlert({
       title: 'sho.co says',
       message: 'Are you sure you wish to remove this video?',
@@ -521,7 +516,6 @@ class videoPage extends React.Component {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
     this.setState({visibility: payload.visibility});
   }
 
@@ -538,7 +532,7 @@ class videoPage extends React.Component {
       vid.play(); 
     }
     
-    if(smallBtn.classList[2] == "vjs-paused"){
+    if(smallBtn.classList[2] === "vjs-paused"){
       smallBtn.classList.remove("vjs-paused");
       smallBtn.classList.add("vjs-playing");
     }else{
