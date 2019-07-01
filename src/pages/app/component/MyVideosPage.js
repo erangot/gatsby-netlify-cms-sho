@@ -110,62 +110,70 @@ class MyVideosPage extends React.Component {
         alert(`/${e.target.value}`);
         
       }
+  }  
+
+
+  renderLayout = () => 
+  {
+    let videos = this.state.videos;
+    return(
+    
+    <div>
+    <div className="videos">
+      <div className="text-center">
+        { (this.state.isVideoDeleted) ? 
+          <h3 className="video-deleted-banner">Your video has been deleted.</h3> :
+          <div></div>
+        }
+        <div className="container text-center">
+          <h1 className="jumbo text-padding">My Videos</h1>
+              <label className="">Add a mock video</label><br/>                   
+              <input className="search-input" type="text" placeholder="storypix/videoscribe/tawe/funscribe"   ref={input => this.form._application = input}/><br/>
+              <input className="search-input" type="text" placeholder="http://video.mp4" ref={input => this.form._video = input}/><br/>
+              <input className="search-input" type="text" placeholder="http://image.png" ref={input => this.form._thumbnail = input}/><br/>
+              <button className="addButton-video" onClick={this.handleAdd}>Submit</button>
+        </div>
+
+
+        <ul className="video-links">
+        {
+          videos.map((video, i) => 
+            <li key={video.shortId}>
+              <div className="video-thumb">
+                <Link to={'/'+video.shortId}>
+                  <img src={
+                    (video.path === 'samplepath' || video.path === 'sample' ) ? (
+                      'https://via.placeholder.com/250x100.png?text=Placeholder+Sho.Co+Under+Development'
+                    ) : (
+                      video.path
+                    )
+                     } alt={video.title}/>
+                </Link>
+                  <span className="video-length">{video.duration}</span>
+                    <div className="video-info">              
+                      <span className="video-owner">Created with 
+                      <Link to={"/application/"+video.application || ''}> {video.applicationDisplayName || ''} </Link>
+                      Short URL: <Link to={'/app/'+video.shortId}>{video.shortId}</Link>
+                      </span>
+                    </div>
+
+              </div>
+            </li>
+          )
+        }
+      </ul>
+      </div>
+    </div>
+
+    </div> ) 
   }
 
   render() {
-    let videos = this.state.videos;
+
 
     return (
       <Layout>
-        <div>
-         
-          <div className="videos">
-            <div className="text-center">
-              { (this.state.isVideoDeleted) ? 
-                <h3 className="video-deleted-banner">Your video has been deleted.</h3> :
-                <div></div>
-              }
-              <div className="container text-center">
-                <h1 className="jumbo text-padding">My Videos</h1>
-                {/* <form className="search-box"> */}
-                    <label className="">Add a mock video</label><br/>                   
-                    <input className="search-input" type="text" placeholder="storypix/videoscribe/tawe/funscribe"   ref={input => this.form._application = input}/><br/>
-                    <input className="search-input" type="text" placeholder="http://video.mp4" ref={input => this.form._video = input}/><br/>
-                    <input className="search-input" type="text" placeholder="http://image.png" ref={input => this.form._thumbnail = input}/><br/>
-                    <button className="addButton-video" onClick={this.handleAdd}>Submit</button>
-                {/* </form>            */}
-              </div>
-
-              <ul className="video-links">
-              {
-                videos.map((video, i) => 
-                  <li key={video.shortId}>
-                    <div className="video-thumb">
-                      <Link to={'/'+video.shortId}>
-                        <img src={
-                          (video.path === 'samplepath' || video.path === 'sample' ) ? (
-                            'https://via.placeholder.com/250x100.png?text=Placeholder+Sho.Co+Under+Development'
-                          ) : (
-                            video.path
-                          )
-                           } alt={video.title}/>
-                      </Link>
-                        <span className="video-length">{video.duration}</span>
-                          <div className="video-info">              
-                            <span className="video-owner">Created with 
-                            <Link to={"/application/"+video.application || ''}> {video.applicationDisplayName || ''} </Link>
-                            Short URL: <Link to={'/app/'+video.shortId}>{video.shortId}</Link>
-                            </span>
-                          </div>
-                    </div>
-                  </li>
-                )
-              }
-            </ul>
-            </div>
-          </div>
-
-        </div>
+             {this.renderLayout}
       </Layout>);
   }
   
