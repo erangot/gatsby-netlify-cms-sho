@@ -12,12 +12,6 @@ class TemplateWrapper extends React.Component{
      constructor(props)
      {
        super();
-       this.state = 
-       {
-         username:"",
-         status:false
-         
-       }
      }
 
      componentWillMount(){
@@ -59,12 +53,10 @@ class TemplateWrapper extends React.Component{
 const mapStateToProps = (state) => 
 { 
   console.log(state)
-  console.log(state)
+
   return {
     user:state.userReducer
   }
 }
-
-
 
 export default connect(mapStateToProps, {signIn})(TemplateWrapper);

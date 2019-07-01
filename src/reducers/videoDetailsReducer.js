@@ -11,8 +11,10 @@ const videoDetailsReducer = (state = {}, action) =>
                 shortUrlId: action.payload.shortUrlId
             }
             break;
+
             default:
             return state;
+         
         
          }
 

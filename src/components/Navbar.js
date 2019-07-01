@@ -1,6 +1,8 @@
 import React, { Component } from "react"
-
+import {connect} from 'react-redux'
 import "./styles/header.scss"
+import {signOut} from '../actions/userAction'
+import RenderNavbar from './navbar/RenderNavbar'
      
 
 
@@ -9,15 +11,12 @@ import "./styles/header.scss"
  
     constructor(props) {
         super(props);
-        this.state = {
-          authState: 'loading',
-          user: ""
-        };
+
         this.signOut = this.signOut.bind(this);
       }
 
-    
 
+      
     signOut(e) {
         e.preventDefault()
         this.props.signOut()
@@ -26,7 +25,7 @@ import "./styles/header.scss"
  
 
     render() {
-        return(<RenderNavbar data ={this.state} signOut={this.signOut}/> )
+        return(<RenderNavbar status ={this.props.user.status} username={this.props.user.username} signOut={this.signOut}/> )
     }
 }
 

@@ -5,9 +5,9 @@ import { Link } from 'gatsby'
 
 const RenderNavbar = (props) => 
 {    
-
-    const {data, signOut} = props
-    if(data.authState === 'signedIn') 
+   
+    const {status, username,signOut} = props
+    if(status) 
             return (
             <header id="header" className="navbar navbar-default">
                     <div className="container">
@@ -32,7 +32,7 @@ const RenderNavbar = (props) =>
                                     <li><Link to="/about">About</Link></li>
                                     <li><Link to="/app/myvideos">My videos</Link></li>
                                     <li className="last">   
-                                        Yo, {data.user} |                     
+                                        Yo, {username} |                     
                                         <span onClick={signOut}>Logout</span>
                                     </li>
                                 </ul>
