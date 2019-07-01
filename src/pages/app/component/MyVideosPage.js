@@ -134,6 +134,7 @@ class MyVideosPage extends React.Component {
               <button className="addButton-video" onClick={this.handleAdd}>Submit</button>
         </div>
 
+
         <ul className="video-links">
         {
           videos.map((video, i) => 
@@ -155,6 +156,7 @@ class MyVideosPage extends React.Component {
                       Short URL: <Link to={'/app/'+video.shortId}>{video.shortId}</Link>
                       </span>
                     </div>
+
               </div>
             </li>
           )

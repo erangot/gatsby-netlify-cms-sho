@@ -16,7 +16,7 @@ export const getUser = () =>
     : {}
 
 const setUser = user =>
-  window.localStorage.setItem("shocoUser", JSON.stringify(user))
+  localStorage.setItem("shocoUser", JSON.stringify(user))
 
 export const handleLogin = callback => {
   if (isLoggedIn()) {
