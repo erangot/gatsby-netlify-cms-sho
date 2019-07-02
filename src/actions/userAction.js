@@ -10,37 +10,37 @@ export const signIn =  () => async (dispatch) =>
      const response = await  Auth.currentAuthenticatedUser({
           bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
       }).then(user => {
-
+        //returning the value to response async
         return user = { 
           username:user.username,
-          userStatus:true
+          userStatus:true,
+          userUUID:user.attributes.sub
         }
       })
       .catch(err => {
           console.log(err);
           return err = { 
             username:"",
-            userStatus:false
+            userStatus:false,
+            userUUID:""
           }
       });
 
    dispatch({
        type:'SIGN_IN', 
-       payload:{status:response.userStatus, username:response.username}
+       payload:{status:response.userStatus, username:response.username, userUUID:response.userUUID}
    });
 }
 
 
 export const signOut = () => async (dispatch) => {
-  //Logging out
+  
   const response = await Auth.signOut().then(() => {
-
     }).catch(e => {
     console.log(e);
 
   });
-    console.log(response)
-
+ 
    dispatch({
     type:"SIGN_OUT", 
     payload:{status:false,username:""}

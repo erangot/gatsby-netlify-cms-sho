@@ -1,20 +1,25 @@
-const videoDetailsReducer = (state = {}, action) => 
+const videoDetailsReducer = (state = {
+    videoTitle: '',
+    videoDesc: '',
+    createdOn: '',
+    visibility: '',
+    shortUrlId: '',
+}, action) => 
 { 
-
     switch(action.type)
          {
             case 'GET_DETAILS':
-            return state = {...state , 
-                videoTitle: action.payload.videoTitle,
-                videoDesc: action.payload.videoDesc,
-                visibility: action.payload.visibility,
-                shortUrlId: action.payload.shortUrlId
+            return state = {
+                ...state, 
+                videoTitle:action.payload.respObj.videoTitle,
+                videoDesc:action.payload.respObj.videoDesc,
+                createdOn:action.payload.respObj.createdOn,
+                visibility:action.payload.respObj.visibility,
+                shortUrlId:action.payload.respObj.shortUrlId,
             }
             break;
-
             default:
             return state;
-         
         
          }
 
@@ -22,3 +27,4 @@ const videoDetailsReducer = (state = {}, action) =>
 }
 
 export default videoDetailsReducer
+

@@ -32,7 +32,7 @@ const VideoComments = (props) => {
                   </div>
                 )}
                 
-                {props.data.isLoggedIn ?(
+                {props.status ?(
                   <div>
                     <div className="comment-wrap">
                       <textarea id="main-AddComment" className={(props.data.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={props.data.comment} onChange={props.handleValidationComment}></textarea>

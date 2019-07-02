@@ -1,13 +1,15 @@
 import React from 'react'
 import {navigate } from 'gatsby'
 import Layout from '../components/Layout'
-import Amplify from 'aws-amplify'
 import { resolve } from 'url'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import  VideoPlayer from '../components/video/VideoPlayer'
 import  VideoDetails from '../components/video/VideoDetails'
 import  VideoComments from '../components/video/VideoComments'
+import {connect} from 'react-redux'
+import videoDetailsAction from '../actions/videoDetailsAction'
+import videoEngagedAction from '../actions/videoEngagedAction'
 
 
 class videoPage extends React.Component {
@@ -16,8 +18,10 @@ class videoPage extends React.Component {
         super(props);
         this.state = {
             video: props.pageContext.video,
-            user: {},
-            isEngaged: false,
+            username:'',
+            status:false,
+            userUUID:'',
+            isEngaged: 0,
             videoTitle:'',
             videoDesc:'',
             visibility:'',
@@ -32,8 +36,6 @@ class videoPage extends React.Component {
             replyCommentError: null,
             currentReply: '',
             openReply: false,
-            isLoggedIn: false,
-            userUUID:'',
             analytics: {
               fullScreens:1,
               engaged:1,
@@ -57,65 +59,43 @@ class videoPage extends React.Component {
         this.handleReplyButton = this.handleReplyButton.bind(this);    
         this.handleValidationComment = this.handleValidationComment.bind(this);  
         this.handleAddComment = this.handleAddComment.bind(this);  
-        
         this.handleLikeButton = this.handleLikeButton.bind(this);  
-        this.handleBlockButton = this.handleBlockButton.bind(this);  
-
+        this.handleBlockButton = this.handleBlockButton.bind(this);
         this.handleEditButton = this.handleEditButton.bind(this);
         this.handleChangeDesc = this.handleChangeDesc.bind(this);  
         this.handleChangeTitle = this.handleChangeTitle.bind(this);  
         this.handleSaveButton = this.handleSaveButton.bind(this);  
-
         this.handleFocus = this.handleFocus.bind(this);
-
         this.handleRemoveButton = this.handleRemoveButton.bind(this);
-
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
-
         this.handleVideoPlay = this.handleVideoPlay.bind(this);
-
         this.handleSharerAnalytics = this.handleSharerAnalytics.bind(this);
     }
 
-    componentDidMount() {
-
+  async componentWillReceiveProps(newProps)
+   {   
+     console.log(newProps)
+     //after recieving props passing it to the state
+     await this.setState({username:newProps.user.username, status:newProps.user.status, userUUID:newProps.user.userUUID})
+      this.setState({
+             videoTitle: newProps.video.videoTitle,
+             videoDesc: newProps.video.videoDesc,
+             visibility: newProps.video.visibility,
+             shortUrlId: newProps.video.shortUrlId,
+             isEngaged: newProps.engaged.isEngaged,
+        });
+     
+ 
    }
 
 
     async componentWillMount() {
-
-        await Amplify.Auth.currentAuthenticatedUser({
-            bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-          }).then(user => {
-              this.setState({
-                user: user,
-                isLoggedIn: true,
-                userUUID: user.attributes.sub
-              }).catch(error => {
-
-              });
-                
-              // Get engaged user
-                fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.video.shortId}&ownerId=${this.state.user.attributes.sub}`)
-                .then(response => {
-                  if(!response.ok) { throw response }
-                  return response.json();
-                })
-                .then(data => {
-                    // console.log("isEngaged",data[0][0]);
-                    this.setState({
-                        isEngaged: data[0][0].engaged,
-                    })
-                });
-              
-                // console.log('User Logged In - ', user);
-
-                resolve(user);
-                }) .catch(err => {
-
-                    // console.log(err);        
-                });
-         
+      //get video details
+      this.props.videoDetailsAction(this.state.video.shortId)
+      // Get engaged user
+      this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
+      
+        
           // Get comments
          await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.video.shortId}&orderBy=asc`)
          .then(response => {
@@ -130,27 +110,7 @@ class videoPage extends React.Component {
            resolve(data[0]);
          }).catch(err => {
 
-            // console.log(err);        
-        });
- 
-         // Get details
-        await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.state.video.shortId}`)
-         .then(response => {
-          if(!response.ok) { throw response }
-          return response.json();
-         })
-         .then(data1 => {
-          //  console.log(data1[0][0]);
-           this.setState({
-             videoTitle: data1[0][0].title,
-             videoDesc: data1[0][0].description,
-             visibility: data1[0][0].visibility,
-             shortUrlId: data1[0][0].shortUrlId
-           });
-           resolve(data1[0][0]);
-         }).catch(err => {
-
-            // console.log(err);        
+          
         });
 
         // Get analytics
@@ -176,18 +136,17 @@ class videoPage extends React.Component {
   async handleLikeButton(event) {
     event.preventDefault();
 
-
-    if(this.state.isLoggedIn) {
+    if(this.state.status) {
       var toggleEngaged = !this.state.isEngaged;
       var payload = {
         "shortId": `${this.state.video.shortId}`,
         "engaged": toggleEngaged,
-        "ownerId": `${this.state.user.attributes.sub}`
+        "ownerId": `${this.state.userUUID}`
       };
       console.log("toggleEngaged",toggleEngaged)
       this.setState({isEngaged: toggleEngaged});
 
-      console.log(payload);
+
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
       const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
           method: 'POST',
@@ -198,12 +157,11 @@ class videoPage extends React.Component {
           body: JSON.stringify(payload)
         });
 
-
       // Create analytics to be a function
       var payload = {
         "shortId": `${this.state.video.shortId}`,
         "eventType": `${toggleEngaged?'engaged':'disengaged'}`,
-        "ownerId": `${this.state.user.attributes.sub}`
+        "ownerId": `${this.state.userUUID}`
       };
   
      console.log(payload);
@@ -231,21 +189,21 @@ class videoPage extends React.Component {
         payload = {
           "shortId": `${this.state.video.shortId}`,
           "eventType": "shared-facebook",
-          "ownerId": `${this.state.user.attributes.sub}`
+          "ownerId": `${this.state.userUUID}`
         };
         break;
       case "Tweet":
         payload = {
           "shortId": `${this.state.video.shortId}`,
           "eventType": "shared-twitter",
-          "ownerId": `${this.state.user.attributes.sub}`
+          "ownerId": `${this.state.userUUID}`
         };
         break;
       case "Email":
         payload = {
           "shortId": `${this.state.video.shortId}`,
           "eventType": "shared-email",
-          "ownerId": `${this.state.user.attributes.sub}`
+          "ownerId": `${this.state.userUUID}`
         };
       break;
     
@@ -267,9 +225,9 @@ class videoPage extends React.Component {
 
   handleBlockButton(event) {
     event.preventDefault();
-    
-    this.setState({isBlocked: true});
 
+    this.setState({isBlocked: true});
+    
     fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=blockShortUrl&shortUrlId=${this.state.shortUrlId}`)
     .then(response => response.json())
     .then(data => {
@@ -286,9 +244,9 @@ class videoPage extends React.Component {
     var payload = {
       "shortId": `${this.state.video.shortId}`,
       "parent": commentParent || null,
-      "username":  `${this.state.user.username}`,
+      "username":  `${this.state.username}`,
       "comment": event.target.className === "main" ? `${this.state.comment}`: `${this.state.commentReply}`,
-      "uid": `${this.state.user.attributes.sub}`
+      "uid": `${this.state.userUUID}`
     };
 
    console.log(payload);
@@ -332,7 +290,7 @@ class videoPage extends React.Component {
       var payload = {
         "shortId": `${this.state.video.shortId}`,
         "eventType": `added-comment`,
-        "ownerId": `${this.state.user.attributes.sub}`
+        "ownerId": `${this.state.userUUID}`
       };
   
      console.log(payload);
@@ -449,7 +407,7 @@ class videoPage extends React.Component {
       "shortId": `${this.state.video.shortId}`,
       "vidTitle": this.state.videoTitle,
       "vidDesc": this.state.videoDesc,
-      "ownerId": `${this.state.user.attributes.sub}`
+      "ownerId": `${this.state.userUUID}`
     };
     console.log(payload);
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -503,7 +461,7 @@ class videoPage extends React.Component {
     var payload = {
       "shortId": `${this.state.video.shortId}`,
       "visibility": event.target.value,
-      "ownerId": `${this.state.user.attributes.sub}`
+      "ownerId": `${this.state.userUUID}`
     };
 
     console.log(payload);
@@ -564,8 +522,8 @@ class videoPage extends React.Component {
              <div className="videoPage">
 
              <VideoPlayer playBtn={playBtn} video ={this.state.video} handleVideoPlay = {this.handleVideoPlay}/>
-             <VideoDetails data={this.state} handleSharerAnalytics={this.handleSharerAnalytics} handleLikeButton={this.handleLikeButton} handleBlockButton ={this.handleBlockButton} />
-             <VideoComments data={this.state} 
+             <VideoDetails status = {this.props.user.status} data={this.state} handleSharerAnalytics={this.handleSharerAnalytics} handleLikeButton={this.handleLikeButton} handleBlockButton ={this.handleBlockButton} />
+             <VideoComments status = {this.props.user.status} data={this.state} 
              commentLength={commentLength} 
              objectComments={{objectComments}}
              handleOrder={this.handleOrder}  
@@ -578,4 +536,16 @@ class videoPage extends React.Component {
         )
     }
 }
-export default videoPage
+
+//setting up the props to access to this component and calling the signIn action
+const mapStateToProps = (state) => 
+{ 
+  console.log(state)
+  return {
+    user:state.userReducer,
+    video:state.videoDetailsReducer,
+    engaged:state.videoEngagedReducer
+  }
+}
+
+export default connect(mapStateToProps,{videoDetailsAction,videoEngagedAction})(videoPage)
