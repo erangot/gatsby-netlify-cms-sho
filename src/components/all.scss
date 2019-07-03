@@ -23,6 +23,9 @@ $screen-lg-desktop:          1200px;
 $videoscribe: #5dbfd9;
 $sparkol: #ed8d1a;
 $storypix: #01ABB3;
+$tawe: #ed8d1a;
+$funscribe: #5CBFD9;
+
 
 
 @mixin transform($property) {
@@ -2370,6 +2373,7 @@ div.videoPage div#comments.videos {
 
   }
   
+
   &.sparkol{
     color: $sparkol;
     
@@ -2402,6 +2406,90 @@ div.videoPage div#comments.videos {
     .vjs-play-progress:before,
     .vjs-seek-to-live-control .vjs-icon-placeholder:before {
       border-color: $storypix;
+    }
+
+    .vjs-big-play-button{
+      background: url(https://sho.co/assets/images/storypix-skin/player-logo-play@2x.png) center no-repeat;
+      background-size: 80px 80px;
+    }
+
+    .vjs-play-control{
+      width: 6em;
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+
+      &:before{
+        content: '';
+        background: url(https://sho.co/assets/images/storypix-skin/player-icon-play-1@2x.png) center no-repeat;
+        background-size: 19px 24px;
+        font-family: VideoJS;
+        font-size: 1.8em;
+        line-height: 2.25;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        text-shadow: none;
+      }
+    }
+    
+    .vjs-playing{
+      width: 6em;
+      cursor: pointer;
+
+      &:before{
+        background: url(https://sho.co/assets/images/storypix-skin/player-icon-pause-1@2x.png) center no-repeat;
+        background-size: 19px 24px;
+      }
+    }
+
+  }
+
+  &.tawe{
+    color: $tawe;
+    
+    .vjs-progress-control .vjs-progress-holder .vjs-play-progress {
+      background-color: $tawe;
+    } 
+
+    .vjs-slider-handle:before{
+      border: 2px solid $tawe;
+    }
+
+    .vjs-play-progress:before,
+    .vjs-seek-to-live-control .vjs-icon-placeholder:before {
+      border-color: $tawe;
+    }
+
+    .vjs-big-play-button{
+      background: url(https://sho.co/assets/images/tawe-skin/player-logo-play@2x.png) center no-repeat;
+      background-size: 80px 80px;
+    }
+
+  }
+
+  &.funscribe{
+    color: $funscribe;
+    
+    .vjs-progress-control .vjs-progress-holder .vjs-play-progress {
+      background-color: $funscribe;
+    } 
+
+    .vjs-slider-handle:before{
+      border: 2px solid $funscribe;
+    }
+
+    .vjs-play-progress:before,
+    .vjs-seek-to-live-control .vjs-icon-placeholder:before {
+      border-color: $funscribe;
+    }
+
+    .vjs-big-play-button{
+      background: url(https://sho.co/assets/images/funscribe-skin/player-logo-play@2x.png) center no-repeat;
+      background-size: 80px 80px;
     }
 
   }

@@ -47,6 +47,7 @@ class videoPage extends React.Component {
             },
         }
 
+        console.log(this.state.video)
         if(process.env.NODE_ENV == 'development') 
           this.state.urlLocation = `http://localhost:8000/${this.state.video.shortId}`
         else 
@@ -543,9 +544,6 @@ class videoPage extends React.Component {
         ]
       },
     });
-
-
-
   }
 
 
@@ -562,7 +560,7 @@ class videoPage extends React.Component {
                 <div className="videoPage">
                     <div className="intro">
                         <div className="container text-center">
-                            <div className="video-skin videoscribe" >
+                            <div className={"video-skin "+this.state.video.applicationDisplayName.toLowerCase()} >
                               <video className="video-js vjs-tech vjs-big-play-centered"
                                 id="vid"
                                 width="640"
