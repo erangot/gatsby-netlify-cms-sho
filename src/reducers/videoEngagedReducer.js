@@ -5,12 +5,12 @@ const videoEngagedReducer = (state = {
       switch(action.type)
          {
             case 'GET_ENGAGED':
-            return state = {
+             state = {
                 ...state, isEngaged:action.payload.isEngaged
             }
             break;
             default:
-            return state;
+            state={};
         
          }
 

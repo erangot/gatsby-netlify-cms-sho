@@ -25,7 +25,6 @@ export const signIn =  () => async (dispatch) =>
             userUUID:""
           }
       });
-
    dispatch({
        type:'SIGN_IN', 
        payload:{status:response.userStatus, username:response.username, userUUID:response.userUUID}

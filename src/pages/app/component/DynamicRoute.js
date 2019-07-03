@@ -7,7 +7,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 import VideoComments from '../../../components/video/VideoComments'
-
+import VideoPlayer from '../../../components/video/VideoPlayer'
 import {connect} from 'react-redux'
 import videoDetailsAction from '../../../actions/videoDetailsAction'
 import videoEngagedAction from '../../../actions/videoEngagedAction'
@@ -136,7 +136,6 @@ class DynamicRoute extends React.Component {
           else 
             videoPageData.thumbnail = video.path;
         });
-    
         console.log(videoPageData);
     
         this.setState({
@@ -419,33 +418,19 @@ async handleSaveButton(event) {
     const objectComments = this.state.comments.filter(comment => comment.id)
     const commentLength = objectComments.length;
     const video = this.state.video;
+    const playStatus = this.state.VideoPlaying;
+        
+    let playBtn = "";
+    if(!playStatus){
+      playBtn = <div className="vjs-big-play-button" role="button" onClick={this.handleVideoPlay}><span aria-hidden="true"></span></div>
+    }else{
+      playBtn = "";
+    }
 
       return (
         <Layout>
           <div className="videoPage">
-              <div className="intro">
-                  {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
-                  <div className="container text-center">
-
-                  {this.state.isRendered ? (
-                    <video width="640" height="480" controls>
-                        <source src={video.videopath || ''} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div>
-                      <h1>Publishing...</h1>
-                      <p>{this.state.message}</p>
-                    </div>
-                  )}
-                      
-                  </div>
-                  <span className="icwrap2">
-                      <span className="ic3"></span>
-                      <span className="ic2"></span>
-                      <span className="ic1"></span>
-                  </span>
-              </div>
+          <VideoPlayer playBtn={playBtn} video ={this.state.video} handleVideoPlay = {this.handleVideoPlay}/>
 
               <div className="container1 dynamic-videopage">
                 <div className="row">

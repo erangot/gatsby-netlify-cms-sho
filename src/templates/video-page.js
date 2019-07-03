@@ -1,7 +1,6 @@
 import React from 'react'
 import {navigate } from 'gatsby'
 import Layout from '../components/Layout'
-import { resolve } from 'url'
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import  VideoPlayer from '../components/video/VideoPlayer'
@@ -101,11 +100,7 @@ class videoPage extends React.Component {
       analytics: this.props.analytics[0][0]
     });
      
-
-  
-  
- 
-    }
+  }
 
     // handle event on likes
   async handleLikeButton(event) {
@@ -113,7 +108,7 @@ class videoPage extends React.Component {
 
     if(this.state.status) {
       var toggleEngaged = !this.state.isEngaged;
-      var payload = {
+      var payload2 = {
         "shortId": `${this.state.video.shortId}`,
         "engaged": toggleEngaged,
         "ownerId": `${this.state.userUUID}`
@@ -123,13 +118,13 @@ class videoPage extends React.Component {
 
 
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
-      const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
+      await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changedEngagedForShortIdUser', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload2)
         });
 
       // Create analytics to be a function
@@ -141,7 +136,7 @@ class videoPage extends React.Component {
   
      console.log(payload);
      const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
-     const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+     await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -187,7 +182,7 @@ class videoPage extends React.Component {
     }
     console.log(payload);
     const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
-    const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+    await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
        method: 'POST',
        headers: {
          'Accept': 'application/json',
@@ -226,7 +221,7 @@ class videoPage extends React.Component {
 
    console.log(payload);
    const proxyurl = "https://cors-anywhere.herokuapp.com/";
-   const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=addComment', {
+   await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=addComment', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -262,21 +257,21 @@ class videoPage extends React.Component {
       })
     
       // Create analytics to be a function
-      var payload = {
+      var payload1 = {
         "shortId": `${this.state.video.shortId}`,
         "eventType": `added-comment`,
         "ownerId": `${this.state.userUUID}`
       };
   
-     console.log(payload);
+     console.log(payload1);
      const proxyurl1 = "https://cors-anywhere.herokuapp.com/";
-     const rawResponse1 = await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
+     await fetch(proxyurl1+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=createAnalyticEntry', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload1)
       });
 
  }
@@ -289,7 +284,7 @@ class videoPage extends React.Component {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({mainCommentError: null,
         mainAddCommentDisabled: true});
         break;
@@ -378,21 +373,21 @@ class videoPage extends React.Component {
   async handleSaveButton(event) {
     event.preventDefault();
 
-    var payload = {
+    var payload2 = {
       "shortId": `${this.state.video.shortId}`,
       "vidTitle": this.state.videoTitle,
       "vidDesc": this.state.videoDesc,
       "ownerId": `${this.state.userUUID}`
     };
-    console.log(payload);
+    console.log(payload2);
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=saveDetailsForShortId', {
+    await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=saveDetailsForShortId', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload2)
       });
  
     
@@ -441,7 +436,7 @@ class videoPage extends React.Component {
 
     console.log(payload);
     const proxyurl = "https://cors-anywhere.herokuapp.com/";
-    const rawResponse = await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changeVisibility', {
+  await fetch(proxyurl+'https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=changeVisibility', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
