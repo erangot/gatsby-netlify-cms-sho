@@ -4,11 +4,7 @@
 
 const VideoDetails = (props) =>
  { 
-            
-
        const {video} = props.data
-     
-
          return( 
               <div className="container1 dynamic-videopage">
               <div className="row">

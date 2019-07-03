@@ -7,9 +7,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import  VideoPlayer from '../components/video/VideoPlayer'
 import  VideoDetails from '../components/video/VideoDetails'
 import  VideoComments from '../components/video/VideoComments'
+
 import {connect} from 'react-redux'
 import videoDetailsAction from '../actions/videoDetailsAction'
 import videoEngagedAction from '../actions/videoEngagedAction'
+import videoCommentsAction from '../actions/videoCommentsAction'
+import videoAnalyticsAction from '../actions/videoCommentsAction'
 
 
 class videoPage extends React.Component {
@@ -70,65 +73,37 @@ class videoPage extends React.Component {
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
         this.handleVideoPlay = this.handleVideoPlay.bind(this);
         this.handleSharerAnalytics = this.handleSharerAnalytics.bind(this);
+
+
+    
     }
 
-  async componentWillReceiveProps(newProps)
-   {   
-     console.log(newProps)
-     //after recieving props passing it to the state
-     await this.setState({username:newProps.user.username, status:newProps.user.status, userUUID:newProps.user.userUUID})
-      this.setState({
-             videoTitle: newProps.video.videoTitle,
-             videoDesc: newProps.video.videoDesc,
-             visibility: newProps.video.visibility,
-             shortUrlId: newProps.video.shortUrlId,
-             isEngaged: newProps.engaged.isEngaged,
-        });
-     
- 
-   }
+
 
 
     async componentWillMount() {
+      console.log(this.props)
+      //setting userinfo
+      await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})
       //get video details
-      this.props.videoDetailsAction(this.state.video.shortId)
-      // Get engaged user
-      this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
-      
-        
-          // Get comments
-         await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.video.shortId}&orderBy=asc`)
-         .then(response => {
-           
-          if(!response.ok) { throw response }
-          return response.json();
+      await this.props.videoDetailsAction(this.state.video.shortId)
+     // Get engaged user
+      await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
+      await this.props.videoAnalyticsAction(this.state.video.shortId)
+      await this.props.videoCommentsAction(this.state.video.shortId)
+      this.setState({
+      videoTitle: this.props.video.videoTitle,
+      videoDesc: this.props.video.videoDesc,
+      visibility: this.props.video.visibility,
+      shortUrlId: this.props.video.shortUrlId,
+      isEngaged: this.props.engaged.isEngaged,
+      comments:this.props.comments[0],
+      analytics: this.props.analytics[0][0]
+    });
+     
 
-         })
-         .then(data => {
-          //  console.log(data);
-           this.setState({comments: data[0]})
-           resolve(data[0]);
-         }).catch(err => {
-
-          
-        });
-
-        // Get analytics
-        await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getVideoStatistics&shortId=${this.state.video.shortId}`)
-         .then(response => {
-          if(!response.ok) { throw response }
-          return response.json();
-         })
-         .then(data2 => {
-           console.log(data2[0][0]);
-           this.setState({
-             analytics: data2[0][0],
-           });
-           resolve(data2[0][0]);
-         }).catch(err => {
-
-            // console.log(err);        
-        });
+  
+  
  
     }
 
@@ -505,11 +480,11 @@ class videoPage extends React.Component {
 
   
     render() {
-      
+     
         const objectComments = this.state.comments.filter(comment => comment.id)
         const commentLength = objectComments.length;
         const playStatus = this.state.VideoPlaying;
-
+        
         let playBtn = "";
         if(!playStatus){
           playBtn = <div className="vjs-big-play-button" role="button" onClick={this.handleVideoPlay}><span aria-hidden="true"></span></div>
@@ -537,15 +512,17 @@ class videoPage extends React.Component {
     }
 }
 
-//setting up the props to access to this component and calling the signIn action
+
 const mapStateToProps = (state) => 
 { 
   console.log(state)
   return {
     user:state.userReducer,
     video:state.videoDetailsReducer,
-    engaged:state.videoEngagedReducer
+    engaged:state.videoEngagedReducer,
+    comments:state.videoCommentsReducer,
+    analytics:state.videoAnalyticsReducer,
   }
 }
 
-export default connect(mapStateToProps,{videoDetailsAction,videoEngagedAction})(videoPage)
+export default connect(mapStateToProps,{videoDetailsAction,videoEngagedAction,videoCommentsAction,videoAnalyticsAction})(videoPage)
