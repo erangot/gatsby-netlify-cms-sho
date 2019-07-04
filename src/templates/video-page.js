@@ -81,16 +81,16 @@ class videoPage extends React.Component {
 
 
     async componentWillMount() {
-      console.log(this.props)
+   
       //setting userinfo
       await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})
       //get video details
       await this.props.videoDetailsAction(this.state.video.shortId)
      // Get engaged user
-      await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
+      await new Promise(this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID))
       await this.props.videoAnalyticsAction(this.state.video.shortId)
       await this.props.videoCommentsAction(this.state.video.shortId)
-      await this.setState({
+       this.setState({
       videoTitle: this.props.video.videoTitle,
       videoDesc: this.props.video.videoDesc,
       visibility: this.props.video.visibility,
@@ -99,7 +99,7 @@ class videoPage extends React.Component {
       comments:this.props.comments[0],
       analytics: this.props.analytics[0][0]
     });
-     
+ 
   }
 
     // handle event on likes
@@ -515,8 +515,8 @@ const mapStateToProps = (state) =>
     user:state.userReducer,
     video:state.videoDetailsReducer,
     engaged:state.videoEngagedReducer,
-    comments:state.videoCommentsReducer,
-    analytics:state.videoAnalyticsReducer,
+    comments:state.videoCommentsReducer.comments,
+    analytics:state.videoAnalyticsReducer.analytics,
   }
 }
 

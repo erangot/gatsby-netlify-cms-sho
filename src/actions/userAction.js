@@ -11,7 +11,7 @@ export const signIn =  () => async (dispatch) =>
           bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
       }).then(user => {
         //returning the value to response async
-        return user = { 
+      return user = { 
           username:user.username,
           userStatus:true,
           userUUID:user.attributes.sub

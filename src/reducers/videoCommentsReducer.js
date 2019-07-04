@@ -1,8 +1,10 @@
-const videoCommentsReducer = (state = {}  , action) => {
-    switch(action.type)
+const videoCommentsReducer = (state = {comments:''}  , action) => {
+
+   switch(action.type)
       { 
+         
          case "GET_COMMENTS":
-               state = action.payload.comments
+                state = {...state, comments:action.payload.comments}
           break;
           default:
              return state;

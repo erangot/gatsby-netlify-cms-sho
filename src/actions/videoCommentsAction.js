@@ -18,7 +18,7 @@ const videoCommentsAction = (shortId) => async (dispatch) => {
    return(dispatch(
        {
            type:'GET_COMMENTS',
-           payload:{comments:respObj}
+           payload:{comments:respObj.comments}
        }
    ))
       }

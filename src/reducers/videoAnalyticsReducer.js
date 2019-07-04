@@ -1,10 +1,10 @@
-const videoAnalyticsReducer = (state = {}  , action) => {
+const videoAnalyticsReducer = (state = {analytics:''}  , action) => {
 
   console.log(action)
     switch(action.type)
       { 
          case "GET_ANALYTICS":
-               state = action.payload.analytics
+           state = {...state, analytics:action.payload.analytics}
           break;
           default:
           return state;
