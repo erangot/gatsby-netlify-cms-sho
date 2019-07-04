@@ -10,7 +10,7 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
          })
          .then(data1 => {
              console.log(data1)
-            return { 
+          return { 
                 videoTitle:data1[0][0].title, 
                 videoDesc:data1[0][0].description, 
                 createdOn:data1[0][0].createdOn, 
@@ -18,7 +18,7 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
                 shortUrlId: data1[0][0].shortUrlId
             }
          }).catch(err => {
-              return err
+            Promise.resolve(err)
         });
         
          console.log(respObj)
@@ -31,7 +31,7 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
     }
     catch(error)
     {
-        console.log(erorr)
+        console.log(error)
     }
 }
 export default videoDetailsAction

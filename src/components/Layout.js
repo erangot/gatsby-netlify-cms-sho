@@ -14,8 +14,8 @@ class TemplateWrapper extends React.Component{
        super();
      }
 
-     componentWillMount(){
-      this.props.signIn()
+    async componentWillMount(){
+      await this.props.signIn()
      } 
   
     render()

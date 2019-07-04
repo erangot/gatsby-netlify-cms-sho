@@ -11,7 +11,7 @@ import {connect} from 'react-redux'
 import videoDetailsAction from '../actions/videoDetailsAction'
 import videoEngagedAction from '../actions/videoEngagedAction'
 import videoCommentsAction from '../actions/videoCommentsAction'
-import videoAnalyticsAction from '../actions/videoCommentsAction'
+import videoAnalyticsAction from '../actions/videoAnalyticsAction'
 
 
 class videoPage extends React.Component {
@@ -90,7 +90,7 @@ class videoPage extends React.Component {
       await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
       await this.props.videoAnalyticsAction(this.state.video.shortId)
       await this.props.videoCommentsAction(this.state.video.shortId)
-      this.setState({
+      await this.setState({
       videoTitle: this.props.video.videoTitle,
       videoDesc: this.props.video.videoDesc,
       visibility: this.props.video.visibility,
