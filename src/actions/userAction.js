@@ -34,7 +34,7 @@ export const signIn =  () => async (dispatch) =>
 
 export const signOut = () => async (dispatch) => {
   
-  const response = await Auth.signOut().then(() => {
+  await Auth.signOut().then(() => {
     }).catch(e => {
     console.log(e);
 

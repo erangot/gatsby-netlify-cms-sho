@@ -1,12 +1,12 @@
 const videoDetailsAction = (shortId) => async (dispatch) => {
 
-        
-        const respObj =  await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${shortId}`)
+         const respObj =  await fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${shortId}`)
          .then(response => {
           if(!response.ok) { throw response }
           return response.json();
          })
          .then(data1 => {
+             console.log(data1)
             return { 
                 videoTitle:data1[0][0].title, 
                 videoDesc:data1[0][0].description, 
@@ -15,12 +15,13 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
                 shortUrlId: data1[0][0].shortUrlId
             }
          }).catch(err => {
-                 
+              return err
         });
+        
          console.log(respObj)
         return(dispatch(
             {
-                type:'GET_DETAILS',
+                type:'GET_DETAILS', 
                 payload:{respObj}
             }
         ))

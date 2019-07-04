@@ -9,7 +9,7 @@ const videoDetailsReducer = (state = {
     switch(action.type)
          {
             case 'GET_DETAILS':
-            return state = {
+             state = {
                 ...state, 
                 videoTitle:action.payload.respObj.videoTitle,
                 videoDesc:action.payload.respObj.videoDesc,
