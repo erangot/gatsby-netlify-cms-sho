@@ -18,7 +18,7 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
                 shortUrlId: data1[0][0].shortUrlId
             }
          }).catch(err => {
-            Promise.resolve(err)
+            return err
         });
         
          console.log(respObj)

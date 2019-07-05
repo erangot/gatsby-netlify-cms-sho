@@ -9,7 +9,7 @@ const videoEngagedAction = (shortId,userUUID) => async (dispatch) => {
     .then(data => {
         return data[0][0]
     }).catch(err => {
-        Promise.resolve(err)
+        return err
     });
    
     return(dispatch(

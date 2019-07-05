@@ -87,9 +87,10 @@ class videoPage extends React.Component {
       //get video details
       await this.props.videoDetailsAction(this.state.video.shortId)
      // Get engaged user
-      await new Promise(this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID))
+      await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
       await this.props.videoAnalyticsAction(this.state.video.shortId)
       await this.props.videoCommentsAction(this.state.video.shortId)
+ 
        this.setState({
       videoTitle: this.props.video.videoTitle,
       videoDesc: this.props.video.videoDesc,

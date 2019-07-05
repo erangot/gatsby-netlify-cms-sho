@@ -10,7 +10,7 @@ const videoAnalyticsAction = (shortId) => async (dispatch) => {
     .then(data2 => {
         return data2
     }).catch(err => {   
-      Promise.resolve(err)
+      return err
     });
        
     return(dispatch(
