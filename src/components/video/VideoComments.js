@@ -67,7 +67,7 @@ const VideoComments = (props) => {
                               <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                               
                               
-                              {props.data.isLoggedIn ?( 
+                              {props.status ?( 
                                 <span>|
                               <a className="reply" onClick={(evt) => props.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                               ):('')}
@@ -129,7 +129,7 @@ const VideoComments = (props) => {
                           <p className="comment-info">
                             <span className="comment-date"><TimeAgo date={comment.date} /> </span>
                             {/* Only when logged In */}
-                            {props.data.isLoggedIn ?( 
+                            {props.status ?( 
                              <span>|
                              <a className="reply" onClick={(evt) => props.handleReplyButton(comment.commentId, evt)}> Reply</a></span>                                     
                              ):('')}

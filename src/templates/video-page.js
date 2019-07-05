@@ -77,29 +77,37 @@ class videoPage extends React.Component {
     
     }
 
-
+    componentWillReceiveProps(newProps)
+    {
+       this.setState({
+        videoTitle: newProps.video.videoTitle,
+        videoDesc: newProps.video.videoDesc,
+        visibility: newProps.video.visibility,
+        shortUrlId: newProps.video.shortUrlId,
+        isEngaged: newProps.engaged.isEngaged,
+        comments:newProps.comments,
+        analytics: newProps.analytics[0][0]
+      });
+    }
 
 
     async componentWillMount() {
-   
+    try{
       //setting userinfo
       await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})
       //get video details
       await this.props.videoDetailsAction(this.state.video.shortId)
+      await this.props.videoCommentsAction(this.state.video.shortId)
      // Get engaged user
       await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
       await this.props.videoAnalyticsAction(this.state.video.shortId)
-      await this.props.videoCommentsAction(this.state.video.shortId)
- 
-       this.setState({
-      videoTitle: this.props.video.videoTitle,
-      videoDesc: this.props.video.videoDesc,
-      visibility: this.props.video.visibility,
-      shortUrlId: this.props.video.shortUrlId,
-      isEngaged: this.props.engaged.isEngaged,
-      comments:this.props.comments[0],
-      analytics: this.props.analytics[0][0]
-    });
+     
+  }
+  catch(error)
+  {
+      console.log(error)
+  }
+
  
   }
 
@@ -516,7 +524,7 @@ const mapStateToProps = (state) =>
     user:state.userReducer,
     video:state.videoDetailsReducer,
     engaged:state.videoEngagedReducer,
-    comments:state.videoCommentsReducer.comments,
+    comments:state.videoCommentsReducer.comments[0],
     analytics:state.videoAnalyticsReducer.analytics,
   }
 }

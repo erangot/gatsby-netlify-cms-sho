@@ -10,7 +10,6 @@ const videoCommentsAction = (shortId) => async (dispatch) => {
     })
     .then(data => {
       //returning comments of the specific video
-      console.log(data)
       return data
     }).catch(err => {
 
