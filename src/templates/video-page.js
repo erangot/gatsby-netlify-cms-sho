@@ -77,19 +77,7 @@ class videoPage extends React.Component {
     
     }
 
-    componentWillReceiveProps(newProps)
-    {
-       this.setState({
-        videoTitle: newProps.video.videoTitle,
-        videoDesc: newProps.video.videoDesc,
-        visibility: newProps.video.visibility,
-        shortUrlId: newProps.video.shortUrlId,
-        isEngaged: newProps.engaged.isEngaged,
-        comments:newProps.comments,
-        analytics: newProps.analytics[0][0]
-      });
-    }
-
+  
 
     async componentWillMount() {
     try{
@@ -101,6 +89,17 @@ class videoPage extends React.Component {
      // Get engaged user
       await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
       await this.props.videoAnalyticsAction(this.state.video.shortId)
+
+      
+      this.setState({
+        videoTitle: this.props.video.videoTitle,
+        videoDesc: this.props.video.videoDesc,
+        visibility:this.props.video.visibility,
+        shortUrlId: this.props.video.shortUrlId,
+        isEngaged: this.props.engaged.isEngaged,
+        comments:this.props.comments,
+        analytics:this.props.analytics[0][0]
+      });
      
   }
   catch(error)
