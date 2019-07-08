@@ -4,11 +4,7 @@
 
 const VideoDetails = (props) =>
  { 
-            
-
        const {video} = props.data
-     
-
          return( 
               <div className="container1 dynamic-videopage">
               <div className="row">
@@ -77,8 +73,8 @@ const VideoDetails = (props) =>
                     </ul>
                     <ul className="action-links">
                         <li><button className="eng-link active" onClick={props.handleLikeButton}>
-                         {props.data.isLoggedIn ? (''):(<span className="login-required-overlay"><span> Please login to rate </span></span>)}
-                          Like<span className={"icon " + (props.data.isEngaged ? 'active' : '') }></span></button></li>
+                         {props.status ? (''):(<span className="login-required-overlay"><span> Please login to rate </span></span>)}
+                          Like<span className={"icon " + (props.data.isEngaged === 1 ? 'active' : '') }></span></button></li>
                         <li className="last"><button className="report-link" onClick={props.handleBlockButton}>Report<span className={"icon " + (props.data.isBlocked ? 'active' : '') }></span></button></li>
                     </ul>
                 </div>

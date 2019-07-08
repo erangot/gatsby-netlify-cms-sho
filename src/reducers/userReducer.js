@@ -1,17 +1,18 @@
 const userReducer = (state = {
    status:false,
-   username:""
+   username:"",
+   userUUID:""
 }, action) => {
    switch(action.type)
      {
         case "SIGN_IN":
               state = { 
-               ...state, status:action.payload.status, username:action.payload.username
+               ...state, status:action.payload.status, username:action.payload.username, userUUID:action.payload.userUUID
               };
          break;
          case "SIGN_OUT":
                state = { 
-               ...state, status:action.payload.status, username:""
+               ...state, status:action.payload.status, username:"", userUUID:""
                };
           break;
          default:

@@ -14,8 +14,8 @@ class TemplateWrapper extends React.Component{
        super();
      }
 
-     componentWillMount(){
-      this.props.signIn()
+    async componentWillMount(){
+      await this.props.signIn()
      } 
   
     render()
@@ -48,15 +48,4 @@ class TemplateWrapper extends React.Component{
     }
   
 }
-
-//setting up the props to access to this component and calling the signIn action
-const mapStateToProps = (state) => 
-{ 
-  console.log(state)
-
-  return {
-    user:state.userReducer
-  }
-}
-
-export default connect(mapStateToProps, {signIn})(TemplateWrapper);
+export default connect(null, {signIn})(TemplateWrapper);

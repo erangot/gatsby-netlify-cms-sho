@@ -2,17 +2,19 @@ import React from "react"
 import { Link,  } from 'gatsby';
 import Layout from '../../../components/Layout';
 import TimeAgo from 'react-timeago'
-import Amplify, { Auth } from 'aws-amplify';
-import aws_exports from '../../../aws-exports'; // if you are using Amplify CLI
-
-
 import { navigate } from "@reach/router" // comes with gatsby v2
-
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
+import VideoComments from '../../../components/video/VideoComments'
+import VideoPlayer from '../../../components/video/VideoPlayer'
+import {connect} from 'react-redux'
+import videoDetailsAction from '../../../actions/videoDetailsAction'
+import videoEngagedAction from '../../../actions/videoEngagedAction'
+import videoCommentsAction from '../../../actions//videoCommentsAction'
+import videoAnalyticsAction from '../../../actions/videoAnalyticsAction'
 
-const windowGlobal = typeof window !== 'undefined' && window
+
 
 class DynamicRoute extends React.Component {
   
@@ -40,11 +42,12 @@ class DynamicRoute extends React.Component {
       shortUrlId: '',
       isEngaged: false,
       isBlocked: false,
-      shortId: ''
+      shortId: '',
+    
     }
 
 
-    if(process.env.NODE_ENV == 'development') 
+    if(process.env.NODE_ENV === 'development') 
       this.state.shortId = String(props["uri"]).split('/')[2]
     else 
       this.state.shortId = String(props["*"]).split('/')[1]
@@ -62,19 +65,41 @@ class DynamicRoute extends React.Component {
     this.handleLikeButton = this.handleLikeButton.bind(this);  
     this.handleBlockButton = this.handleBlockButton.bind(this);  
     this.handleRemoveButton = this.handleRemoveButton.bind(this);
+
+
+
   }
 
   async componentWillMount() {
+    try{
+      //setting userinfo
+      await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})
+      //get video details
+      await this.props.videoDetailsAction(this.state.video.shortId)
+      await this.props.videoCommentsAction(this.state.video.shortId)
+     // Get engaged user
+      await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
+      await this.props.videoAnalyticsAction(this.state.video.shortId)
 
-    Amplify.configure(aws_exports);
-    // after checking the video is isRendered
-    await Amplify.Auth.currentAuthenticatedUser({
-      bypassCache: false  // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    }).then(user => {
-        this.setState({user: user});
-        // insert getting comments
+      
+      this.setState({
+        videoTitle: this.props.video.videoTitle,
+        videoDesc: this.props.video.videoDesc,
+        visibility:this.props.video.visibility,
+        shortUrlId: this.props.video.shortUrlId,
+        isEngaged: this.props.engaged.isEngaged,
+        comments:this.props.comments,
+        analytics:this.props.analytics[0][0]
+      });
+     
+  }
+  catch(error)
+  {
 
+  }
 
+ 
+  
     // Show video page when rendered but not yet built
     // Show video when it is being rendered
      fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.state.shortId}`)
@@ -122,7 +147,6 @@ class DynamicRoute extends React.Component {
           else 
             videoPageData.thumbnail = video.path;
         });
-    
         console.log(videoPageData);
     
         this.setState({
@@ -130,56 +154,9 @@ class DynamicRoute extends React.Component {
           video: videoPageData
         });
 
-        // Get comments
-        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getComments&shortUrl=${this.state.shortId}&orderBy=asc`)
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          this.setState({comments: data[0]})
-        });
-
-        // Get details
-         fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getDetailsFromShortId&shortId=${this.state.shortId}`)
-        .then(response => response.json())
-        .then(data1 => {
-          console.log(data1[0][0]);
-          this.setState({
-            videoTitle: data1[0][0].title,
-            videoDesc: data1[0][0].description,
-            visibility: data1[0][0].visibility,
-            shortUrlId: data1[0][0].shortUrlId
-          })
-        });
-
-        // Get engaged user
-        fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=getEngagedForShortIdUser&shortId=${this.state.shortId}&ownerId=${this.state.user.attributes.sub}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log("isEngaged",data[0][0]);
-          this.setState({
-            isEngaged: data[0][0].engaged,
-          })
-        });
-
-      // } 
-      // else {
-      //   this.setState({
-      //     isRendered: false,
-      //     message: 'Hang in there. Your video will be ready soon. '
-      //   });
-      // }
-
     })
 
-    })
-    .catch(err => {
-        console.log(err);        
-    });
 
-    console.log(this.props);
-
-    // Redirect to site static page is ready
-      // fetch
   }
 
 
@@ -202,8 +179,8 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
     
+
     this.setState({isEditing:false});
   }
 
@@ -306,7 +283,7 @@ async handleSaveButton(event) {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({mainCommentError: null,
         mainAddCommentDisabled: true});
         break;
@@ -331,7 +308,7 @@ async handleSaveButton(event) {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({replyCommentError: null,
         replyAddCommentDisabled: true});
         break;
@@ -378,7 +355,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+
     
   }
 
@@ -442,7 +419,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+      
     this.setState({visibility: payload.visibility});
   }
 
@@ -452,33 +429,19 @@ async handleSaveButton(event) {
     const objectComments = this.state.comments.filter(comment => comment.id)
     const commentLength = objectComments.length;
     const video = this.state.video;
+    const playStatus = this.state.VideoPlaying;
+        
+    let playBtn = "";
+    if(!playStatus){
+      playBtn = <div className="vjs-big-play-button" role="button" onClick={this.handleVideoPlay}><span aria-hidden="true"></span></div>
+    }else{
+      playBtn = "";
+    }
 
       return (
         <Layout>
           <div className="videoPage">
-              <div className="intro">
-                  {/* <img src={video.thumbnail || ''} alt={video.shortId || ''} /> */}
-                  <div className="container text-center">
-
-                  {this.state.isRendered ? (
-                    <video width="640" height="480" controls>
-                        <source src={video.videopath || ''} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                    </video>
-                  ) : (
-                    <div>
-                      <h1>Publishing...</h1>
-                      <p>{this.state.message}</p>
-                    </div>
-                  )}
-                      
-                  </div>
-                  <span className="icwrap2">
-                      <span className="ic3"></span>
-                      <span className="ic2"></span>
-                      <span className="ic1"></span>
-                  </span>
-              </div>
+          <VideoPlayer playBtn={playBtn} video ={this.state.video} handleVideoPlay = {this.handleVideoPlay}/>
 
               <div className="container1 dynamic-videopage">
                 <div className="row">
@@ -577,174 +540,31 @@ async handleSaveButton(event) {
               
           </div>
         </div>
-              <div className="videos" id="comments">
-                <div className="container2">
-                  {this.state.user ? (
-                      <div className="comment-section comments">
-                      <div className="comment-post">
-                        <h2>{commentLength} comments of {commentLength}</h2>
-                        <ul className="list-inline comment-sort" >
-                          <li>
-                            <a onClick={(evt) => this.handleOrder('oldest', evt)} className={  (this.state.orderBy ==='oldest' ? 'active' : '')}>Oldest </a>
-                             |
-                          </li>
-                          <li className="last">
-                            <a onClick={(evt) => this.handleOrder('newest', evt)} className={  (this.state.orderBy ==='newest' ? 'active' : '')}> Newest</a>
-                          </li>
-                        </ul>
-                        
-                        <div className="comment-wrap">
-                          <textarea id="main-AddComment" className={(this.state.mainAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.comment} onChange={this.handleValidationComment}></textarea>
-                           <span className="error-comment-input">{this.state.mainCommentError}</span>
-{/*                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                          {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
-                        </div>
-                        <button id="comment-btn" 
-                          className="main"
-                          disabled = {(this.state.mainAddCommentDisabled)? "disabled" : ""}
-                          onClick={this.handleAddComment}
-                          >Post</button>
-                      
-                      </div>
-                        
-                        <ul className="comment-list">
-                          { this.state.orderBy === 'oldest' ? (
-                              
-                              objectComments
-                              .filter(comment => comment.parent === null)
-                              .map((comment, i) => 
-                                <li key={i} className="comment-list-item">
-                                  <div className="comment-content">
-                                    <p className="username"> {comment.userName || ''} </p>
-                                    <p className="comment-text">
-                                      {comment.comment || ''} 
-                                      
-                                    </p>
-                                    <p className="comment-info">
-                                      <span className="comment-date"><TimeAgo date={comment.date} /> </span>
-                                      {/* Only when logged In */}
-                                      | 
-                                      <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>                                     
-                                    </p>
-                                    {
-                                      this.state.openReply && this.state.currentReply === comment.commentId ? (
-                                        <div className="comment-post">
-                                          <div className="comment-wrap">
-                                          <textarea className={(this.state.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.commentReply} onChange={this.handleValidationComment}></textarea>
-                                          <span className="error-comment-input">{this.state.replyCommentError}</span>
-                                            {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
-                                            <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                                            {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
-                                          </div>
-                                          <button id="comment-btn"
-                                          disabled = {(this.state.replyAddCommentDisabled)? "disabled" : ""}
-                                          onClick={(evt) => this.handleAddComment(evt, comment.commentId)}
-                                          >Post</button>
-                                      </div>
-                                      ):(
-                                        <div></div>
-                                      )
-                                    }
-                                    <ul>
-                                    {
-                                      objectComments.reverse()
-                                      .filter(comment1 => comment1.parent === comment.commentId)
-                                      .map((comment1, i) => 
-                                        <li key={i} className="comment-list-item">
-                                          <div className="comment-content">
-                                            <p className="username"> {comment1.userName || ''} </p>
-                                            <p className="comment-text">
-                                              {comment1.comment || ''} 
-                                              
-                                            </p>
-                                            <p className="comment-info">
-                                              <span className="comment-date"><TimeAgo date={comment1.date} /> </span>
-                                            </p>
-                                          </div>
-                                        </li>
-                                      )
-                                    }
-                                  </ul>
-                                  </div>
-                                </li>
-                              )
-
-                          ):(
-                            objectComments.reverse()
-                            .filter(comment => comment.parent === null)
-                            .map((comment, i) => 
-                              <li key={i} className="comment-list-item">
-                                <div className="comment-content">
-                                  <p className="username"> {comment.userName || ''} </p>
-                                  <p className="comment-text">
-                                    {comment.comment || ''} 
-                                    
-                                  </p>
-                                  <p className="comment-info">
-                                    <span className="comment-date"><TimeAgo date={comment.date} /> </span>
-                                    {/* Only when logged In */}
-                                    | 
-                                    <a className="reply" onClick={(evt) => this.handleReplyButton(comment.commentId, evt)}> Reply</a>
-                                  </p>
-                                  {
-                                    this.state.openReply && this.state.currentReply === comment.commentId ? (
-                                      <div className="comment-post">
-                                        <div className="comment-wrap">
-                                        <textarea className={(this.state.replyAddCommentDisabled)? 'comment-input disabled' : 'comment-input'} value={this.state.commentReply} onChange={this.handleValidationComment}></textarea>
-                                        <span className="error-comment-input">{this.state.replyCommentError}</span>
-                                          {/* <span className="error-comment-input">Your comment is too short, please type a longer message</span>
-                                          <span className="error-comment-input">Your comment is too long, please type a shorter message</span> */}
-                                          {/* <span className="error ng-hide" ng-show="newCommentForm.failed">Your comment was not added, please try again</span> */}
-                                        </div>
-                                        <button id="comment-btn"
-                                        disabled = {(this.state.replyAddCommentDisabled)? "disabled" : ""}
-                                        onClick={(evt) => this.handleAddComment(evt, comment.commentId)}
-                                        >Post</button>
-                                    </div>
-                                    ):(
-                                      <div></div>
-                                    )
-                                  }
-                                  <ul>
-                                      {
-                                    objectComments
-                                    .filter(comment1 => comment1.parent === comment.commentId)
-                                    .map((comment1, i) => 
-                                      <li key={i} className="comment-list-item">
-                                        <div className="comment-content">
-                                          <p className="username"> {comment1.userName || ''} </p>
-                                          <p className="comment-text">
-                                            {comment1.comment || ''} 
-                                            
-                                          </p>
-                                          <p className="comment-info">
-                                            <span className="comment-date"><TimeAgo date={comment1.date} /> </span>
-                                          </p>
-                                        </div>
-                                      </li>
-                                    )
-                                  }
-                                  </ul>
-                                </div>
-                              </li>
-                            )
-                          )
-                          }
-                        </ul>
-                      </div>
-                    ):(
-                      <div className="text-center">
-                        <p>You must <Link to="/">log in</Link> or <Link to="/">sign up</Link> to comment on this video</p>
-                        <h2>{commentLength} comments</h2>
-                      </div>
-                    )}
-                </div>
-                  
-              </div>
+        <VideoComments status = {this.props.user.status} data={this.state} 
+             commentLength={commentLength} 
+             objectComments={{objectComments}}
+             handleOrder={this.handleOrder}  
+             handleValidationComment={this.handleValidationComment} 
+             handleAddComment={this.handleAddComment} 
+             handleReplyButton={this.handleReplyButton}/>
           </div>
         </Layout>
       );
   }
 }
 
-export default DynamicRoute
+
+
+const mapStateToProps = (state) => 
+{ 
+  
+  return {
+    user:state.userReducer,
+    video:state.videoDetailsReducer,
+    engaged:state.videoEngagedReducer,
+    comments:state.videoCommentsReducer.comments[0],
+    analytics:state.videoAnalyticsReducer.analytics,
+  }
+}
+
+export default connect(mapStateToProps,{videoDetailsAction,videoEngagedAction,videoCommentsAction,videoAnalyticsAction})(DynamicRoute)
