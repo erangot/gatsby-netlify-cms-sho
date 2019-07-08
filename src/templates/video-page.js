@@ -193,11 +193,6 @@ class videoPage extends React.Component {
         
     }
 
-
-    componentWillUnmount(){
-      this.handleLoad();
-    }
-
     // handle event on likes
   async handleLikeButton(event) {
     event.preventDefault();
