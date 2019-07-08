@@ -432,9 +432,6 @@ footer {
 
           li{
             padding: 0 7px;
-            .icon-social{
-
-            }
           }
         }
       }
@@ -451,7 +448,7 @@ footer {
     height: 100%;
     width: 100%;
     color: #3c3c3c;
-    overflow: scroll;
+    overflow: none;
     &.embeded-video {
       margin: 0;
     }

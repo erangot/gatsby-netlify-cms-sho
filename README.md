@@ -25,3 +25,10 @@ To test the CMS locally, you'll need run a production build of the site:
 $ npm run build
 $ npm run serve
 ```
+### Coding Standard Packages
+ESLint Instruction how to install 
+
+1. npm install -g eslint
+2. eslint-plugin-react@latest @eslint@latest
+
+Reference:LINK:https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
