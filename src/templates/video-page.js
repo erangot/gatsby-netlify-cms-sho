@@ -45,6 +45,8 @@ class videoPage extends React.Component {
               uniquePlays:1,
               score:1
             },
+            player:'',
+            videoNode:{}
         }
 
         console.log(this.state.video)
@@ -77,8 +79,28 @@ class videoPage extends React.Component {
     }
 
     componentDidMount() {
-      this.handleLoad();
+      this.player = videojs(this.videoNode, {
+        controls: true,
+        controlBar: {
+          children: [
+              "playToggle",
+              "volumeMenuButton",
+              "progressControl",
+              "remainingTimeDisplay",
+              "MuteToggle",
+              "VolumeControl",
+              "fullscreenToggle"
+          ]
+        },
+      });
    }
+
+   // destroy player on unmount
+  componentWillUnmount() {
+    if (this.player) {
+      this.player.dispose()
+    }
+  }
 
 
     async componentWillMount() {
@@ -529,23 +551,6 @@ class videoPage extends React.Component {
     this.setState({visibility: payload.visibility});
   }
 
-  handleLoad() {
-    var player = videojs("vid", {
-      controls: true,
-      controlBar: {
-        children: [
-            "playToggle",
-            "volumeMenuButton",
-            "progressControl",
-            "remainingTimeDisplay",
-            "MuteToggle",
-            "VolumeControl",
-            "fullscreenToggle"
-        ]
-      },
-    });
-  }
-
 
 
     render() {
@@ -561,7 +566,7 @@ class videoPage extends React.Component {
                     <div className="intro">
                         <div className="container text-center">
                             <div className={"video-skin "+this.state.video.applicationDisplayName.toLowerCase()} >
-                              <video className="video-js vjs-tech vjs-big-play-centered"
+                              <video ref={ node => this.videoNode = node } className="video-js vjs-tech vjs-big-play-centered"
                                 id="vid"
                                 width="640"
                                 height="480"
