@@ -11,8 +11,10 @@ import VideoPlayer from '../../../components/video/VideoPlayer'
 import {connect} from 'react-redux'
 import videoDetailsAction from '../../../actions/videoDetailsAction'
 import videoEngagedAction from '../../../actions/videoEngagedAction'
+
 import videoCommentsAction from '../../../actions//videoCommentsAction'
 import videoAnalyticsAction from '../../../actions/videoAnalyticsAction'
+
 
 
 
@@ -71,6 +73,7 @@ class DynamicRoute extends React.Component {
   }
 
   async componentWillMount() {
+    
     try{
       //setting userinfo
       await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})

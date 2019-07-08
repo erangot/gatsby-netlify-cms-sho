@@ -39,7 +39,6 @@ const MyTheme = {
   formContainer: { 'marginTop': '20px' }
 }
 
-
 class App extends AuthPiece {
 
   state = {

@@ -72,8 +72,6 @@ class videoPage extends React.Component {
         this.handleVisibilityOption = this.handleVisibilityOption.bind(this);
         this.handleVideoPlay = this.handleVideoPlay.bind(this);
         this.handleSharerAnalytics = this.handleSharerAnalytics.bind(this);
-
-
     
     }
 
@@ -106,7 +104,6 @@ class videoPage extends React.Component {
   {
     
   }
-
  
   }
 

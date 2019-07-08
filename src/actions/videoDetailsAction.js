@@ -9,7 +9,6 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
           return response.json();
          })
          .then(data1 => {
-
           return { 
                 videoTitle:data1[0][0].title, 
                 videoDesc:data1[0][0].description, 
@@ -21,7 +20,6 @@ const videoDetailsAction = (shortId) => async (dispatch) => {
             return err
         });
         
-      
         return(dispatch(
             {
                 type:'GET_DETAILS', 
