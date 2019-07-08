@@ -47,7 +47,7 @@ class DynamicRoute extends React.Component {
     }
 
 
-    if(process.env.NODE_ENV == 'development') 
+    if(process.env.NODE_ENV === 'development') 
       this.state.shortId = String(props["uri"]).split('/')[2]
     else 
       this.state.shortId = String(props["*"]).split('/')[1]
@@ -179,8 +179,8 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
     
+
     this.setState({isEditing:false});
   }
 
@@ -283,7 +283,7 @@ async handleSaveButton(event) {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({mainCommentError: null,
         mainAddCommentDisabled: true});
         break;
@@ -308,7 +308,7 @@ async handleSaveButton(event) {
 
       switch(true) {
 
-        case (event.target.value.length == 0): 
+        case (event.target.value.length === 0): 
         this.setState({replyCommentError: null,
         replyAddCommentDisabled: true});
         break;
@@ -355,7 +355,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+
     
   }
 
@@ -419,7 +419,7 @@ async handleSaveButton(event) {
         },
         body: JSON.stringify(payload)
       });
-    const content = await rawResponse.json();
+      
     this.setState({visibility: payload.visibility});
   }
 

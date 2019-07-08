@@ -29,6 +29,17 @@ const authScreenLabels = {
 I18n.putVocabularies(authScreenLabels);
 I18n.setLanguage('en');
 
+const MyTheme = {
+  button: { 'backgroundColor': '#6e81ad', 'minWidth': '100%' },
+  a: { 'color': '#6e81ad' },
+  input: { 'borderRadius': 0 },
+  formSection: { 'borderRadius': 0, 'boxShadow': 'none', 'clipPath': 'polygon(0 2%, 100% 0, 100% 100%, 0 98%)' },
+  sectionHeader: { 'fontSize': '15px' },
+  sectionFooter: { 'display': 'block' },
+  formContainer: { 'marginTop': '20px' }
+}
+
+
 class App extends AuthPiece {
 
   state = {
@@ -73,17 +84,6 @@ class App extends AuthPiece {
       </>
     )
   }
-
-const MyTheme = {
-  button: { 'backgroundColor': '#6e81ad', 'minWidth': '100%' },
-  a: { 'color': '#6e81ad' },
-  input: { 'borderRadius': 0 },
-  formSection: { 'borderRadius': 0, 'boxShadow': 'none', 'clipPath': 'polygon(0 2%, 100% 0, 100% 100%, 0 98%)' },
-  sectionHeader: { 'fontSize': '15px' },
-  sectionFooter: { 'display': 'block' },
-  formContainer: { 'marginTop': '20px' }
 }
 
-export default App;
-
-
+export default App
