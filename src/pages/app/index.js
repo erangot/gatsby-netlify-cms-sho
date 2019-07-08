@@ -37,9 +37,9 @@ const App = () => {
   )
 }
 
-function PublicRoute(props) {
-  return <div>{props.children}</div>
-}
+// function PublicRoute(props) {
+//   return <div>{props.children}</div>
+// }
 
 const MyTheme = {
   
