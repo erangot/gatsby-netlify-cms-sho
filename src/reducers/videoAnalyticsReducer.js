@@ -1,6 +1,6 @@
 const videoAnalyticsReducer = (state = {analytics:''}  , action) => {
 
-  console.log(action)
+  
     switch(action.type)
       { 
          case "GET_ANALYTICS":

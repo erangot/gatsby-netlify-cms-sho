@@ -104,7 +104,7 @@ class videoPage extends React.Component {
   }
   catch(error)
   {
-      console.log(error)
+    
   }
 
  
@@ -518,7 +518,7 @@ class videoPage extends React.Component {
 
 const mapStateToProps = (state) => 
 { 
-  console.log(state)
+
   return {
     user:state.userReducer,
     video:state.videoDetailsReducer,

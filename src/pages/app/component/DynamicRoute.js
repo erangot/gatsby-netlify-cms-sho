@@ -11,8 +11,8 @@ import VideoPlayer from '../../../components/video/VideoPlayer'
 import {connect} from 'react-redux'
 import videoDetailsAction from '../../../actions/videoDetailsAction'
 import videoEngagedAction from '../../../actions/videoEngagedAction'
-import videoCommentsAction from '../../../actions/videoCommentsAction'
-import videoAnalyticsAction from '../../../actions/videoCommentsAction'
+import videoCommentsAction from '../../../actions//videoCommentsAction'
+import videoAnalyticsAction from '../../../actions/videoAnalyticsAction'
 
 
 
@@ -71,24 +71,35 @@ class DynamicRoute extends React.Component {
   }
 
   async componentWillMount() {
-        // insert getting comments
-        await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})
-        //get video details
-        await this.props.videoDetailsAction(this.state.shortId)
-       // Get engaged user
-        await this.props.videoEngagedAction(this.state.shortId, this.state.video.userUUID)
-        await this.props.videoAnalyticsAction(this.state.shortId)
-        await this.props.videoCommentsAction(this.state.shortId)
-        this.setState({
+    try{
+      //setting userinfo
+      await this.setState({username:this.props.user.username, status:this.props.user.status, userUUID:this.props.user.userUUID})
+      //get video details
+      await this.props.videoDetailsAction(this.state.video.shortId)
+      await this.props.videoCommentsAction(this.state.video.shortId)
+     // Get engaged user
+      await this.props.videoEngagedAction(this.state.video.shortId, this.state.video.userUUID)
+      await this.props.videoAnalyticsAction(this.state.video.shortId)
+
+      
+      this.setState({
         videoTitle: this.props.video.videoTitle,
         videoDesc: this.props.video.videoDesc,
-        visibility: this.props.video.visibility,
+        visibility:this.props.video.visibility,
         shortUrlId: this.props.video.shortUrlId,
         isEngaged: this.props.engaged.isEngaged,
-        comments:this.props.comments[0],
-        analytics: this.props.analytics[0][0]
+        comments:this.props.comments,
+        analytics:this.props.analytics[0][0]
       });
+     
+  }
+  catch(error)
+  {
 
+  }
+
+ 
+  
     // Show video page when rendered but not yet built
     // Show video when it is being rendered
      fetch(`https://cors-anywhere.herokuapp.com/https://ydkmdqhm84.execute-api.us-east-2.amazonaws.com/default/test-api?api=checkSetEmailCompletion&shortId=${this.state.shortId}`)
@@ -542,15 +553,17 @@ async handleSaveButton(event) {
   }
 }
 
+
+
 const mapStateToProps = (state) => 
 { 
-  console.log(state)
+  
   return {
     user:state.userReducer,
     video:state.videoDetailsReducer,
     engaged:state.videoEngagedReducer,
-    comments:state.videoCommentsReducer,
-    analytics:state.videoAnalyticsReducer,
+    comments:state.videoCommentsReducer.comments[0],
+    analytics:state.videoAnalyticsReducer.analytics,
   }
 }
 
